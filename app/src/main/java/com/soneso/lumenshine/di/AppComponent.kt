@@ -1,5 +1,6 @@
 package com.soneso.lumenshine.di
 
+import com.soneso.lumenshine.domain.usecases.TransactionsUseCases
 import com.soneso.lumenshine.domain.usecases.UserUseCases
 import com.soneso.lumenshine.domain.usecases.WalletsUseCase
 import dagger.Component
@@ -16,4 +17,6 @@ interface AppComponent {
     val walletsUseCase: WalletsUseCase
 
     val userUseCases: UserUseCases
+
+    val transactionsUseCase: TransactionsUseCases
 }

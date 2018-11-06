@@ -193,6 +193,10 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="login">Login</string>
 
+    <string name="filter">FILTER</string>
+
+    <string name="sort">SORT</string>
+
     <string name="register">Register</string>
 
     <string name="login_continue">Log in to your account</string>
@@ -661,5 +665,22 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="error_invalid_forename">Invalid forename</string>
 
     <string name="error_invalid_lastname">Invalid lastname</string>
+
+    <string name="transactions_wallet">Wallet:</string>
+    <string name="transactions_date_from">Date from:</string>
+    <string name="transactions_date_to">Date to:</string>
+    <string name="transactions_history">Transactions History</string>
+    <string name="transactions_date">Date:</string>
+    <string name="transactions_type">Type:</string>
+    <string name="transactions_amount">Amount:</string>
+    <string name="transactions_currency">Currency:</string>
+    <string name="transactions_fee">Fee:</string>
+    <string name="transactions_details">Details:</string>
+    <string name="transactions_operation_id">Operation ID:</string>
+    <string name="transactions_status_ok">Status OK</string>
+
+    <string name="payment_received">Payment received</string>
+    <string name="payment_sent">Payment sent</string>
+    <string name="account_created">Account created</string>
 
 </resources>

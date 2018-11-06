@@ -13,6 +13,7 @@ import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.presentation.home.HomeFragment
 import com.soneso.lumenshine.presentation.settings.FingerPrintSetupActivity
 import com.soneso.lumenshine.presentation.settings.SettingsFragment
+import com.soneso.lumenshine.presentation.transactions.TransactionsFragment
 import com.soneso.lumenshine.presentation.wallets.WalletsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -94,7 +95,9 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
                 replaceFragment(WalletsFragment.newInstance(), WalletsFragment.TAG)
             }
             R.id.nav_transactions -> {
-
+                app_bar_layout.setExpanded(false)
+                fab.hide()
+                replaceFragment(TransactionsFragment.newInstance(), TransactionsFragment.TAG)
             }
             R.id.nav_currencies -> {
 

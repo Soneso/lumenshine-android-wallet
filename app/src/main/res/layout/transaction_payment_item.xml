@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transactionPaymentItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_11"
+        android:layout_marginBottom="@dimen/size_11"
+        android:columnCount="2"><!-- Row headers -->
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetailBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+
+            android:text="@string/transactions_date" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetailBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+
+            android:text="@string/transactions_type" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetailBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="2"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+
+            android:text="@string/transactions_amount" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetailBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="3"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+
+            android:text="@string/transactions_currency" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetailBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="4"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+
+            android:text="@string/transactions_fee" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            style="@style/LsCardTitleDetailBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="5"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+
+            android:text="@string/transactions_details" />
+
+        <!-- Row values -->
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/paymentDateText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_columnWeight="4"
+
+            tools:text="12.09.2018 at 11:53:09AM" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/paymentTypeText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_columnWeight="4"
+
+            tools:text="payment received" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/paymentAmountText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_columnWeight="4"
+
+            tools:text="200.00" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/paymentCurrencyText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_columnWeight="4"
+
+            tools:text="XLM" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/paymentFeeText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_row="4"
+            android:layout_column="1"
+            android:layout_columnWeight="4"
+
+            tools:text="0.0" />
+
+        <!--TODO custom details view?-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="5"
+
+            android:layout_column="1"
+            android:layout_columnWeight="4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    style="@style/LsCardTitleDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transactions_operation_id" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:id="@+id/paymentId"
+                    style="@style/LsLightBlueText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_8"
+                    tools:text="123456789" />
+            </LinearLayout>
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transactions_status_ok" />
+        </LinearLayout>
+
+    </GridLayout>
+
+
+</LinearLayout>

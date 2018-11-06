@@ -10,6 +10,7 @@ import com.soneso.lumenshine.presentation.auth.LostCredentialViewModel
 import com.soneso.lumenshine.presentation.auth.TFAConfirmationViewModel
 import com.soneso.lumenshine.presentation.home.HomeViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
+import com.soneso.lumenshine.presentation.transactions.TransactionsViewModel
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
 
 class LsViewModelFactory(
@@ -22,6 +23,7 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T
+            modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
             modelClass.isAssignableFrom(LostCredentialViewModel::class.java) -> LostCredentialViewModel(appComponent.userUseCases) as T
