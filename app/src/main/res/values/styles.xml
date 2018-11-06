@@ -80,6 +80,13 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="LsCardTitleBlue">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="LsCardSecondTitle">
         <item name="android:textColor">@color/green</item>
         <item name="android:textSize">@dimen/text_size_15</item>
@@ -90,6 +97,13 @@
     <style name="LsCardTitleDetail">
         <item name="android:textColor">@color/lightBlack</item>
         <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsCardTitleDetailBold">
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
 
@@ -114,6 +128,24 @@
     <style name="LsCardText">
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="LsLightBlueText">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsDarkGreenText">
+        <item name="android:textColor">@color/darkGreen</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsDarkRedText">
+        <item name="android:textColor">@color/darkRed</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
 
     <style name="LsCardButton">
