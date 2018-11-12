@@ -96,7 +96,7 @@ dependencies {
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
 
     // library to see logs in console
-    implementation 'com.jakewharton.timber:timber:4.6.1'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation('com.github.ihsanbal:LoggingInterceptor:3.0.0') {
         exclude group: 'org.json', module: 'json'
         exclude group: "com.squareup.okhttp3"

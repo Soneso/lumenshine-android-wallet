@@ -59,6 +59,8 @@ class UserRepository @Inject constructor(
                     if (it.isSuccessful) {
                         LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
+                    LsPrefs.username = userSecurity.username
+                    userDao.saveUserData(userSecurity)
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
@@ -151,9 +153,9 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun getUserData(username: String? = null): Flowable<UserSecurity> {
-        val usernameFlowable = if (username == null) LsPrefs.observeUsername() else Flowable.just(username)
-        return usernameFlowable.flatMap { userDao.getUserDataById(it) }
+    fun getUserData(username: String? = null): Single<UserSecurity> {
+        val usernameSingle = if (username == null) LsPrefs.loadUsername() else Single.just(username)
+        return usernameSingle.flatMap { userDao.getUserDataById(it) }
     }
 
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
@@ -167,7 +169,8 @@ class UserRepository @Inject constructor(
     }
 
     fun resendConfirmationMail(): Flowable<Resource<Boolean, ServerException>> =
-            LsPrefs.observeUsername()
+            LsPrefs.loadUsername()
+                    .toFlowable()
                     .flatMap { username ->
                         userApi.resendConfirmationMail(username)
                                 .asHttpResourceLoader(networkStateObserver)
@@ -175,17 +178,17 @@ class UserRepository @Inject constructor(
                     }
 
 
-    fun refreshRegistrationStatus(): Flowable<Resource<Boolean, ServerException>> {
+    fun refreshRegistrationStatus(): Flowable<Resource<RegistrationStatus?, ServerException>> {
 
         return userApi.getRegistrationStatus()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
-                    true
+                    it.toRegistrationStatus(LsPrefs.username)
                 }, { it })
     }
 
-    fun loadTfaSecret(): Single<String> = LsPrefs.observeTfaSecret().singleOrError()
+    fun loadTfaSecret(): Single<String> = LsPrefs.loadTfaSecret()
 
     fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
 
@@ -253,16 +256,15 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun loadTfaCode(): Single<String> =
-            Single.create<String> {
-                val tfaSecret = LsPrefs.tfaSecret
-                val tfaCode = OtpProvider.currentTotpCode(tfaSecret.decodeBase32()) ?: ""
-                it.onSuccess(tfaCode)
+    fun loadTfaCode(): Single<String> = LsPrefs.loadTfaSecret()
+            .map {
+                OtpProvider.currentTotpCode(it.decodeBase32()) ?: ""
             }
 
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return LsPrefs.observeUsername().filter { it.isNotBlank() }
+        return LsPrefs.loadUsername().filter { it.isNotBlank() }
+                .toFlowable()
                 .flatMap { userDao.getRegistrationStatus(it) }
     }
 

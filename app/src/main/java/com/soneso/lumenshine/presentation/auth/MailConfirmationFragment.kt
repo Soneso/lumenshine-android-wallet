@@ -10,6 +10,7 @@ import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.TypefaceSpan
 import com.soneso.lumenshine.util.Resource
@@ -28,6 +29,7 @@ class MailConfirmationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        authViewModel.initLastUsername()
         setupListeners()
         subscribeForLiveData()
     }
@@ -69,11 +71,12 @@ class MailConfirmationFragment : AuthFragment() {
         }
         submitButton.setOnClickListener {
             errorView.text = ""
+
             authViewModel.refreshRegistrationStatus()
         }
     }
 
-    private fun renderRegistrationRefresh(resource: Resource<Boolean, ServerException>) {
+    private fun renderRegistrationRefresh(resource: Resource<RegistrationStatus?, ServerException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -81,6 +84,9 @@ class MailConfirmationFragment : AuthFragment() {
             }
             Resource.SUCCESS -> {
                 hideLoadingView()
+                if (!resource.success()?.mailConfirmed!!) {
+                    errorView.setText(R.string.error_verify_email)
+                }
             }
             Resource.FAILURE -> {
                 hideLoadingView()

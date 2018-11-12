@@ -32,10 +32,6 @@ class LoginFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-
-        authViewModel.liveLastUsername.observe(this, Observer {
-            emailView.trimmedText = it
-        })
         authViewModel.liveLogin.observe(this, Observer {
             renderLoginStatus(it ?: return@Observer)
         })

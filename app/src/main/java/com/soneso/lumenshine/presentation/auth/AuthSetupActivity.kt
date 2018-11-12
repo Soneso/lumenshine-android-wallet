@@ -21,6 +21,7 @@ class AuthSetupActivity : BaseAuthActivity() {
         super.onCreate(savedInstanceState)
 
         setupDrawer()
+        setupHeader()
         subscribeToLiveData()
         Timber.d("Auth setup activity created.")
     }
@@ -33,12 +34,19 @@ class AuthSetupActivity : BaseAuthActivity() {
 
     private fun renderRegistrationStatus(status: RegistrationStatus) {
 
+        if (status.tfaConfirmed && status.mailConfirmed && status.mnemonicConfirmed) {
+            goToMain()
+            return
+        }
+
         when {
             !status.tfaConfirmed -> {
                 navigate(R.id.to_confirm_tfa_screen)
             }
             !status.mailConfirmed -> {
-                navigate(R.id.to_confirm_mail_screen)
+                if (navController.currentDestination?.id != R.id.confirm_mail_screen) {
+                    navigate(R.id.to_confirm_mail_screen)
+                }
             }
             !status.mnemonicConfirmed -> {
                 navigate(R.id.to_mnemonic_screen)

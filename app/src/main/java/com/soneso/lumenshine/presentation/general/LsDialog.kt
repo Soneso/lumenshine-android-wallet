@@ -14,9 +14,20 @@ abstract class LsDialog : DialogFragment() {
         activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         dialog.window?.apply {
-            setBackgroundDrawableResource(R.drawable.bg_top_rounded3_inset)
+            val drawableResId: Int = if (isWithHeader()) {
+                R.drawable.bg_header_rounded
+            } else {
+                R.drawable.bg_top_rounded3_inset
+            }
+
+            setBackgroundDrawableResource(drawableResId)
+            if (isWithHeader()) {
+                requestFeature(Window.FEATURE_NO_TITLE)
+                attributes?.gravity = Gravity.FILL
+            } else{
+                attributes?.gravity = Gravity.BOTTOM
+            }
             setLayout(WindowManager.LayoutParams.MATCH_PARENT, if (hasMaxHeight()) WindowManager.LayoutParams.MATCH_PARENT else WindowManager.LayoutParams.WRAP_CONTENT)
-            attributes?.gravity = Gravity.BOTTOM
         }
         return dialog
     }
@@ -31,4 +42,6 @@ abstract class LsDialog : DialogFragment() {
     }
 
     abstract fun getContentLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
+
+    abstract fun isWithHeader(): Boolean
 }

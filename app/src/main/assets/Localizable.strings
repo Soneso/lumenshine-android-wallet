@@ -306,7 +306,7 @@
 "email_already_confirmed" = "Already confirmed";
 
 /*  */
-"email_resend_confirmation" = "Resend confirmation mail";
+"email_resend_confirmation" = "Resend confirmation link";
 
 /*  */
 "resend_email" = "Resend email";

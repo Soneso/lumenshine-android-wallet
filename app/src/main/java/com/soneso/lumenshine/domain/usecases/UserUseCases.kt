@@ -38,6 +38,7 @@ class UserUseCases
                 .create<UserSecurity> {
                     it.onSuccess(helper.generateUserSecurity(userProfile.email))
                 }
+                .doOnSuccess { passSubject.onNext(password.toString()) }
                 .toFlowable()
                 .flatMap { userRepo.createUserAccount(userProfile, it) }
     }
@@ -56,7 +57,7 @@ class UserUseCases
         return tfaFlow.flatMap { tfa ->
             userRepo.loginStep1(username, tfa).flatMap {
                 if (it.isSuccessful) {
-                    userRepo.getUserData(username).flatMap { userData ->
+                    userRepo.getUserData(username).toFlowable().flatMap { userData ->
                         val helper = UserSecurityHelper(password.toCharArray())
                         val publicKeyIndex188 = helper.decipherUserSecurity(userData)
                         if (publicKeyIndex188 == null) {
@@ -74,17 +75,16 @@ class UserUseCases
 
     fun provideMnemonic(): Single<String> {
 
-        return Flowable.combineLatest(
-                passSubject
-                        .doOnNext { Timber.d("Pass: $it") }
-                        .filter { it.isNotBlank() },
-                userRepo.getUserData().doOnNext { Timber.d("UserData for: ${it.username}") },
+        return Single.zip(passSubject
+                .doOnNext { Timber.d("Pass: $it") }
+                .filter { it.isNotBlank() }.firstOrError(),
+                userRepo.getUserData().doOnSuccess { Timber.d("UserData for: ${it.username}") },
                 BiFunction<String, UserSecurity, String> { pass, userSecurity ->
                     val helper = UserSecurityHelper(pass.toCharArray())
                     helper.decipherUserSecurity(userSecurity)
                     String(helper.mnemonicChars)
                 }
-        ).firstOrError()
+        )
     }
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
@@ -116,6 +116,7 @@ class UserUseCases
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 
         return userRepo.getUserData()
+                .toFlowable()
                 .flatMap {
                     val helper = UserSecurityHelper(currentPass.toCharArray())
                     val us = helper.changePassword(it, newPass.toCharArray())
@@ -126,6 +127,7 @@ class UserUseCases
     fun changeTfaPassword(pass: CharSequence): Flowable<Resource<String, ServerException>> {
 
         return userRepo.getUserData()
+                .toFlowable()
                 .flatMap {
                     val helper = UserSecurityHelper(pass.toCharArray())
                     val publicKey188 = helper.decipherUserSecurity(it)

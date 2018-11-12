@@ -59,6 +59,10 @@
         <item name="android:background">@drawable/bg_green_button</item>
     </style>
 
+    <style name="GreenButtonWithStates">
+        <item name="android:background">@drawable/bg_green_gray_states_button</item>
+    </style>
+
     <style name="RedButton" parent="AppTheme.LsButton">
         <item name="android:background">@drawable/bg_red_button</item>
     </style>
@@ -160,6 +164,30 @@
         <item name="android:paddingStart">@dimen/size_10</item>
         <item name="android:paddingEnd">@dimen/size_10</item>
         <item name="android:drawableTint">@android:color/black</item>
+    </style>
+
+    <style name="DarkBlueCheckBox">
+        <item name="colorControlNormal">@color/gray</item>
+        <item name="colorAccent">@color/darkBlue</item>
+    </style>
+
+    <style name="DialogHeader">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">@color/cyan</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+    </style>
+
+    <style name="PasswordRequirementTitle">
+        <item name="android:textColor">@color/darkRed</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+    </style>
+
+    <style name="PasswordRequirementSubtitle">
+        <item name="android:textColor">@color/darkGray</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
 
 </resources>

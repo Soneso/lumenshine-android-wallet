@@ -107,6 +107,10 @@ open class FormInputView @JvmOverloads constructor(
         editTextView.setOnEditorActionListener(listener)
     }
 
+    fun setSelection(index: Int) {
+        editTextView.setSelection(index)
+    }
+
     var error: CharSequence
         get() = errorTextView.text
         set(value) {

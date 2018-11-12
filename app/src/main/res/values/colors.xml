@@ -26,6 +26,7 @@
     <color name="darkRed">#C71A20</color>
     <color name="green">#91c74a</color>
     <color name="darkGreen">#7BA83E</color>
+    <color name="lightLightGray">#F2F2F2</color>
     <color name="lightGray">#e1e1e1</color>
     <color name="gray">#a8a8a8</color>
     <color name="darkGray">#898989</color>

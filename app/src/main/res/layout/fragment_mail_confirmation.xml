@@ -4,7 +4,7 @@
     style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/size_12"
+    android:layout_margin="@dimen/size_11"
     android:orientation="vertical"
     tools:context=".presentation.auth.MailConfirmationFragment">
 
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="@dimen/size_15">
+        android:padding="@dimen/size_14">
 
         <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
@@ -22,14 +22,13 @@
             android:text="@string/lbl_email_confirmation"
             android:textAllCaps="true"
             android:textColor="@color/red"
-            android:textSize="@dimen/text_size_17" />
+            android:theme="@style/LsCardTitle" />
 
         <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:id="@+id/descriptionView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_20"
-            android:layout_marginBottom="@dimen/size_20"
+            android:layout_marginTop="@dimen/size_16"
             android:fontFamily="@font/encodesans_regular"
             android:gravity="center"
             android:text="@string/email_confirmation_prehint"
@@ -40,24 +39,28 @@
             android:id="@+id/errorView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/size_40"
+            android:layout_marginTop="@dimen/size_20"
             android:fontFamily="@font/encodesans_regular"
             android:textColor="@color/red"
             android:textSize="@dimen/text_size_14" />
 
-        <Button
+        <com.soneso.lumenshine.presentation.widgets.LsButton
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/size_38"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_15"
+            android:minWidth="@dimen/size_120"
             android:text="@string/already_confirmed" />
 
-        <Button
+        <com.soneso.lumenshine.presentation.widgets.LsButton
             android:id="@+id/resendButton"
             style="@style/OrangeButton"
+            android:layout_marginBottom="@dimen/size_6"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_25"
-            android:text="@string/resend_mail" />
+            android:layout_height="@dimen/size_38"
+            android:layout_marginTop="@dimen/size_30"
+            android:minWidth="@dimen/size_260"
+            android:text="@string/email_resend_confirmation" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

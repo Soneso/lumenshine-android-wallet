@@ -6,8 +6,7 @@ import android.util.Log
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.domain.util.Cryptor
 import com.soneso.lumenshine.domain.util.toByteArray
-import io.reactivex.Flowable
-import io.reactivex.processors.BehaviorProcessor
+import io.reactivex.Single
 import org.bouncycastle.util.encoders.Base64
 import java.util.*
 
@@ -32,9 +31,6 @@ object LsPrefs {
     private val encryptionIv: ByteArray
     private val derivedPass: ByteArray
 
-    private val usernameProcessor = BehaviorProcessor.create<String>()
-    private val tfaSecretProcessor = BehaviorProcessor.create<String>()
-
     val appPass: String
 
     init {
@@ -46,9 +42,6 @@ object LsPrefs {
         val salt = initializePassSalt(keyHolder)
         derivedPass = Cryptor.deriveKeyPbkdf2(salt, appPass.toCharArray())
         encryptionIv = initializeEncryptionIv(keyHolder)
-
-        usernameProcessor.onNext(username)
-        tfaSecretProcessor.onNext(tfaSecret)
     }
 
     private fun initializeAppPass(keyHolder: AppKeyHolder): String {
@@ -105,7 +98,6 @@ object LsPrefs {
         get() = decryptAndGetString(KEY_USERNAME)
         set(value) {
             encryptAndSaveString(KEY_USERNAME, value)
-            usernameProcessor.onNext(value)
         }
 
     var jwtToken: String
@@ -116,7 +108,6 @@ object LsPrefs {
         get() = decryptAndGetString(KEY_TFA_SECRET)
         set(value) {
             encryptAndSaveString(KEY_TFA_SECRET, value)
-            tfaSecretProcessor.onNext(value)
         }
 
     var isFingeprintEnabled: Boolean
@@ -185,7 +176,11 @@ object LsPrefs {
         listeners.add(listener)
     }
 
-    fun observeUsername(): Flowable<String> = usernameProcessor
+    fun loadUsername(): Single<String> = Single.create{
+        it.onSuccess(username)
+    }
 
-    fun observeTfaSecret(): Flowable<String> = tfaSecretProcessor
+    fun loadTfaSecret(): Single<String> = Single.create {
+        it.onSuccess(tfaSecret)
+    }
 }
