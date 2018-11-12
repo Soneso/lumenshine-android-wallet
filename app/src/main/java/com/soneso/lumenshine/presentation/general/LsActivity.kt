@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.R
@@ -24,11 +25,12 @@ open class LsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         hideStatusBar()
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         super.onCreate(savedInstanceState)
         viewModelFactory = LsViewModelFactory(lsApp.appComponent)
     }
 
-    fun hideStatusBar() {
+    private fun hideStatusBar() {
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
