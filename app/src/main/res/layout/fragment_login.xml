@@ -19,17 +19,11 @@
             android:layout_height="wrap_content"
             android:text="@string/login_continue" />
 
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            style="@style/LsCardTitleDetail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_fill" />
-
         <com.soneso.lumenshine.presentation.widgets.FormInputView
             android:id="@+id/emailView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_5"
+            android:layout_marginTop="@dimen/size_20"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             app:error_text="@string/error_invalid_email"
@@ -41,7 +35,7 @@
             android:id="@+id/passwordView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_5"
+            android:layout_marginTop="@dimen/size_9"
             android:hint="@string/password"
             android:inputType="textPassword"
             app:input_level="@integer/input_mandatory" />
@@ -50,7 +44,7 @@
             android:id="@+id/tfaCodeView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_5"
+            android:layout_marginTop="@dimen/size_9"
             android:hint="@string/tfa_code_configured"
             android:imeActionId="6"
             android:imeActionLabel="@string/action_sign_in"
@@ -61,10 +55,11 @@
         <com.soneso.lumenshine.presentation.widgets.LsButton
             android:id="@+id/loginButton"
             style="@style/GreenButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/size_5"
+            android:layout_width="@dimen/size_160"
+            android:layout_height="@dimen/size_38"
+            android:layout_marginTop="@dimen/size_25"
+            android:layout_marginBottom="@dimen/size_5"
             android:text="@string/login" />
 
     </LinearLayout>

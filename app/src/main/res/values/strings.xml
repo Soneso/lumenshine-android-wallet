@@ -195,13 +195,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="register">Register</string>
 
-    <string name="login_continue">Login to continue</string>
+    <string name="login_continue">Log in to your account</string>
 
     <string name="unlock_app">Unlock app</string>
 
     <string name="unlock_button">Unlock</string>
-
-    <string name="login_fill">Please fill in the form below with valid information</string>
 
     <string name="logout">Log Out</string>
 
