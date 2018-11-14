@@ -8,14 +8,14 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.presentation.util.setTextStyle
 import com.soneso.lumenshine.presentation.widgets.LsCardView
-import kotlinx.android.synthetic.main.view_wallet_card.view.*
+import kotlinx.android.synthetic.main.view_unfunded_wallet_card.view.*
 
-class WalletCardView @JvmOverloads constructor(
+class UnfundedWalletCardView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LsCardView(context, attrs, defStyleAttr) {
 
     init {
-        View.inflate(context, R.layout.view_wallet_card, this)
+        View.inflate(context, R.layout.view_unfunded_wallet_card, this)
     }
 
     fun populate(wallet: Wallet) {
@@ -24,12 +24,12 @@ class WalletCardView @JvmOverloads constructor(
         // TODO: cristi.paval, 8/23/18 - integrate balances here
         val balances = emptyList<Any>()
 
-        balancesLayout.removeAllViews()
-        availabilityLayout.removeAllViews()
+//        balancesLayout.removeAllViews()
+//        availabilityLayout.removeAllViews()
         if (balances.isEmpty()) {
-            renderNotFundedWallet()
+//            renderNotFundedWallet()
         } else {
-            renderBalances(balances)
+//            renderBalances(balances)
         }
     }
 
@@ -40,15 +40,15 @@ class WalletCardView @JvmOverloads constructor(
                 if (balances.size > 1) R.string.wallet_balances
                 else R.string.wallet_balance
         )
-        availabilityTitleView.visibility = View.VISIBLE
-        availabilityLayout.visibility = View.VISIBLE
+//        availabilityTitleView.visibility = View.VISIBLE
+//        availabilityLayout.visibility = View.VISIBLE
         sendButton.visibility = View.VISIBLE
         receiveButton.visibility = View.VISIBLE
         detailsButton.visibility = View.VISIBLE
         fundButton.visibility = View.GONE
         for (b in balances) {
-            availabilityLayout.addView(getBalanceView("1000.000000 XLM"))
-            balancesLayout.addView(getBalanceView("1000.000000 XLM"))
+//            availabilityLayout.addView(getBalanceView("1000.000000 XLM"))
+//            balancesLayout.addView(getBalanceView("1000.000000 XLM"))
         }
     }
 
@@ -56,9 +56,9 @@ class WalletCardView @JvmOverloads constructor(
 
         subtitleView.setText(R.string.wallet_not_funded)
         balanceTitleView.setText(R.string.wallet_balance)
-        availabilityTitleView.visibility = View.GONE
-        availabilityLayout.visibility = View.GONE
-        balancesLayout.addView(getBalanceView(resources.getString(R.string.wallet_empty_balance)))
+//        availabilityTitleView.visibility = View.GONE
+//        availabilityLayout.visibility = View.GONE
+//        balancesLayout.addView(getBalanceView(resources.getString(R.string.wallet_empty_balance)))
         sendButton.visibility = View.GONE
         receiveButton.visibility = View.GONE
         detailsButton.visibility = View.GONE

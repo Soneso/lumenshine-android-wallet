@@ -19,7 +19,7 @@ class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletViewHolder {
 
-        val view = WalletCardView(parent.context)
+        val view = UnfundedWalletCardView(parent.context)
         val params = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         params.marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
         params.marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
@@ -35,6 +35,6 @@ class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
     }
 
     inner class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val walletView = view as WalletCardView
+        val walletView = view as UnfundedWalletCardView
     }
 }

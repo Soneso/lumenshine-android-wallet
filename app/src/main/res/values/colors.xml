@@ -33,4 +33,5 @@
     <color name="darkerGray">#333333</color>
     <color name="orange">#FAAF3A</color>
     <color name="darkOrange">#D39432</color>
+    <color name="helpButtonGray">#cccccc</color>
 </resources>
