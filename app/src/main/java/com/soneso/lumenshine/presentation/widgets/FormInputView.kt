@@ -1,7 +1,9 @@
 package com.soneso.lumenshine.presentation.widgets
 
 import android.content.Context
+import android.graphics.Typeface
 import android.text.Editable
+import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -10,10 +12,10 @@ import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import kotlinx.android.synthetic.main.ls_input_view.view.*
-import android.text.InputType
 
 
 open class FormInputView @JvmOverloads constructor(
@@ -25,6 +27,7 @@ open class FormInputView @JvmOverloads constructor(
     private var regexToMatch = ""
     private var showPasswordToggle: Boolean = false
     var onDrawableEndClickListener: (() -> Unit)? = null
+    private var passwordTypeFace: Typeface? = Typeface.DEFAULT
 
     var trimmedText: CharSequence
         get() = editTextView.text?.trim() ?: ""
@@ -35,6 +38,9 @@ open class FormInputView @JvmOverloads constructor(
     init {
         LayoutInflater.from(context).inflate(R.layout.ls_input_view, this, true)
         orientation = VERTICAL
+        if (!isInEditMode) {
+            passwordTypeFace = ResourcesCompat.getFont(context, R.font.encodesans_semibold)
+        }
         applyAttrs(attrs)
         editTextView.maxLines = 1
 
@@ -73,6 +79,10 @@ open class FormInputView @JvmOverloads constructor(
             editTextEndDrawable.setImageDrawable(drawableEnd)
             editTextView.layoutParams = layoutParams
         } else {
+            if (editTextView.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
+                editTextView.typeface = passwordTypeFace
+            }
+
             var padding = 0
             if (drawableEnd != null) {
                 padding += resources.getDimensionPixelOffset(R.dimen.size_40)
@@ -133,6 +143,8 @@ open class FormInputView @JvmOverloads constructor(
             passwordToggleDrawable.setImageResource(R.drawable.ic_visibility_off)
             editTextView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
         }
+        editTextView.typeface = passwordTypeFace
+
         editTextView.setSelection(editTextView.text.length)
     }
 
