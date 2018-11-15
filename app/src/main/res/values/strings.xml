@@ -32,9 +32,9 @@
 
     <!-- Strings related to authentication -->
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">PASSWORD</string>
     <string name="hint_two_factor">Two Factor Code</string>
-    <string name="hint_password_confirmation">Repeat password</string>
+    <string name="hint_password_confirmation">REPEAT PASSWORD</string>
     <string name="hint_first_name">First name</string>
     <string name="hint_last_name">Last name</string>
     <string name="action_sign_in">Login</string>
