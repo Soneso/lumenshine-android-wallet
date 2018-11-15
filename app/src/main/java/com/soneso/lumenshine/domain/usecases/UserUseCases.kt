@@ -27,9 +27,12 @@ class UserUseCases
 
     private val passSubject = BehaviorProcessor.create<String>()
 
-    fun registerAccount(email: CharSequence, password: CharSequence, country: Country?): Flowable<Resource<Boolean, ServerException>> {
+    fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence,
+                        country: Country?): Flowable<Resource<Boolean, ServerException>> {
 
         val userProfile = UserProfile()
+        userProfile.forename = foreName.toString()
+        userProfile.lastname = lastName.toString()
         userProfile.email = email.toString()
         userProfile.country = country
 

@@ -20,6 +20,10 @@ interface UserApi {
     @FormUrlEncoded
     @POST("/portal/user/register_user")
     fun registerUser(
+            @Field("forename") forename: String,
+
+            @Field("lastname") lastname: String,
+
             @Field("email") email: String,
 
             @Field("kdf_salt") passwordSalt: String,

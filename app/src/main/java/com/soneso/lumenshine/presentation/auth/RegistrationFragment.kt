@@ -183,6 +183,8 @@ class RegistrationFragment : AuthFragment() {
         showLoadingView()
 
         authViewModel.createAccount(
+                foreName.trimmedText,
+                lastName.trimmedText,
                 emailView.trimmedText,
                 password.trimmedText
         )
