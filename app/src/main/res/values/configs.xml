@@ -10,5 +10,6 @@
     <integer name="password_confirmation_input_level">@integer/input_mandatory</integer>
     <integer name="first_name_input_level">@integer/input_optional</integer>
     <integer name="last_name_input_level">@integer/input_optional</integer>
+    <string name="text_regex" tools:ignore="TypographyDashes">^[A-Za-z]{2,}$</string>
 
 </resources>

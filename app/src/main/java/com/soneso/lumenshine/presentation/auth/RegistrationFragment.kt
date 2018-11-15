@@ -30,6 +30,8 @@ import kotlinx.android.synthetic.main.ls_input_view.view.*
  */
 class RegistrationFragment : AuthFragment() {
 
+    private var forenameCompleted: Boolean = false
+    private var lastNameCompleted: Boolean = false
     private var emailCompleted: Boolean = false
     private var passwordCompleted: Boolean = false
     private var repeatPasswordCompleted: Boolean = false
@@ -98,6 +100,18 @@ class RegistrationFragment : AuthFragment() {
     private fun setupListeners() {
         registerButton.setOnClickListener { attemptRegistration() }
 
+        foreName.editTextView.setOnTextChangeListener {
+            val editText = it as LsEditText
+            forenameCompleted = editText.text.toString().isNotEmpty()
+            enableDisableRegisterButton()
+        }
+
+        lastName.editTextView.setOnTextChangeListener {
+            val editText = it as LsEditText
+            lastNameCompleted = editText.text.toString().isNotEmpty()
+            enableDisableRegisterButton()
+        }
+
         emailView.editTextView.setOnTextChangeListener {
             val editText = it as LsEditText
             emailCompleted = editText.text.toString().isNotEmpty()
@@ -123,7 +137,7 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun enableDisableRegisterButton() {
-        registerButton.isEnabled = emailCompleted && passwordCompleted
+        registerButton.isEnabled = forenameCompleted && lastNameCompleted && emailCompleted && passwordCompleted
                 && repeatPasswordCompleted && termsOfServiceAccepted
     }
 
@@ -175,9 +189,11 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun isValidForm() =
-            emailView.hasValidInput()
-                    && password.isValidPassword()
-                    && isPasswordMatch()
+            foreName.hasValidInput()
+                &&lastName.hasValidInput()
+                && emailView.hasValidInput()
+                && password.isValidPassword()
+                && isPasswordMatch()
 
 
     private fun isPasswordMatch(): Boolean {
