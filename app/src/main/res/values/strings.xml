@@ -658,4 +658,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="error_verify_email">Please verify your email address first</string>
 
+    <string name="no_stellar_address">no stellar address</string>
+
 </resources>
