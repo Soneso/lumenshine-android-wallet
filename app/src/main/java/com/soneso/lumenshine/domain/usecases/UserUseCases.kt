@@ -12,7 +12,6 @@ import com.soneso.lumenshine.util.Resource
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
-import io.reactivex.processors.BehaviorProcessor
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,8 +23,6 @@ import javax.inject.Singleton
 @Singleton
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
-
-    private val passSubject = BehaviorProcessor.create<String>()
 
     fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence,
                         country: Country?): Flowable<Resource<Boolean, ServerException>> {
@@ -41,7 +38,7 @@ class UserUseCases
                 .create<UserSecurity> {
                     it.onSuccess(helper.generateUserSecurity(userProfile.email))
                 }
-                .doOnSuccess { passSubject.onNext(password.toString()) }
+                .doOnSuccess { userRepo.setPassword(password.toString()) }
                 .toFlowable()
                 .flatMap { userRepo.createUserAccount(userProfile, it) }
     }
@@ -54,7 +51,7 @@ class UserUseCases
 
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
 
-        passSubject.onNext(password.toString())
+        userRepo.setPassword(password.toString())
         val username = email.toString()
         val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode().toFlowable()
         return tfaFlow.flatMap { tfa ->
@@ -78,9 +75,7 @@ class UserUseCases
 
     fun provideMnemonic(): Single<String> {
 
-        return Single.zip(passSubject
-                .doOnNext { Timber.d("Pass: $it") }
-                .filter { it.isNotBlank() }.firstOrError(),
+        return Single.zip(userRepo.getPassword(),
                 userRepo.getUserData().doOnSuccess { Timber.d("UserData for: ${it.username}") },
                 BiFunction<String, UserSecurity, String> { pass, userSecurity ->
                     val helper = UserSecurityHelper(pass.toCharArray())
@@ -149,7 +144,7 @@ class UserUseCases
     fun logout() = userRepo.logout()
 
     fun setNewSession() {
-        passSubject.onNext("")
+        userRepo.setPassword("")
     }
 
     companion object {

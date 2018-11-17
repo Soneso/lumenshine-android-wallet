@@ -21,6 +21,7 @@ import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,6 +38,7 @@ class UserRepository @Inject constructor(
 
     private val userApi = r.create(UserApi::class.java)
     private val userDao = db.userDao()
+    private val passSubject = BehaviorSubject.create<String>()
 
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
@@ -71,6 +73,12 @@ class UserRepository @Inject constructor(
                     true
                 }, { it })
     }
+
+    fun setPassword(pass: String) {
+        passSubject.onNext(pass)
+    }
+
+    fun getPassword() = passSubject.firstOrError()
 
     fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 
