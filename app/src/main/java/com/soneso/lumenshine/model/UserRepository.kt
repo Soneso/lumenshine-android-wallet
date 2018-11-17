@@ -25,11 +25,13 @@ import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Class used to user operations to server.
  * Created by cristi.paval on 3/26/18.
  */
+@Singleton
 class UserRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
         db: LsDatabase,
