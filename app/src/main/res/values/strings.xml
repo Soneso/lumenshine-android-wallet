@@ -257,9 +257,9 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="repeat_password">Repeat Password</string>
 
-    <string name="forename">Forename</string>
+    <string name="forename">FORENAME</string>
 
-    <string name="lastname">Lastname</string>
+    <string name="lastname">LASTNAME</string>
 
     <string name="company_name">Company name</string>
 
@@ -657,5 +657,9 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     </string-array>
 
     <string name="error_verify_email">Please verify your email address first</string>
+
+    <string name="error_invalid_forename">Invalid forename</string>
+
+    <string name="error_invalid_lastname">Invalid lastname</string>
 
 </resources>

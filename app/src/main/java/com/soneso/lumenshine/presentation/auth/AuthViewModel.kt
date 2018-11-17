@@ -68,7 +68,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    fun createAccount(email: CharSequence, password: CharSequence, countryPosition: Int = 0) {
+    fun createAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence, countryPosition: Int = 0) {
 
         val country = try {
             liveCountries.value?.success()?.get(countryPosition)
@@ -76,7 +76,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
             null
         }
 
-        val d = userUseCases.registerAccount(email, password, country)
+        val d = userUseCases.registerAccount(foreName, lastName, email, password, country)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {

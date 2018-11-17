@@ -41,6 +41,8 @@ class UserRepository @Inject constructor(
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.registerUser(
+                userProfile.forename,
+                userProfile.lastname,
                 userProfile.email,
                 userSecurity.passwordKdfSalt.base64String(),
                 userSecurity.encryptedMnemonicMasterKey.base64String(),
