@@ -97,6 +97,7 @@ open class FormInputView @JvmOverloads constructor(
 
             regexToMatch.isNotEmpty() && !trimmedText.matches(Regex(regexToMatch)) -> {
                 errorTextView.text = errorText
+                return false
             }
         }
         return true
