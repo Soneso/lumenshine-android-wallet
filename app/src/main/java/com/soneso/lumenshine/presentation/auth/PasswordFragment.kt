@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import com.soneso.lumenshine.BuildConfig
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -22,6 +23,9 @@ class PasswordFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (BuildConfig.DEBUG) {
+            passwordView.trimmedText = "Test1234!"
+        }
         setupListeners()
         subscribeForLiveData()
     }

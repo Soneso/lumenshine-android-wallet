@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -41,7 +40,6 @@
             android:background="@drawable/bg_rounded3_helpbuttongray"
             android:fontFamily="@font/encodesans_bold"
             android:padding="@dimen/size_2"
-            android:text="@string/wallet_not_funded"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_15"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,36 +48,54 @@
         <TextView
             android:id="@+id/balanceTitleView"
             style="@style/WalletCardBalanceTitleView"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_6"
             android:layout_marginTop="@dimen/size_15"
-            android:background="@drawable/bg_top_rounded10_red"
+            android:layout_marginEnd="@dimen/size_10"
+            android:background="@drawable/bg_top_rounded10_green"
             android:paddingStart="@dimen/size_10"
             android:paddingTop="@dimen/size_10"
             android:paddingEnd="0dp"
             android:text="@string/wallet_balance"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subtitleView" />
 
-        <TextView
-            android:id="@+id/balanceView"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/balancesView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_6"
+            android:layout_marginEnd="@dimen/size_10"
             android:layout_marginBottom="@dimen/size_15"
-            android:background="@drawable/bg_bottom_rounded10_red"
+            android:background="@drawable/bg_bottom_rounded10_green"
+            android:orientation="vertical"
             android:paddingStart="@dimen/size_10"
             android:paddingEnd="0dp"
             android:paddingBottom="@dimen/size_10"
-            android:text="@string/wallet_empty_balance"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_16"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/balanceTitleView" />
+
+        <TextView
+            android:id="@+id/availabilityTitleView"
+            style="@style/WalletCardBalanceTitleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginEnd="@dimen/size_10"
+            android:text="@string/wallet_availability"
+            android:textColor="@color/blue"
+            app:layout_constraintTop_toBottomOf="@id/balancesView" />
+
+        <LinearLayout
+            android:id="@+id/availabilitiesView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_10"
+            android:layout_marginBottom="@dimen/size_15"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/size_10"
+            app:layout_constraintTop_toBottomOf="@id/availabilityTitleView" />
 
         <View
             android:id="@+id/dividerView"
@@ -87,35 +103,36 @@
             android:layout_height="@dimen/size_05"
             android:layout_marginTop="@dimen/size_22"
             android:background="@color/lightGray"
-            app:layout_constraintTop_toBottomOf="@id/balanceView" />
+            app:layout_constraintTop_toBottomOf="@id/availabilitiesView" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:paddingStart="@dimen/size_16"
-            android:paddingEnd="@dimen/size_16"
-            android:src="@drawable/icon_help28"
-            android:tint="@color/blue_selectable"
-            app:layout_constraintBottom_toBottomOf="@id/fundButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/fundButton"
-            tools:ignore="ContentDescription" />
 
         <TextView
-            android:id="@+id/fundButton"
+            android:id="@+id/detailsButton"
             style="@style/WalletCardButton"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size_45"
             android:layout_marginEnd="@dimen/size_8"
-            android:text="@string/wallet_button_fund_wallet"
+            android:text="@string/details"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerView" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+        <TextView
+            android:id="@+id/receiveButton"
+            style="@style/WalletCardButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+            android:layout_height="@dimen/size_45"
+            android:text="@string/receive"
+            app:layout_constraintEnd_toStartOf="@id/detailsButton"
+            app:layout_constraintTop_toBottomOf="@id/dividerView" />
+
+        <TextView
+            android:id="@+id/sendButton"
+            style="@style/WalletCardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_45"
+            android:text="@string/send"
+            app:layout_constraintEnd_toStartOf="@id/receiveButton"
+            app:layout_constraintTop_toBottomOf="@id/dividerView" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </merge>
