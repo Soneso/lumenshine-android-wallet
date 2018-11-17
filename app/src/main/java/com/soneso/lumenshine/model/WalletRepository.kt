@@ -1,7 +1,7 @@
 package com.soneso.lumenshine.model
 
 import com.soneso.lumenshine.model.entities.StellarWallet
-import com.soneso.lumenshine.model.entities.Wallet
+import com.soneso.lumenshine.model.entities.WalletEntity
 import com.soneso.lumenshine.model.wrapper.toStellarWallet
 import com.soneso.lumenshine.model.wrapper.toWallet
 import com.soneso.lumenshine.networking.NetworkStateObserver
@@ -12,7 +12,6 @@ import com.soneso.lumenshine.util.*
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.stellar.sdk.Server
-import org.stellar.sdk.responses.AccountResponse
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -26,30 +25,28 @@ class WalletRepository @Inject constructor(
     private val walletApi = r.create(WalletApi::class.java)
     private val walletDao = db.walletDao()
 
-    fun loadAllWallets(): Flowable<Resource<List<Wallet>, ServerException>> {
+    fun loadAllWallets(): Flowable<Resource<List<WalletEntity>, ServerException>> {
 
-        val refresher: Flowable<Resource<List<Wallet>, ServerException>> = walletApi.getAllWallets()
+        val refresher: Flowable<Resource<List<WalletEntity>, ServerException>> = walletApi.getAllWallets()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({ dto ->
                     dto.map { it.toWallet() }
                 }, { it })
 
         return walletDao.getAllWallets()
-                .map { Success<List<Wallet>, ServerException>(it) as Resource<List<Wallet>, ServerException> }
+                .map { Success<List<WalletEntity>, ServerException>(it) as Resource<List<WalletEntity>, ServerException> }
                 .refreshWith(refresher) { walletDao.insertAll(it) }
     }
 
-    fun loadStellarWallet(mnemonic: CharArray): Single<Resource<StellarWallet, ServerException>> {
+    fun loadStellarWallet(mnemonic: CharArray): Single<StellarWallet> {
 
-
-        return Single.create<Resource<AccountResponse, ServerException>> {
+        return Single.create {
             try {
                 val ar = stellarServer.accounts().account(KeyPairHelper.keyPair(mnemonic))
-                it.onSuccess(Success(ar))
+                it.onSuccess(ar.toStellarWallet())
             } catch (e: Exception) {
-                it.onSuccess(Failure(ServerException(e)))
+                it.onError(e)
             }
         }
-                .mapResource({ it.toStellarWallet() }, { it })
     }
 }

@@ -3,8 +3,8 @@ package com.soneso.lumenshine.presentation.wallets
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.soneso.lumenshine.domain.data.WalletCardData
 import com.soneso.lumenshine.domain.usecases.WalletsUseCase
-import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -15,7 +15,7 @@ class WalletsViewModel(private val walletsUseCase: WalletsUseCase) : ViewModel()
 
     private val compositeDisposable = CompositeDisposable()
 
-    val liveWallets: LiveData<Resource<List<Wallet>, ServerException>> = MutableLiveData()
+    val liveWallets: LiveData<Resource<WalletCardData, ServerException>> = MutableLiveData()
 
     init {
         compositeDisposable.add(fetchAllWallets())

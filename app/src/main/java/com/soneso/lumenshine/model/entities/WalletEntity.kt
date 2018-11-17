@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.soneso.lumenshine.persistence.room.DbNames
 
 @Entity(tableName = DbNames.TABLE_WALLETS)
-data class Wallet(
+data class WalletEntity(
 
         @PrimaryKey
         @ColumnInfo(name = DbNames.COLUMN_ID)

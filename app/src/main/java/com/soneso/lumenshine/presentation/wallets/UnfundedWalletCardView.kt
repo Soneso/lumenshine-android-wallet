@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.model.entities.Wallet
+import com.soneso.lumenshine.domain.data.WalletCardData
 import com.soneso.lumenshine.presentation.widgets.LsCardView
 import kotlinx.android.synthetic.main.view_unfunded_wallet_card.view.*
 
@@ -16,7 +16,7 @@ class UnfundedWalletCardView @JvmOverloads constructor(
         View.inflate(context, R.layout.view_unfunded_wallet_card, this)
     }
 
-    fun populate(wallet: Wallet) {
+    fun populate(wallet: WalletCardData) {
 
         nameView.text = wallet.name
     }

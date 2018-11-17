@@ -4,37 +4,67 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.model.entities.Wallet
+import com.soneso.lumenshine.domain.data.WalletCardData
 
 class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 
-    private val walletData = ArrayList<Wallet>()
+    private val walletData = ArrayList<WalletCardData>()
 
-    fun setWalletData(wallets: List<Wallet>) {
+    fun addWalletData(wallet: WalletCardData) {
 
-        walletData.clear()
-        walletData.addAll(wallets)
-        notifyDataSetChanged()
+        var index = walletData.indexOfFirst { it.id == wallet.id }
+        if (index > -1) {
+            walletData[index] = wallet
+            notifyItemChanged(index)
+        } else {
+            index = walletData.size
+            walletData.add(wallet)
+            notifyItemInserted(index)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletViewHolder {
 
-        val view = FundedWalletCardView(parent.context)
+        val view = when (viewType) {
+            R.layout.view_funded_wallet_card -> FundedWalletCardView(parent.context)
+            R.layout.view_unfunded_wallet_card -> UnfundedWalletCardView(parent.context)
+            else -> EmptyWalletCardView(parent.context)
+        }
         val params = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         params.marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
         params.marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
         view.layoutParams = params
         return WalletViewHolder(view)
+
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val wallet = walletData[position]
+        return if (wallet.hasBalances()) {
+            R.layout.view_funded_wallet_card
+        } else {
+            R.layout.view_empty_wallet_card
+        }
     }
 
     override fun getItemCount() = walletData.size
 
     override fun onBindViewHolder(holder: WalletViewHolder, position: Int) {
-
-        holder.walletView.populate(walletData[position])
+        when (getItemViewType(position)) {
+            R.layout.view_empty_wallet_card -> {
+                val walletView = holder.itemView as EmptyWalletCardView
+                walletView.populate(walletData[position])
+            }
+            R.layout.view_unfunded_wallet_card -> {
+                val walletView = holder.itemView as UnfundedWalletCardView
+                walletView.populate(walletData[position])
+            }
+            R.layout.view_funded_wallet_card -> {
+                val walletView = holder.itemView as FundedWalletCardView
+                walletView.populate(walletData[position])
+            }
+        }
     }
 
-    inner class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val walletView = view as FundedWalletCardView
-    }
+    inner class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
