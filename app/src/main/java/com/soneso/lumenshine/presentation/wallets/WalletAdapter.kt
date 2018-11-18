@@ -4,13 +4,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.WalletCardData
+import com.soneso.lumenshine.domain.data.Wallet
 
 class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 
-    private val walletData = ArrayList<WalletCardData>()
+    private val walletData = ArrayList<Wallet>()
 
-    fun addWalletData(wallet: WalletCardData) {
+    fun addWalletData(wallet: Wallet) {
 
         var index = walletData.indexOfFirst { it.id == wallet.id }
         if (index > -1) {

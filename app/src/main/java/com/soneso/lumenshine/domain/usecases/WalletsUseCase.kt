@@ -1,6 +1,6 @@
 package com.soneso.lumenshine.domain.usecases
 
-import com.soneso.lumenshine.domain.data.WalletCardData
+import com.soneso.lumenshine.domain.data.Wallet
 import com.soneso.lumenshine.model.WalletRepository
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Failure
@@ -16,27 +16,27 @@ class WalletsUseCase @Inject constructor(
         private val walletRepo: WalletRepository
 ) {
 
-    fun provideAllWallets(): Flowable<Resource<WalletCardData, ServerException>> {
+    fun provideAllWallets(): Flowable<Resource<Wallet, ServerException>> {
 
-        return Flowable.create<Resource<WalletCardData, ServerException>>({ emitter ->
+        return Flowable.create<Resource<Wallet, ServerException>>({ emitter ->
             val cd = CompositeDisposable()
             val d = walletRepo.loadAllWallets()
                     .flatMap {
                         when (it.state) {
                             Resource.SUCCESS -> Flowable.fromIterable(it.success())
-                                    .map { entity -> Success<WalletCardData, ServerException>(WalletCardData(entity)) }
+                                    .map { entity -> Success<Wallet, ServerException>(Wallet(entity)) }
 
-                            Resource.FAILURE -> Flowable.just(Failure<WalletCardData, ServerException>(it.failure()))
+                            Resource.FAILURE -> Flowable.just(Failure<Wallet, ServerException>(it.failure()))
                             else -> Flowable.just(Resource(Resource.LOADING))
                         }
                     }
                     .doOnNext { resource ->
                         when (resource.state) {
                             Resource.SUCCESS -> {
-                                val d = walletRepo.loadStellarWallet(resource.success().publicKey)
+                                val d = walletRepo.loadWalletDetails(resource.success().publicKey)
                                         .subscribeOn(Schedulers.io())
                                         .subscribe({ sw ->
-                                            emitter.onNext(Success(resource.success().apply { setStellarWallet(sw) }))
+                                            emitter.onNext(Success(resource.success().apply { setDetails(sw) }))
                                         }, { throwable ->
                                             emitter.onNext(Failure(ServerException(throwable)))
                                         })

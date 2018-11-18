@@ -1,8 +1,9 @@
 package com.soneso.lumenshine.model.wrapper
 
-import com.soneso.lumenshine.model.entities.StellarWallet
-import com.soneso.lumenshine.model.entities.WalletBalanceEntity
-import com.soneso.lumenshine.model.entities.WalletEntity
+import com.soneso.lumenshine.model.entities.wallet.AssetType
+import com.soneso.lumenshine.model.entities.wallet.WalletBalanceEntity
+import com.soneso.lumenshine.model.entities.wallet.WalletDetailEntity
+import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import com.soneso.lumenshine.networking.dto.WalletDto
 import org.stellar.sdk.responses.AccountResponse
 
@@ -17,13 +18,14 @@ fun WalletDto.toWallet(): WalletEntity {
     )
 }
 
-fun AccountResponse.toStellarWallet(): StellarWallet {
+fun AccountResponse.toStellarWallet(): WalletDetailEntity {
 
-    return StellarWallet(
+    return WalletDetailEntity(
             balances.map { it.toWalletBalance() }
     )
 }
 
 fun AccountResponse.Balance.toWalletBalance(): WalletBalanceEntity {
-    return WalletBalanceEntity(balance.toDouble(), assetType)
+    return WalletBalanceEntity(balance.toDouble(), assetCode
+            ?: "XLM", AssetType.fromStellarName(assetType))
 }

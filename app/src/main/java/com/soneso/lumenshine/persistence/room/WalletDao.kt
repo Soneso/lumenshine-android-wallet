@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.soneso.lumenshine.model.entities.WalletEntity
+import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import io.reactivex.Flowable
 
 @Dao

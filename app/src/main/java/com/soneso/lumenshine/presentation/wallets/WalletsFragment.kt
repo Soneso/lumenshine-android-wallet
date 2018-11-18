@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.data.WalletCardData
+import com.soneso.lumenshine.domain.data.Wallet
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.util.Resource
@@ -48,7 +48,7 @@ class WalletsFragment : LsFragment() {
         })
     }
 
-    private fun renderWallet(resource: Resource<WalletCardData, ServerException>) {
+    private fun renderWallet(resource: Resource<Wallet, ServerException>) {
 
         when (resource.state) {
             Resource.SUCCESS -> {

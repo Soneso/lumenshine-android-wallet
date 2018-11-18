@@ -1,7 +1,7 @@
 package com.soneso.lumenshine.model
 
-import com.soneso.lumenshine.model.entities.StellarWallet
-import com.soneso.lumenshine.model.entities.WalletEntity
+import com.soneso.lumenshine.model.entities.wallet.WalletDetailEntity
+import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import com.soneso.lumenshine.model.wrapper.toStellarWallet
 import com.soneso.lumenshine.model.wrapper.toWallet
 import com.soneso.lumenshine.networking.NetworkStateObserver
@@ -40,7 +40,7 @@ class WalletRepository @Inject constructor(
                 .refreshWith(refresher) { walletDao.insertAll(it) }
     }
 
-    fun loadStellarWallet(publicKey: String): Single<StellarWallet> {
+    fun loadWalletDetails(publicKey: String): Single<WalletDetailEntity> {
 
         return Single.create {
             try {
@@ -48,7 +48,7 @@ class WalletRepository @Inject constructor(
                 it.onSuccess(ar.toStellarWallet())
             } catch (e: ErrorResponse) {
                 when (e.code) {
-                    404 -> it.onSuccess(StellarWallet())
+                    404 -> it.onSuccess(WalletDetailEntity())
                     else -> it.onError(e)
                 }
             }

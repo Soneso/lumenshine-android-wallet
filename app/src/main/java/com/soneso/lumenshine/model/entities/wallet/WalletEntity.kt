@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.model.entities
+package com.soneso.lumenshine.model.entities.wallet
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
