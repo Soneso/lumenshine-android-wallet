@@ -1,24 +1,18 @@
 package com.soneso.lumenshine.domain.usecases
 
 import com.soneso.lumenshine.domain.data.WalletCardData
-import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.WalletRepository
-import com.soneso.lumenshine.model.entities.StellarWallet
-import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.Success
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class WalletsUseCase @Inject constructor(
-        private val userRepo: UserRepository,
         private val walletRepo: WalletRepository
 ) {
 
@@ -39,7 +33,7 @@ class WalletsUseCase @Inject constructor(
                     .doOnNext { resource ->
                         when (resource.state) {
                             Resource.SUCCESS -> {
-                                val d = provideStellarWallet()
+                                val d = walletRepo.loadStellarWallet(resource.success().publicKey)
                                         .subscribeOn(Schedulers.io())
                                         .subscribe({ sw ->
                                             emitter.onNext(Success(resource.success().apply { setStellarWallet(sw) }))
@@ -55,19 +49,4 @@ class WalletsUseCase @Inject constructor(
             emitter.setCancellable { cd.dispose() }
         }, BackpressureStrategy.LATEST)
     }
-
-    private fun provideStellarWallet(): Single<StellarWallet> {
-        return Single.zip(
-                userRepo.getPassword(),
-                userRepo.getUserData(),
-                BiFunction<String, UserSecurity, CharArray> { pass, us ->
-                    UserSecurityHelper(pass.toCharArray())
-                            .apply { decipherUserSecurity(us) }
-                            .mnemonicChars
-                }
-        ).flatMap {
-            walletRepo.loadStellarWallet(it)
-        }
-    }
-
 }

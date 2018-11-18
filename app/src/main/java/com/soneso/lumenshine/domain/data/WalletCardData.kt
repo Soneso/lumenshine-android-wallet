@@ -9,12 +9,15 @@ class WalletCardData(entity: WalletEntity, stellar: StellarWallet? = null) {
     val name = entity.name
     val federationAddress = entity.federationAddress
     val shownInHomeScreen = entity.shownInHomeScreen
-    var publicKey0 = stellar?.publicKey0
+    val publicKey = entity.publicKey
+    var balances = stellar?.balances
         private set
 
     fun setStellarWallet(wallet: StellarWallet) {
-        publicKey0 = wallet.publicKey0
+        balances = wallet.balances
     }
 
-    fun hasBalances() = publicKey0 != null
+    fun hasBalances() = balances?.isNotEmpty() == true
+
+    fun isLoaded() = balances != null
 }

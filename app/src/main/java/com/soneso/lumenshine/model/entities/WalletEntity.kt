@@ -19,5 +19,8 @@ data class WalletEntity(
         val federationAddress: String,
 
         @ColumnInfo(name = DbNames.COLUMN_IN_HOME_SCREEN)
-        val shownInHomeScreen: Boolean
+        val shownInHomeScreen: Boolean,
+
+        @ColumnInfo(name = DbNames.COLUMN_PUBLIC_KEY)
+        val publicKey: String
 )

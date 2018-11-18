@@ -11,7 +11,9 @@ import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.*
 import io.reactivex.Flowable
 import io.reactivex.Single
+import org.stellar.sdk.KeyPair
 import org.stellar.sdk.Server
+import org.stellar.sdk.requests.ErrorResponse
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -38,14 +40,17 @@ class WalletRepository @Inject constructor(
                 .refreshWith(refresher) { walletDao.insertAll(it) }
     }
 
-    fun loadStellarWallet(mnemonic: CharArray): Single<StellarWallet> {
+    fun loadStellarWallet(publicKey: String): Single<StellarWallet> {
 
         return Single.create {
             try {
-                val ar = stellarServer.accounts().account(KeyPairHelper.keyPair(mnemonic))
+                val ar = stellarServer.accounts().account(KeyPair.fromAccountId(publicKey))
                 it.onSuccess(ar.toStellarWallet())
-            } catch (e: Exception) {
-                it.onError(e)
+            } catch (e: ErrorResponse) {
+                when (e.code) {
+                    404 -> it.onSuccess(StellarWallet())
+                    else -> it.onError(e)
+                }
             }
         }
     }

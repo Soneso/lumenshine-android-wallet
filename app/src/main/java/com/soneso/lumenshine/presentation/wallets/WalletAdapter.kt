@@ -40,10 +40,12 @@ class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
         val wallet = walletData[position]
-        return if (wallet.hasBalances()) {
+        return if (!wallet.isLoaded()) {
+            R.layout.view_empty_wallet_card
+        } else if (wallet.hasBalances()) {
             R.layout.view_funded_wallet_card
         } else {
-            R.layout.view_empty_wallet_card
+            R.layout.view_unfunded_wallet_card
         }
     }
 
