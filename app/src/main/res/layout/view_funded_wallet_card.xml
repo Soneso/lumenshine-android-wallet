@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_6"
-            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginEnd="@dimen/size_10"
             android:background="@drawable/bg_top_rounded10_green"
             android:paddingStart="@dimen/size_10"
@@ -101,7 +101,7 @@
             android:id="@+id/dividerView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_05"
-            android:layout_marginTop="@dimen/size_22"
+            android:layout_marginTop="@dimen/size_15"
             android:background="@color/lightGray"
             app:layout_constraintTop_toBottomOf="@id/availabilitiesView" />
 

@@ -21,11 +21,12 @@ fun WalletDto.toWallet(): WalletEntity {
 fun AccountResponse.toStellarWallet(): WalletDetailEntity {
 
     return WalletDetailEntity(
-            balances.map { it.toWalletBalance() }
+            balances.map { it.toWalletBalance() },
+            subentryCount ?: 0
     )
 }
 
 fun AccountResponse.Balance.toWalletBalance(): WalletBalanceEntity {
     return WalletBalanceEntity(balance.toDouble(), assetCode
-            ?: "XLM", AssetType.fromStellarName(assetType))
+            ?: "XLM", AssetType.fromStellarName(assetType), sellingLiabilities.toDouble())
 }

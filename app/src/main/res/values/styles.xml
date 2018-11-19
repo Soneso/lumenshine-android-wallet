@@ -141,7 +141,16 @@
 
     <style name="WalletCardBalanceValueView" parent="AppTheme.LsTextView">
         <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
         <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="WalletCardAvailabilityValueView" parent="AppTheme.LsTextView">
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="WalletCardButton" parent="AppTheme.LsTextView">
