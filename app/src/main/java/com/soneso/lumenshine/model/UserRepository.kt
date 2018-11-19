@@ -21,14 +21,17 @@ import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Class used to user operations to server.
  * Created by cristi.paval on 3/26/18.
  */
+@Singleton
 class UserRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
         db: LsDatabase,
@@ -37,10 +40,13 @@ class UserRepository @Inject constructor(
 
     private val userApi = r.create(UserApi::class.java)
     private val userDao = db.userDao()
+    private val passSubject = BehaviorSubject.create<String>()
 
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.registerUser(
+                userProfile.forename,
+                userProfile.lastname,
                 userProfile.email,
                 userSecurity.passwordKdfSalt.base64String(),
                 userSecurity.encryptedMnemonicMasterKey.base64String(),
@@ -69,6 +75,12 @@ class UserRepository @Inject constructor(
                     true
                 }, { it })
     }
+
+    fun setPassword(pass: String) {
+        passSubject.onNext(pass)
+    }
+
+    fun getPassword() = passSubject.firstOrError()
 
     fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 

@@ -13,7 +13,7 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.BlogPostPreview
 import com.soneso.lumenshine.domain.data.InternalLink
 import com.soneso.lumenshine.domain.util.Mock
-import com.soneso.lumenshine.presentation.wallets.WalletCardView
+import com.soneso.lumenshine.presentation.wallets.UnfundedWalletCardView
 import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*
 import kotlinx.android.synthetic.main.item_home_web_link.view.*
@@ -39,7 +39,7 @@ class HomeFeedAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androi
                 InternalLinkHolder(view)
             }
             TYPE_ACCOUNT -> {
-                val view = WalletCardView(parent.context)
+                val view = UnfundedWalletCardView(parent.context)
                 val params = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 params.marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
                 params.marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)

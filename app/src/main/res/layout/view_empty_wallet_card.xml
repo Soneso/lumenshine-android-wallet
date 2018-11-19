@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/nameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_16"
+            android:fontFamily="@font/encodesans_bold"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_size_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/walletLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_5"
+            android:text="@string/wallet"
+            android:textAllCaps="true"
+            android:textSize="@dimen/text_size_16"
+            app:layout_constraintBottom_toBottomOf="@id/nameView"
+            app:layout_constraintStart_toEndOf="@id/nameView" />
+
+        <TextView
+            android:id="@+id/subtitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_4"
+            android:fontFamily="@font/encodesans_regular"
+            android:padding="@dimen/size_2"
+            android:text="@string/no_stellar_address"
+            android:textColor="@color/orange"
+            android:textSize="@dimen/text_size_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameView" />
+
+        <TextView
+            android:id="@+id/loadingTitleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_16"
+            android:layout_marginTop="@dimen/size_25"
+            android:fontFamily="@font/encodesans_regular"
+            android:text="@string/loading"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/text_size_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/subtitleView" />
+
+        <ProgressBar
+            style="?android:progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_10"
+            app:layout_constraintBottom_toBottomOf="@id/loadingTitleView"
+            app:layout_constraintStart_toEndOf="@id/loadingTitleView"
+            app:layout_constraintTop_toTopOf="@id/loadingTitleView" />
+
+        <View
+            android:id="@+id/dividerView"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_05"
+            android:layout_marginTop="@dimen/size_25"
+            android:background="@color/lightGray"
+            app:layout_constraintTop_toBottomOf="@id/loadingTitleView" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingStart="@dimen/size_16"
+            android:paddingEnd="@dimen/size_16"
+            android:src="@drawable/icon_help28"
+            android:tint="@color/blue_selectable"
+            app:layout_constraintBottom_toBottomOf="@id/fundButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fundButton"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/fundButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_45"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/size_16"
+            android:paddingEnd="@dimen/size_16"
+            android:text="@string/wallet_button_fund_wallet"
+            android:textColor="@color/blue_selectable"
+            android:textSize="@dimen/text_size_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dividerView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

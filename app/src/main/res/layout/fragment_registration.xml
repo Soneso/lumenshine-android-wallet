@@ -1,34 +1,66 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/AppTheme.LsCardView"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/size_11"
-    tools:context="com.soneso.lumenshine.presentation.auth.RegistrationFragment">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/size_14">
+        android:paddingBottom="@dimen/size_40"
+        android:orientation="vertical">
 
-        <com.soneso.lumenshine.presentation.widgets.LsTextView
-            style="@style/LsCardTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/join_lumenshine" />
-
-        <com.soneso.lumenshine.presentation.widgets.FormInputView
-            android:id="@+id/emailView"
+        <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            style="@style/AppTheme.LsCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_20"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            app:error_text="@string/error_invalid_email"
-            app:input_level="@integer/email_input_level"
-            app:regex="@string/email_regex" />
+            android:layout_margin="@dimen/size_11"
+            tools:context="com.soneso.lumenshine.presentation.auth.RegistrationFragment">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/size_14">
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    style="@style/LsCardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/join_lumenshine" />
+
+                <com.soneso.lumenshine.presentation.widgets.FormInputView
+                    android:id="@+id/foreName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:hint="@string/forename"
+                    android:inputType="textPersonName"
+                    app:error_text="@string/error_invalid_forename"
+                    app:input_level="@integer/email_input_level"
+                    app:regex="@string/text_regex" />
+
+                <com.soneso.lumenshine.presentation.widgets.FormInputView
+                    android:id="@+id/lastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_9"
+                    android:hint="@string/lastname"
+                    android:inputType="textPersonName"
+                    app:error_text="@string/error_invalid_lastname"
+                    app:input_level="@integer/email_input_level"
+                    app:regex="@string/text_regex" />
+
+                <com.soneso.lumenshine.presentation.widgets.FormInputView
+                    android:id="@+id/emailView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_9"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress"
+                    app:error_text="@string/error_invalid_email"
+                    app:input_level="@integer/email_input_level"
+                    app:regex="@string/email_regex" />
 
         <com.soneso.lumenshine.presentation.widgets.PasswordInputView
             android:id="@+id/password"
@@ -51,41 +83,44 @@
             android:inputType="textPassword"
             app:input_level="@integer/password_confirmation_input_level" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_12"
-            android:orientation="horizontal">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_12"
+                    android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/checkboxTermsOfService"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:scaleX="0.90"
-                android:scaleY="0.90"
-                android:padding="0dp"
-                android:theme="@style/DarkBlueCheckBox" />
+                    <CheckBox
+                        android:id="@+id/checkboxTermsOfService"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:padding="0dp"
+                        android:scaleX="0.90"
+                        android:scaleY="0.90"
+                        android:theme="@style/DarkBlueCheckBox" />
 
-            <com.soneso.lumenshine.presentation.widgets.LsTextView
-                android:id="@+id/agreeToTermsOfService"
-                style="@style/LsCardTitleDetail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/checkboxTermsOfService"
-                android:text="@string/you_agree_to_abide" />
-        </RelativeLayout>
+                    <com.soneso.lumenshine.presentation.widgets.LsTextView
+                        android:id="@+id/agreeToTermsOfService"
+                        style="@style/LsCardTitleDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@id/checkboxTermsOfService"
+                        android:text="@string/you_agree_to_abide" />
+                </RelativeLayout>
 
-        <com.soneso.lumenshine.presentation.widgets.LsButton
-            android:id="@+id/registerButton"
-            style="@style/GreenButtonWithStates"
-            android:layout_width="@dimen/size_160"
-            android:layout_height="@dimen/size_38"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/size_25"
-            android:layout_marginBottom="@dimen/size_5"
-            android:enabled="false"
-            android:text="@string/sign_up" />
+                <com.soneso.lumenshine.presentation.widgets.LsButton
+                    android:id="@+id/registerButton"
+                    style="@style/GreenButtonWithStates"
+                    android:layout_width="@dimen/size_160"
+                    android:layout_height="@dimen/size_38"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/size_25"
+                    android:layout_marginBottom="@dimen/size_5"
+                    android:enabled="false"
+                    android:text="@string/sign_up" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</ScrollView>
