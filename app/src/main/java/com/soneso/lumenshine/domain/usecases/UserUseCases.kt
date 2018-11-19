@@ -3,6 +3,7 @@ package com.soneso.lumenshine.domain.usecases
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
+import com.soneso.lumenshine.domain.util.PrivateKeyManager
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.entities.UserSecurity
@@ -59,11 +60,18 @@ class UserUseCases
                 if (it.isSuccessful) {
                     userRepo.getUserData(username).toFlowable().flatMap { userData ->
                         val helper = UserSecurityHelper(password.toCharArray())
-                        val publicKeyIndex188 = helper.decipherUserSecurity(userData)
-                        if (publicKeyIndex188 == null) {
+                        val decipherData = helper.decipherUserSecurityNew(userData)
+                        if (decipherData == null) {
                             Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
                         } else {
-                            userRepo.loginStep2(username, publicKeyIndex188)
+                            val keyPair = PrivateKeyManager.getKeyPair(userData.publicKeyIndex0, decipherData.mnemonic.toString())
+                            if (keyPair == null) {
+                                Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
+                            } else {
+                                //userRepo.signSEP10ChallengeIfValid()
+
+                                userRepo.loginStep2(username, "")
+                            }
                         }
                     }
                 } else {

@@ -31,6 +31,7 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/INDEX.LIST'
     }
 }
 
@@ -101,7 +102,17 @@ dependencies {
         exclude group: 'org.json', module: 'json'
         exclude group: "com.squareup.okhttp3"
     }
-    implementation 'com.github.stellar:java-stellar-sdk:0.3.3'
+    implementation('com.github.stellar:java-stellar-sdk:0.3.3') {
+        exclude group: "com.squareup.okhttp3"
+        exclude group: "org.glassfish.jersey.core"
+        exclude group: "org.glassfish.jersey.media"
+        exclude group: "com.moandjiezana.toml"
+        exclude group: "com.google.guava"
+        exclude group: "com.google.code.gson"
+        exclude group: "org.mockito"
+        exclude group: "net.i2p.crypto"
+        exclude group: "commons-io"
+    }
 }
 
 
