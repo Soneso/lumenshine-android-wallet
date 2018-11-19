@@ -101,6 +101,7 @@ dependencies {
         exclude group: 'org.json', module: 'json'
         exclude group: "com.squareup.okhttp3"
     }
+    implementation 'com.github.stellar:java-stellar-sdk:0.3.3'
 }
 
 

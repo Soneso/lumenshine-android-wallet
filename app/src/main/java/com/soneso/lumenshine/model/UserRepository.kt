@@ -22,8 +22,14 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
+import org.stellar.sdk.KeyPair
+import org.stellar.sdk.Network
+import org.stellar.sdk.xdr.OperationType
+import org.stellar.sdk.xdr.TransactionEnvelope
+import org.stellar.sdk.xdr.XdrDataInputStream
 import retrofit2.Retrofit
 import timber.log.Timber
+import java.io.ByteArrayInputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -286,6 +292,188 @@ class UserRepository @Inject constructor(
             LsPrefs.username = ""
             userDao.removeRegistrationStatus(username)
             it.onComplete()
+        }
+    }
+
+    //TODO: add callback to method
+    fun signSEP10ChallengeIfValid(base64EnvelopeXDR: String, userKeyPair: KeyPair) {
+        val validationResult = validateSEP10Envelope(base64EnvelopeXDR, userKeyPair.accountId)
+        when (validationResult.state) {
+            validationResult.SUCCES -> {
+                val isValid: Boolean = validationResult.isValid
+                val envelopeXDR: TransactionEnvelope = validationResult.transactionEnvelopeXDR
+                val default = 0
+                if (isValid && envelopeXDR != null && envelopeXDR.tx.seqNum.sequenceNumber.int64 == default.toLong()) {
+                    //sign
+                    // get currently used stellar network
+                    var network = Network.useTestNetwork()
+                    if (Services.shared.usePublicStellarNetwork) {
+                        network = Network.public
+                    }
+                    try {
+                        val tx = envelopeXDR.tx
+                        // user signature
+                        val transactionHash = [UInt8](tx.hash(network))
+                        val userSignature = userKeyPair.signDecorated(transactionHash)
+                        envelopeXDR.signatures.append(userSignature)
+                        val xdrEncodedEnvelope = envelopeXDR.xdrEncoded
+                        if (xdrEncodedEnvelope != null) {
+                            //TODO callback return .success (xdrEncodedEnvelope))
+                            return
+                        } else {
+                            //TODO callback return .failure (.xdrError))
+                        }
+                    } catch (exception: Exception) {
+                        //TODO callback return .failure (.xdrError))
+                    }
+                } else {
+                    //TODO callback return .failure (.invalidSEP10Challenge))
+                }
+            }
+            validationResult.FAILURE -> {
+                val error = validationResult.error
+                //TODO callback return .failure(error))
+            }
+        }
+    }
+    //TODO add callback to method
+    private fun validateSEP10Envelope(base64EnvelopeXDR: String, userAccountId: String) {
+        try {
+            // decode the envelope
+            val stream = ByteArrayInputStream(base64EnvelopeXDR.toByteArray())
+            val stream2 = XdrDataInputStream(stream)
+            val transactionEnvelopeXDR = TransactionEnvelope.decode(stream2)
+            val transactionXDR = transactionEnvelopeXDR.tx
+            // sequence number of transaction must be 0
+            val default = 0
+            if (transactionXDR.seqNum.sequenceNumber.int64 != default.toLong()) {
+                //TODO callback return false, transactionEnvelopeXDR
+                return
+            }
+            // the transaction must contain one operation
+            if (transactionXDR.operations.size == 1) {
+                val operationXDR = transactionXDR.operations.first()
+                // the source account of the operation must match
+                val operationSourceAccount = operationXDR.sourceAccount
+                //TODO to check if the conversion toString of operationSourceAccount.accountID
+                //TODO is correct logically speaking
+                if (operationSourceAccount.accountID.toString() != userAccountId) {
+                    //TODO review if this should replace the comparison of
+                    //TODO operationSourceAccount.accountId != userAccountId from swift or the one above
+                    if (operationSourceAccount.accountID.ed25519.uint256.toString() != userAccountId) {
+                        // source account of transaction doese not match user account
+                        // TODO callback return false, transactionEnvelopeXDR
+                        return
+                    }
+                } else {
+                    // source account of transaction not found
+                    //TODO callback return false, transactionEnvelopeXDR
+                    return
+                }
+                //operation must be manage data operation
+                val operationBodyXDR = operationXDR.body
+                if (operationBodyXDR.discriminant != OperationType.MANAGE_DATA) {
+                    // not a manage data operation
+                    //TODO callback return false, transactionEnvelopeXDR
+                    return
+                }
+            } else {
+                // the transaction has no operation or contains more than one operation
+                //TODO callback return false, transactionEnvelopeXDR
+                return
+            }
+            // the envelope must have one signature and it must be valid: transaction signed by the server
+            if (transactionEnvelopeXDR.signatures.count() == 1) {
+                val signature = transactionEnvelopeXDR.signatures.first().signature
+                // get currently used stellar network
+                var network = Network.useTestNetwork()
+                if (Services.shared.usePublicStellarNetwork) {
+                    network = Network.public
+                }
+                // transaction hash is the signed payload
+                var transactionHash = [UInt8](transactionXDR.hash(network))
+                // validate signature
+                var serverKeyPair = KeyPair(Services.shared.serverSigningKey)
+                var signatureIsValid = serverKeyPair.verify([UInt8](signature), transactionHash)
+                if (signatureIsValid) {
+//                    signature is valid
+                    //TODO callback return true, transactionEnvelopeXDR
+                    return
+                } else { // signature is not valid
+                    //check if our server key is still the same. Load from server and if different, try validation again
+                    var response = loadServerSigningKey()
+                    when (response.state) {
+                        response.SUCCESS -> {
+                            var signingKey = response.signingKey
+                            // check if key loaded from the server is different to our locally stored key
+                            if (signingKey != Services.shared.serverSigningKey) {
+                                // store new signing key
+                                Services.shared.serverSigningKey = signingKey
+                                try {
+                                    // validate signature again
+                                    serverKeyPair = KeyPair(signingKey)
+                                    signatureIsValid = serverKeyPair.verify([UInt8](signature), transactionHash)
+                                    if (signatureIsValid) {
+                                        // signature is valid
+                                        //TODO callback return true, transactionEnvelopeXDR))
+                                        return
+                                    } else {
+                                        // signature is not valid
+                                        //TODO callback return false, transactionEnvelopeXDR))
+                                        return
+                                    }
+                                } catch (error: Exception) {
+//                                print(error.localizedDescription)
+                                    // validation failed
+                                    //TODO callback return false, transactionEnvelopeXDR))
+                                }
+                            } else {
+                                // server key is not different
+                                // signature is not valid
+                                //TODO callback return false, envelopeXDR: transactionEnvelopeXDR))
+                                return
+                            }
+                        }
+                        response.FAILURE -> {
+                            var error = response.error
+                            // could not load signing key from server signature
+                            //TODO callback return. failure (error: error))
+                        }
+                    }
+                }
+            } else {
+                // could not find signature
+                //TODO callback return false, transactionEnvelopeXDR
+                return
+            }
+        } catch (error: Exception) {
+            print(error.localizedMessage)
+            // validation failed
+            //TODO callback return false, null
+        }
+    }
+    /// Loads the server signing key from the servers stellar.toml file
+    /// - Parameter: ServerSigningKeyClosure
+    private fun loadServerSigningKey() {
+        //TODO add callback to function
+        //TODO Services class
+        val url = URL(Services.shared.tomlURL)
+        if (url != null) {
+            try {
+                val tomlString = String(url.readBytes())
+                val toml = StellarToml(tomlString)
+                val serverKey = toml.accountInformation.signingKey
+                if (serverKey != null) {
+                    //TODO callback .success(serverKey))
+                } else {
+                    //TODO callback .failure(.noSigningKeySet))
+                }
+            } catch (error: Exception) {
+                //TODO callback .failure(error: .invalidToml))
+            }
+        } else {
+            //TODO callback return .failure(error: .invalidRequest))
+            return
         }
     }
 
