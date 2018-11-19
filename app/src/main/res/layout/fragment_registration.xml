@@ -5,8 +5,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/size_40"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/size_40">
 
         <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -62,26 +62,26 @@
                     app:input_level="@integer/email_input_level"
                     app:regex="@string/email_regex" />
 
-        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_9"
-            android:drawableEnd="@drawable/icon_help"
-            android:hint="@string/hint_password"
-            android:inputType="textPassword"
-            app:showPasswordToggle="true"
-            app:input_level="@integer/password_input_level" />
+                <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_9"
+                    android:drawableEnd="@drawable/icon_help"
+                    android:hint="@string/hint_password"
+                    android:inputType="textPassword"
+                    app:input_level="@integer/password_input_level"
+                    app:showPasswordToggle="true" />
 
-        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
-            android:id="@+id/passConfirmationView"
-            android:layout_width="match_parent"
-            app:showPasswordToggle="true"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_9"
-            android:hint="@string/hint_password_confirmation"
-            android:inputType="textPassword"
-            app:input_level="@integer/password_confirmation_input_level" />
+                <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+                    android:id="@+id/passConfirmationView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_9"
+                    android:hint="@string/hint_password_confirmation"
+                    android:inputType="textPassword"
+                    app:input_level="@integer/password_confirmation_input_level"
+                    app:showPasswordToggle="true" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

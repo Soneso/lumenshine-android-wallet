@@ -39,7 +39,7 @@ open class FormInputView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.ls_input_view, this, true)
         orientation = VERTICAL
         if (!isInEditMode) {
-            passwordTypeFace = ResourcesCompat.getFont(context, R.font.encodesans_semibold)
+            passwordTypeFace = ResourcesCompat.getFont(context, R.font.encodesans_regular)
         }
         applyAttrs(attrs)
         editTextView.maxLines = 1
