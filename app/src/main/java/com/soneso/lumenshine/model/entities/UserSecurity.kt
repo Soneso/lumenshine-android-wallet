@@ -16,8 +16,8 @@ data class UserSecurity(
         @ColumnInfo(name = DbNames.COLUMN_PK_0)
         val publicKeyIndex0: String,
 
-        @ColumnInfo(name = DbNames.COLUMN_PK_188)
-        var publicKeyIndex188: String,
+        @ColumnInfo(name = DbNames.COLUMN_SEP_10_CHALLENGE)
+        var sep10Challenge: String,
 
         @ColumnInfo(name = DbNames.COLUMN_PASS_KDF_SALT)
         val passwordKdfSalt: ByteArray,
@@ -55,7 +55,7 @@ data class UserSecurity(
 
         if (username != other.username) return false
         if (publicKeyIndex0 != other.publicKeyIndex0) return false
-        if (publicKeyIndex188 != other.publicKeyIndex188) return false
+        if (sep10Challenge != other.sep10Challenge) return false
         if (!Arrays.equals(passwordKdfSalt, other.passwordKdfSalt)) return false
         if (!Arrays.equals(encryptedMnemonicMasterKey, other.encryptedMnemonicMasterKey)) return false
         if (!Arrays.equals(mnemonicMasterKeyEncryptionIv, other.mnemonicMasterKeyEncryptionIv)) return false
@@ -72,7 +72,7 @@ data class UserSecurity(
     override fun hashCode(): Int {
         var result = username.hashCode()
         result = 31 * result + publicKeyIndex0.hashCode()
-        result = 31 * result + publicKeyIndex188.hashCode()
+        result = 31 * result + sep10Challenge.hashCode()
         result = 31 * result + Arrays.hashCode(passwordKdfSalt)
         result = 31 * result + Arrays.hashCode(encryptedMnemonicMasterKey)
         result = 31 * result + Arrays.hashCode(mnemonicMasterKeyEncryptionIv)

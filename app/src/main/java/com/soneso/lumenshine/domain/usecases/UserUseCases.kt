@@ -70,7 +70,7 @@ class UserUseCases
                             } else {
                                 //userRepo.signSEP10ChallengeIfValid()
 
-                                userRepo.loginStep2(username, "")
+                                userRepo.loginStep2(username, userData.sep10Challenge, keyPair)
                             }
                         }
                     }

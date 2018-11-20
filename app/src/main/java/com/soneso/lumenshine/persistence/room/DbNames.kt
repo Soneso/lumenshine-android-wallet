@@ -7,7 +7,7 @@ object DbNames {
     const val COLUMN_USERNAME = "username"
     const val TABLE_USER_DATA = "user_data"
     const val COLUMN_PK_0 = "public_key_index_0"
-    const val COLUMN_PK_188 = "public_key_index_188"
+    const val COLUMN_SEP_10_CHALLENGE = "sep10_transaction_challenge"
     const val COLUMN_PASS_KDF_SALT = "ppassword_kdf_salt"
     const val COLUMN_ENCRYPTED_MNEMONIC_MASTER_KEY = "encrypted_mnemonic_master_key"
     const val COLUMN_MMK_ENCRYPTION_IV = "mnemonic_master_key_encryption_iv"
