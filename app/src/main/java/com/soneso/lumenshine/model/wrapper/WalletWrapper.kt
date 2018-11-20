@@ -11,6 +11,7 @@ fun WalletDto.toWallet(): WalletEntity {
 
     return WalletEntity(
             id,
+            publicKey,
             name,
             federationAddress,
             showOnHomeScreen,
