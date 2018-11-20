@@ -8,7 +8,7 @@ import com.soneso.lumenshine.model.entities.Wallet
 
 @Database(
         entities = [UserSecurity::class, Wallet::class, RegistrationStatus::class],
-        version = 1
+        version = 2
 )
 abstract class LsDatabase : RoomDatabase() {
 

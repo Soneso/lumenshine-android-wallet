@@ -87,6 +87,13 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="LsCardTitleLightBlack">
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="LsCardSecondTitle">
         <item name="android:textColor">@color/green</item>
         <item name="android:textSize">@dimen/text_size_15</item>

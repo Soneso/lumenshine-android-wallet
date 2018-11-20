@@ -9,6 +9,7 @@ fun WalletDto.toWallet(): Wallet {
 
     return Wallet(
             id,
+            publicKey,
             name,
             federationAddress,
             showOnHomeScreen

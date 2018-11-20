@@ -12,6 +12,9 @@ data class Wallet(
         @ColumnInfo(name = DbNames.COLUMN_ID)
         val id: Long,
 
+        @ColumnInfo(name = DbNames.COLUMEN_PUBLIC_KEY)
+        val publicKey: String,
+
         @ColumnInfo(name = DbNames.COLUMN_NAME)
         val name: String,
 

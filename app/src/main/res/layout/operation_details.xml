@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationIdTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_operation_id"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationId"
+        style="@style/LsLightBlueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/operationIdTag"
+        tools:text="123456789" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationMemoTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_memo"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/operationIdTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationMemo"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxEms="10"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/operationMemoTag"
+        tools:text="This is a memo template"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/paymentSenderTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_sender"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/operationMemo"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/paymentSenderPK"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/paymentSenderTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/senderCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/paymentSenderPK"
+        app:layout_constraintStart_toEndOf="@id/paymentSenderPK"
+        app:layout_constraintTop_toTopOf="@+id/paymentSenderPK"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/paymentRecipientTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_receiver"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentSenderTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/paymentRecipientPK"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/paymentRecipientTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/recipientCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/paymentRecipientPK"
+        app:layout_constraintStart_toEndOf="@id/paymentRecipientPK"
+        app:layout_constraintTop_toTopOf="@+id/paymentRecipientPK"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustTypeTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_trust_type"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paymentRecipientTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustTypeText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/changeTrustTypeTag"
+        tools:text="add/remove"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustAssetTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_trust_asset"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeTrustTypeTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustAssetText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/changeTrustAssetTag"
+        tools:text="XLM"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustIssuerTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_trust_issuer"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeTrustAssetTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustIssuerText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/changeTrustIssuerTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/issuerCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/changeTrustIssuerText"
+        app:layout_constraintStart_toEndOf="@id/changeTrustIssuerText"
+        app:layout_constraintTop_toTopOf="@+id/changeTrustIssuerText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustLimitTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_trust_limit"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeTrustIssuerTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/changeTrustLimitText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/changeTrustLimitTag"
+        tools:text="1000.00"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerIdTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/offer_id"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/changeTrustLimitTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerIdText"
+        style="@style/LsLightBlueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/offerIdTag"
+        tools:text="123456789"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerBuyingTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/offer_buying_asset"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerIdTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerBuyingText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/offerBuyingTag"
+        tools:text="EUR"
+        tools:visibility="visible" />
+
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerSellingTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/offer_selling_asset"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerBuyingTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerSellingText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/offerSellingTag"
+        tools:text="1000.00 XLM"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerPriceTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/offer_asset_price"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerSellingTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/offerPriceText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/offerPriceTag"
+        tools:text="1000.00"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/manageDataNameTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manage_data_name"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/offerPriceTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/manageDataNameText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/manageDataNameTag"
+        tools:text="Key"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/manageDataValueTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/manage_data_value"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manageDataNameTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/manageDataValueText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxEms="10"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/manageDataValueTag"
+        tools:text="Manage Data Value"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/bumpToTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bump_sequence_to"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/manageDataValueText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/bumpToText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/bumpToTag"
+        tools:text="215345614"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/mergedAccountTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/account_merge_account"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bumpToTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/mergedAccountText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/mergedAccountTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/mergedAccountCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/mergedAccountText"
+        app:layout_constraintStart_toEndOf="@id/mergedAccountText"
+        app:layout_constraintTop_toTopOf="@+id/mergedAccountText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/inflationDestinationTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/inflation_destination"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mergedAccountTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/inflationDestinationText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/inflationDestinationTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/inflationDestinationCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/inflationDestinationText"
+        app:layout_constraintStart_toEndOf="@id/inflationDestinationText"
+        app:layout_constraintTop_toTopOf="@+id/inflationDestinationText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/setFlagsTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_flags"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inflationDestinationTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/setFlagsText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxEms="10"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/setFlagsTag"
+        tools:text="Authorization required\nAuthorization revocable"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/clearFlagsTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/clear_flags"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setFlagsText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/clearFlagsText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxEms="10"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/clearFlagsTag"
+        tools:text="Authorization immutable"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/masterWeightTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/master_weight"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clearFlagsText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/masterWeightText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/masterWeightTag"
+        tools:text="255"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/lowThresholdTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/low_threshold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/masterWeightTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/lowThresholdText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/lowThresholdTag"
+        tools:text="255"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/mediumThresholdTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/medium_threshold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lowThresholdTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/mediumThresholdText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/mediumThresholdTag"
+        tools:text="255"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/highThresholdTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/high_threshold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mediumThresholdTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/highThresholdText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/highThresholdTag"
+        tools:text="255"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/signerTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signer_added"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/highThresholdTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/signerText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/signerTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/signerCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/signerText"
+        app:layout_constraintStart_toEndOf="@id/signerText"
+        app:layout_constraintTop_toTopOf="@+id/signerText"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/signerTypeTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signer_type"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signerTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/signerTypeText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/signerTypeTag"
+        tools:text="Ed25519 Public Key"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/signerWeightTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signer_weight"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signerTypeTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/signerWeightText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/signerWeightTag"
+        tools:text="255"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/homeDomainTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/home_domain"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signerWeightTag"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/homeDomainText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/homeDomainTag"
+        tools:text="soneso.com"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationAccountTag"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/source_account"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homeDomainTag" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationAccountPK"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:maxEms="10"
+        android:singleLine="true"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@+id/operationAccountTag"
+        tools:text="PK212314545661324243214124124214878"
+        tools:visibility="visible" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/sourceCopyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_8"
+        android:src="@drawable/icon_copy12"
+        android:tint="@color/blue"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/operationAccountPK"
+        app:layout_constraintStart_toEndOf="@id/operationAccountPK"
+        app:layout_constraintTop_toTopOf="@+id/operationAccountPK"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
