@@ -20,14 +20,14 @@ class WalletsUseCase @Inject constructor(
      * This method returns a flowable stream on which is emitted all the wallets one by one. Every wallet will be sent 2 times,
      * first time it contains data from horizon server, then second time it contains all details fetched from stellar sdk.
      */
-    fun provideAllWallets(): Flowable<Resource<Wallet, ServerException>> {
+    fun provideWallets(forHomeScreenOnly: Boolean = false): Flowable<Resource<Wallet, ServerException>> {
 
         return Flowable.create<Resource<Wallet, ServerException>>({ emitter ->
             val cd = CompositeDisposable()
             val d = walletRepo.loadAllWallets()
                     .flatMap {
                         when (it.state) {
-                            Resource.SUCCESS -> Flowable.fromIterable(it.success())
+                            Resource.SUCCESS -> Flowable.fromIterable(it.success().filter { w -> w.shownInHomeScreen || !forHomeScreenOnly })
                                     .map { entity -> Success<Wallet, ServerException>(Wallet(entity)) }
 
                             Resource.FAILURE -> Flowable.just(Failure<Wallet, ServerException>(it.failure()))

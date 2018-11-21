@@ -21,7 +21,7 @@ class WalletsViewModel(private val walletsUseCase: WalletsUseCase) : ViewModel()
         compositeDisposable.add(fetchAllWallets())
     }
 
-    private fun fetchAllWallets() = walletsUseCase.provideAllWallets()
+    private fun fetchAllWallets() = walletsUseCase.provideWallets()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

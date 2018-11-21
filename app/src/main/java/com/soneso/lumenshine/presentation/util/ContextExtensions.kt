@@ -4,8 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.soneso.lumenshine.R
 
@@ -55,4 +59,13 @@ fun FragmentActivity.showInfoDialog(titleResId: Int, contentResId: Int, iconResI
         }
     })
     infoDialog.show(fragmentTransaction, InfoDialog.TAG)
+}
+
+@ColorInt
+fun Context.color(@ColorRes colorId: Int): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        getColor(colorId)
+    } else {
+        ContextCompat.getColor(this, colorId)
+    }
 }

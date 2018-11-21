@@ -1,7 +1,6 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -18,6 +17,7 @@ import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.presentation.util.color
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import com.soneso.lumenshine.presentation.widgets.LsEditText
 import com.soneso.lumenshine.util.Resource
@@ -76,12 +76,10 @@ class RegistrationFragment : AuthFragment() {
             }
         }, 0, youAgreeToAbideTermsOfUse.length - termsOfService.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        val spanColor: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context!!.getColor(R.color.blue)
-        } else {
-            context!!.resources.getColor(R.color.blue)
+        context?.let {
+            val spanColor: Int = it.color(R.color.blue)
+            spannable.setSpan(ForegroundColorSpan(spanColor), youAgreeToAbideTermsOfUse.length - termsOfService.length, youAgreeToAbideTermsOfUse.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
-        spannable.setSpan(ForegroundColorSpan(spanColor), youAgreeToAbideTermsOfUse.length - termsOfService.length, youAgreeToAbideTermsOfUse.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         agreeToTermsOfService.setText(spannable, TextView.BufferType.SPANNABLE)
         agreeToTermsOfService.movementMethod = LinkMovementMethod.getInstance()
@@ -166,7 +164,7 @@ class RegistrationFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.SIGNUP_EMAIL_ALREADY_EXIST -> {
-                emailView.error = e.message
+                emailView.error = e.displayMessage
             }
             else -> {
                 showErrorSnackbar(e)
@@ -192,10 +190,10 @@ class RegistrationFragment : AuthFragment() {
 
     private fun isValidForm() =
             foreName.hasValidInput()
-                &&lastName.hasValidInput()
-                && emailView.hasValidInput()
-                && password.isValidPassword()
-                && isPasswordMatch()
+                    && lastName.hasValidInput()
+                    && emailView.hasValidInput()
+                    && password.isValidPassword()
+                    && isPasswordMatch()
 
 
     private fun isPasswordMatch(): Boolean {

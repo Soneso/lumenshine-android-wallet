@@ -30,10 +30,11 @@ class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
             R.layout.view_unfunded_wallet_card -> UnfundedWalletCardView(parent.context)
             else -> EmptyWalletCardView(parent.context)
         }
-        val params = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        params.marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
-        params.marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
-        view.layoutParams = params
+        view.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                .apply {
+                    marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
+                    marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
+                }
         return WalletViewHolder(view)
 
     }
@@ -55,7 +56,7 @@ class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
         holder.walletView.populate(walletData[position])
     }
 
-    inner class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val walletView = view as WalletCardView
     }
 }

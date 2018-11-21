@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -12,8 +13,12 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.BlogPostPreview
 import com.soneso.lumenshine.domain.data.InternalLink
+import com.soneso.lumenshine.domain.data.Wallet
 import com.soneso.lumenshine.domain.util.Mock
+import com.soneso.lumenshine.presentation.wallets.EmptyWalletCardView
+import com.soneso.lumenshine.presentation.wallets.FundedWalletCardView
 import com.soneso.lumenshine.presentation.wallets.UnfundedWalletCardView
+import com.soneso.lumenshine.presentation.wallets.WalletCardView
 import kotlinx.android.synthetic.main.item_home_chart.view.*
 import kotlinx.android.synthetic.main.item_home_internal_link.view.*
 import kotlinx.android.synthetic.main.item_home_web_link.view.*
@@ -24,29 +29,48 @@ import kotlinx.android.synthetic.main.item_home_web_link.view.*
  */
 class HomeFeedAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
 
-    var onBlogLinkClickListener: ((BlogPostPreview) -> Unit)? = null
+    private val walletData = ArrayList<Wallet>()
 
-//    private var account: StellarAccount? = null
+    fun addWalletData(wallet: Wallet): Int {
+
+        var index = walletData.indexOfFirst { it.id == wallet.id }
+        if (index > -1) {
+            walletData[index] = wallet
+            notifyItemChanged(index)
+        } else {
+            index = walletData.size
+            walletData.add(wallet)
+            notifyItemInserted(index)
+        }
+        return index
+    }
+
+    var onBlogLinkClickListener: ((BlogPostPreview) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return when (viewType) {
-            TYPE_WEB -> {
+            R.layout.view_funded_wallet_card, R.layout.view_unfunded_wallet_card, R.layout.view_empty_wallet_card -> {
+                val view = when (viewType) {
+                    R.layout.view_funded_wallet_card -> FundedWalletCardView(parent.context)
+                    R.layout.view_unfunded_wallet_card -> UnfundedWalletCardView(parent.context)
+                    else -> EmptyWalletCardView(parent.context)
+                }
+                view.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                        .apply {
+                            marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
+                            marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
+                        }
+                return WalletViewHolder(view)
+            }
+            R.layout.item_home_web_link -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_web_link, parent, false)
                 BlogPostHolder(view)
             }
-            TYPE_INTERNAL_LINK -> {
+            R.layout.item_home_internal_link -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_internal_link, parent, false)
                 InternalLinkHolder(view)
             }
-            TYPE_ACCOUNT -> {
-                val view = UnfundedWalletCardView(parent.context)
-                val params = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                params.marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
-                params.marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
-                view.layoutParams = params
-                AccountHolder(view)
-            }
-            TYPE_CHART -> {
+            R.layout.item_home_chart -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_home_chart, parent, false)
                 ChartHolder(view)
             }
@@ -59,29 +83,38 @@ class HomeFeedAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androi
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            ACCOUNT_POSITION -> TYPE_ACCOUNT
-            1 -> TYPE_CHART
-            2 -> TYPE_WEB
-            3 -> TYPE_INTERNAL_LINK
-            else -> TYPE_LOAD_MORE
+            walletData.size -> R.layout.item_home_chart
+            walletData.size + 1 -> R.layout.item_home_web_link
+            walletData.size + 2 -> R.layout.item_home_internal_link
+            walletData.size + 3 -> R.layout.item_home_load_more
+            else -> {
+                val wallet = walletData[position]
+                return if (!wallet.isLoaded()) {
+                    R.layout.view_empty_wallet_card
+                } else if (wallet.hasBalances()) {
+                    R.layout.view_funded_wallet_card
+                } else {
+                    R.layout.view_unfunded_wallet_card
+                }
+            }
         }
     }
 
-    override fun getItemCount() = 5
+    override fun getItemCount() = walletData.size + 4
 
     override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            TYPE_WEB -> {
+            R.layout.view_funded_wallet_card, R.layout.view_unfunded_wallet_card, R.layout.view_empty_wallet_card -> {
+                (holder as WalletViewHolder).populate(walletData[position])
+            }
+            R.layout.item_home_web_link -> {
                 (holder as BlogPostHolder).fillData(Mock.mockBlogPost())
             }
-            TYPE_INTERNAL_LINK -> {
+            R.layout.item_home_internal_link -> {
                 (holder as InternalLinkHolder).fillData(Mock.mockInternalLink())
             }
-            TYPE_CHART -> {
+            R.layout.item_home_chart -> {
                 (holder as ChartHolder).fillData()
-            }
-            TYPE_ACCOUNT -> {
-                (holder as AccountHolder).fillData(/*account ?: return*/)
             }
             else -> {
 
@@ -89,18 +122,17 @@ class HomeFeedAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androi
         }
     }
 
-    inner class AccountHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-//        private val imageView = view.account_image
-
-        fun fillData(/*account: StellarAccount*/) {
-
+        fun populate(wallet: Wallet) {
+            (itemView as WalletCardView).populate(wallet)
         }
+
     }
 
-    inner class LoadMoreHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
+    inner class LoadMoreHolder(view: View) : RecyclerView.ViewHolder(view)
 
-    inner class ChartHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
+    inner class ChartHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         private val chartView = view.line_chart
 
@@ -163,14 +195,5 @@ class HomeFeedAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androi
             titleView.text = link.title
             paragraphView.text = link.description
         }
-    }
-
-    companion object {
-        private const val TYPE_ACCOUNT = 0
-        private const val TYPE_WEB = 1
-        private const val TYPE_INTERNAL_LINK = 2
-        private const val TYPE_LOAD_MORE = 3
-        private const val TYPE_CHART = 4
-        private const val ACCOUNT_POSITION = 0
     }
 }

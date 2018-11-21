@@ -104,7 +104,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
         when (error.code) {
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfaInputView.error = error.message
+                tfaInputView.error = error.displayMessage
             }
             else -> {
                 showErrorSnackbar(error)

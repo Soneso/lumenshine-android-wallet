@@ -107,7 +107,7 @@ class MailConfirmationFragment : AuthFragment() {
             }
             Resource.FAILURE -> {
                 hideLoadingView()
-                errorView.text = resource.failure().message
+                errorView.text = resource.failure().displayMessage
             }
         }
     }
