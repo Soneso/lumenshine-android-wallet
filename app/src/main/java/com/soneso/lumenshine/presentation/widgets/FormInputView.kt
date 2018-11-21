@@ -1,9 +1,7 @@
 package com.soneso.lumenshine.presentation.widgets
 
 import android.content.Context
-import android.graphics.Typeface
 import android.text.Editable
-import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -11,8 +9,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import kotlinx.android.synthetic.main.ls_input_view.view.*
@@ -25,9 +21,9 @@ open class FormInputView @JvmOverloads constructor(
     protected var inputLevel = 0
     private var errorText: CharSequence = ""
     private var regexToMatch = ""
-    private var showPasswordToggle: Boolean = false
+    //    private var showPasswordToggle: Boolean = false
     var onDrawableEndClickListener: (() -> Unit)? = null
-    private var passwordTypeFace: Typeface? = Typeface.DEFAULT
+
 
     var trimmedText: CharSequence
         get() = editTextView.text?.trim() ?: ""
@@ -38,9 +34,6 @@ open class FormInputView @JvmOverloads constructor(
     init {
         LayoutInflater.from(context).inflate(R.layout.ls_input_view, this, true)
         orientation = VERTICAL
-        if (!isInEditMode) {
-            passwordTypeFace = ResourcesCompat.getFont(context, R.font.encodesans_regular)
-        }
         applyAttrs(attrs)
         editTextView.maxLines = 1
 
@@ -51,7 +44,6 @@ open class FormInputView @JvmOverloads constructor(
     private fun setupListeners() {
         editTextView.setOnTextChangeListener { errorTextView.text = "" }
         editTextEndDrawable.setOnClickListener { onDrawableEndClickListener?.invoke() }
-        passwordToggleDrawable.setOnClickListener { changePasswordVisibility() }
     }
 
 
@@ -61,7 +53,6 @@ open class FormInputView @JvmOverloads constructor(
         inputLevel = typedArray.getInt(R.styleable.FormInputView_input_level, 0)
         regexToMatch = typedArray.getString(R.styleable.FormInputView_regex) ?: ""
         errorText = typedArray.getString(R.styleable.FormInputView_error_text) ?: resources.getText(R.string.invalid)
-        showPasswordToggle = typedArray.getBoolean(R.styleable.FormInputView_showPasswordToggle, false)
         val inputType = typedArray.getInt(R.styleable.FormInputView_android_inputType, EditorInfo.TYPE_NULL)
         if (inputType != EditorInfo.TYPE_NULL) {
             editTextView.inputType = inputType
@@ -70,41 +61,6 @@ open class FormInputView @JvmOverloads constructor(
         editTextView.hint = hint
 
         editTextView.imeOptions = typedArray.getInt(R.styleable.FormInputView_android_imeOptions, EditorInfo.IME_ACTION_UNSPECIFIED)
-        val drawableEnd = typedArray.getDrawable(R.styleable.FormInputView_android_drawableEnd)
-
-        val layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-        var bottomPadding = 0
-
-        if (isInEditMode) {
-            editTextEndDrawable.setImageDrawable(drawableEnd)
-            editTextView.layoutParams = layoutParams
-        } else {
-            if (editTextView.inputType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
-                editTextView.typeface = passwordTypeFace
-            }
-
-            var padding = 0
-            if (drawableEnd != null) {
-                padding += resources.getDimensionPixelOffset(R.dimen.size_40)
-                editTextEndDrawable.visibility = View.VISIBLE
-                editTextEndDrawable.setImageDrawable(drawableEnd)
-            } else {
-                editTextEndDrawable.visibility = View.GONE
-            }
-            if (showPasswordToggle) {
-                padding += resources.getDimensionPixelOffset(R.dimen.size_45)
-                passwordToggleDrawable.setImageResource(R.drawable.ic_visibility_states)
-                passwordToggleDrawable.visibility = View.VISIBLE
-            } else {
-                passwordToggleDrawable.visibility = View.GONE
-                if (drawableEnd == null) {
-                    editTextView.layoutParams = layoutParams
-                    bottomPadding = editTextView.paddingBottom
-                }
-            }
-            editTextView.setPadding(0, 0, padding, bottomPadding)
-        }
-
 
         val imeActionId = typedArray.getInt(R.styleable.FormInputView_android_imeActionId, 0)
         editTextView.setImeActionLabel(typedArray.getString(R.styleable.FormInputView_android_imeActionLabel), imeActionId)
@@ -133,20 +89,6 @@ open class FormInputView @JvmOverloads constructor(
             }
         }
         return true
-    }
-
-    private fun changePasswordVisibility() {
-        passwordToggleDrawable.isSelected = !passwordToggleDrawable.isSelected
-        if (passwordToggleDrawable.isSelected) {
-            passwordToggleDrawable.setImageResource(R.drawable.ic_visibility)
-            editTextView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-        } else {
-            passwordToggleDrawable.setImageResource(R.drawable.ic_visibility_off)
-            editTextView.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-        }
-        editTextView.typeface = passwordTypeFace
-
-        editTextView.setSelection(editTextView.text.length)
     }
 
     fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
