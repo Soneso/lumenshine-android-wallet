@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.util.GeneralUtils
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
  * A simple [Fragment] subclass.
  */
 class LoginFragment : AuthFragment() {
+    private var shouldAutoPaste: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_login, container, false)
@@ -82,6 +84,20 @@ class LoginFragment : AuthFragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (shouldAutoPaste) {
+            val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+            tfaCodeView.trimmedText = textFromClipboard
+            tfaCodeView.setSelection(textFromClipboard.length)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        shouldAutoPaste = true
     }
 
     /**

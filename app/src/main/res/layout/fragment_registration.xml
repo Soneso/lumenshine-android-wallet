@@ -5,8 +5,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/size_40"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/size_40">
 
         <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -70,7 +70,8 @@
                     android:drawableEnd="@drawable/icon_help"
                     android:hint="@string/hint_password"
                     android:inputType="textPassword"
-                    app:input_level="@integer/password_input_level" />
+                    app:input_level="@integer/password_input_level"
+                    app:showPasswordToggle="true" />
 
                 <com.soneso.lumenshine.presentation.widgets.PasswordInputView
                     android:id="@+id/passConfirmationView"
@@ -79,7 +80,8 @@
                     android:layout_marginTop="@dimen/size_9"
                     android:hint="@string/hint_password_confirmation"
                     android:inputType="textPassword"
-                    app:input_level="@integer/password_confirmation_input_level" />
+                    app:input_level="@integer/password_confirmation_input_level"
+                    app:showPasswordToggle="true" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

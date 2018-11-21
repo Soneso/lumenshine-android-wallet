@@ -32,9 +32,9 @@
 
     <!-- Strings related to authentication -->
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">PASSWORD</string>
     <string name="hint_two_factor">Two Factor Code</string>
-    <string name="hint_password_confirmation">Repeat password</string>
+    <string name="hint_password_confirmation">REPEAT PASSWORD</string>
     <string name="hint_first_name">First name</string>
     <string name="hint_last_name">Last name</string>
     <string name="action_sign_in">Login</string>
@@ -195,13 +195,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="register">Register</string>
 
-    <string name="login_continue">Login to continue</string>
+    <string name="login_continue">Log in to your account</string>
 
     <string name="unlock_app">Unlock app</string>
 
     <string name="unlock_button">Unlock</string>
-
-    <string name="login_fill">Please fill in the form below with valid information</string>
 
     <string name="logout">Log Out</string>
 

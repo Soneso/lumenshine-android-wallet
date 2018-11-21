@@ -207,4 +207,16 @@
         <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
 
+    <style name="CompoundDrawable">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:padding">@dimen/size_10</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
+    </style>
 </resources>
