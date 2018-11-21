@@ -20,8 +20,17 @@ fun WalletDto.toWallet(): WalletEntity {
 
 fun AccountResponse.toStellarWallet(): WalletDetailEntity {
 
+    val balanceList = balances.map { it.toWalletBalance() }
+            // cristi.paval, 11/20/18 - put the native balance on the first position
+            .sortedWith(Comparator { b1, b2 ->
+                when {
+                    b1.type == AssetType.NATIVE -> -1
+                    b2.type == AssetType.NATIVE -> 1
+                    else -> 0
+                }
+            })
     return WalletDetailEntity(
-            balances.map { it.toWalletBalance() },
+            balanceList,
             subentryCount ?: 0
     )
 }

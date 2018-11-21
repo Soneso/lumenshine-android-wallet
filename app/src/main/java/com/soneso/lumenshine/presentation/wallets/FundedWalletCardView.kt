@@ -10,18 +10,17 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.Wallet
 import com.soneso.lumenshine.model.entities.wallet.WalletBalanceEntity
 import com.soneso.lumenshine.presentation.util.setStyleCompat
-import com.soneso.lumenshine.presentation.widgets.LsCardView
 import kotlinx.android.synthetic.main.view_funded_wallet_card.view.*
 
 class FundedWalletCardView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = R.style.AppTheme_LsCardView
-) : LsCardView(context, attrs, defStyleAttr) {
+) : WalletCardView(context, attrs, defStyleAttr) {
 
     init {
         View.inflate(context, R.layout.view_funded_wallet_card, this)
     }
 
-    fun populate(wallet: Wallet) {
+    override fun populate(wallet: Wallet) {
 
         nameView.text = wallet.name
         if (wallet.federationAddress.isBlank()) {

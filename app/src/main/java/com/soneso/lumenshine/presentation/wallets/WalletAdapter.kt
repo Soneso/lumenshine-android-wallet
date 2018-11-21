@@ -52,21 +52,10 @@ class WalletAdapter : RecyclerView.Adapter<WalletAdapter.WalletViewHolder>() {
     override fun getItemCount() = walletData.size
 
     override fun onBindViewHolder(holder: WalletViewHolder, position: Int) {
-        when (getItemViewType(position)) {
-            R.layout.view_empty_wallet_card -> {
-                val walletView = holder.itemView as EmptyWalletCardView
-                walletView.populate(walletData[position])
-            }
-            R.layout.view_unfunded_wallet_card -> {
-                val walletView = holder.itemView as UnfundedWalletCardView
-                walletView.populate(walletData[position])
-            }
-            R.layout.view_funded_wallet_card -> {
-                val walletView = holder.itemView as FundedWalletCardView
-                walletView.populate(walletData[position])
-            }
-        }
+        holder.walletView.populate(walletData[position])
     }
 
-    inner class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view)
+    inner class WalletViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val walletView = view as WalletCardView
+    }
 }
