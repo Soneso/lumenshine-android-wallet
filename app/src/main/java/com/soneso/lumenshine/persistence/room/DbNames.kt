@@ -23,6 +23,7 @@ object DbNames {
     const val COLUMN_NAME = "name"
     const val COLUMN_FEDERATION_ADDRESS = "federation_address"
     const val COLUMN_IN_HOME_SCREEN = "shown_in_home_screen"
+    const val COLUMN_PUBLIC_KEY = "public_key"
 
     const val TABLE_STELLAR_ACCOUNTS = "stellar_accounts"
 

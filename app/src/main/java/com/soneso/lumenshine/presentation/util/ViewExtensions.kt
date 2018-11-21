@@ -1,6 +1,5 @@
 package com.soneso.lumenshine.presentation.util
 
-import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.Editable
@@ -15,13 +14,6 @@ import androidx.lifecycle.MutableLiveData
  * Extensions.
  * Created by cristi.paval on 3/20/18.
  */
-
-fun View.fadeIn() {
-    visibility = View.VISIBLE
-    val animator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
-    animator.duration = 500
-    animator.start()
-}
 
 fun TextView.setOnTextChangeListener(listener: ((View) -> Unit)) {
     addTextChangedListener(object : TextWatcher {
@@ -53,4 +45,13 @@ fun <T> LiveData<T>.putValue(value: T) {
 
 fun TextView.setDrawableEnd(drawable: Drawable?) {
     setCompoundDrawablesWithIntrinsicBounds(compoundDrawables[0], compoundDrawables[1], drawable, compoundDrawables[3])
+}
+
+fun TextView.setStyleCompat(@StyleRes resId: Int) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        setTextAppearance(resId)
+    } else {
+        @Suppress("DEPRECATION")
+        setTextAppearance(context, resId)
+    }
 }

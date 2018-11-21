@@ -49,6 +49,7 @@
 
         <TextView
             android:id="@+id/balanceTitleView"
+            style="@style/WalletCardBalanceTitleView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_6"
@@ -58,15 +59,13 @@
             android:paddingTop="@dimen/size_10"
             android:paddingEnd="0dp"
             android:text="@string/wallet_balance"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_16"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subtitleView" />
 
         <TextView
             android:id="@+id/balanceView"
+            style="@style/WalletCardBalanceValueView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_6"
@@ -76,9 +75,6 @@
             android:paddingEnd="0dp"
             android:paddingBottom="@dimen/size_10"
             android:text="@string/wallet_empty_balance"
-            android:textAllCaps="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_16"
             app:layout_constraintEnd_toStartOf="@id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/balanceTitleView" />
@@ -105,14 +101,11 @@
 
         <TextView
             android:id="@+id/fundButton"
+            style="@style/WalletCardButton"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/size_45"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/size_16"
-            android:paddingEnd="@dimen/size_16"
+            android:layout_marginEnd="@dimen/size_8"
             android:text="@string/wallet_button_fund_wallet"
-            android:textColor="@color/blue_selectable"
-            android:textSize="@dimen/text_size_15"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dividerView" />
 

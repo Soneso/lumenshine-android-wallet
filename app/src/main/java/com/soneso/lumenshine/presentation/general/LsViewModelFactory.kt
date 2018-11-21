@@ -8,6 +8,7 @@ import com.soneso.lumenshine.presentation.SplashViewModel
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
 import com.soneso.lumenshine.presentation.auth.LostCredentialViewModel
 import com.soneso.lumenshine.presentation.auth.TFAConfirmationViewModel
+import com.soneso.lumenshine.presentation.home.HomeViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
 
@@ -25,6 +26,7 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
             modelClass.isAssignableFrom(LostCredentialViewModel::class.java) -> LostCredentialViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(TFAConfirmationViewModel::class.java) -> TFAConfirmationViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(appComponent.walletsUseCase) as T
             else -> throw IllegalArgumentException("View Model not found here not found")
         }
     }

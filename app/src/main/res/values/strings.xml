@@ -152,7 +152,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="failed_to_change_tfa">Failed to change 2FA Code</string>
     <string name="wallet_not_funded">(not funded)</string>
     <string name="wallet_balance">Balance</string>
-    <string name="wallet_empty_balance">0.0 XLM</string>
+    <string name="wallet_empty_balance">0 XLM</string>
     <string name="wallet_balances">Balances</string>
     <string name="wallet_availability">Available</string>
     <string name="wallet_button_send">Send</string>
