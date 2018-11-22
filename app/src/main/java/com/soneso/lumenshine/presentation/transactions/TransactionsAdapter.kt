@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.operation_item.view.*
 class TransactionsAdapter(private val transactionsFragment: TransactionsFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val operationsList = ArrayList<Operation>()
+    var onOperationJsonSetListener: ((String) -> Unit)? = null
 
     fun setTransactionsData(operations: List<Operation>) {
         operationsList.clear()
@@ -130,7 +131,7 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
             itemView.operationId.setOnClickListener {
                 //TODO load the JSON from the response
                 transactionsFragment.showInfoDialog(R.string.json_content, R.layout.operation_json)
-//                operationJsonText.text = operation.id.toString()
+                onOperationJsonSetListener?.invoke("Test JSON")
             }
         }
     }
@@ -146,6 +147,9 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
             if (payment.isReceived) {
                 itemView.operationTypeText.text = itemView.context.getString(R.string.payment_received)
 
+                itemView.paymentRecipientTag.visibility = View.GONE
+                itemView.paymentRecipientPK.visibility = View.GONE
+                itemView.recipientCopyButton.visibility = View.GONE
                 itemView.paymentSenderTag.visibility = View.VISIBLE
                 itemView.paymentSenderPK.visibility = View.VISIBLE
                 itemView.senderCopyButton.visibility = View.VISIBLE
@@ -162,6 +166,9 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
             } else {
                 itemView.operationTypeText.text = itemView.context.getString(R.string.payment_sent)
 
+                itemView.paymentSenderTag.visibility = View.GONE
+                itemView.paymentSenderPK.visibility = View.GONE
+                itemView.senderCopyButton.visibility = View.GONE
                 itemView.paymentRecipientTag.visibility = View.VISIBLE
                 itemView.paymentRecipientPK.visibility = View.VISIBLE
                 itemView.recipientCopyButton.visibility = View.VISIBLE

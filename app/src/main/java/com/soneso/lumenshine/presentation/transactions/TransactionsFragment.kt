@@ -12,13 +12,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.domain.usecases.TransactionsUseCases
 import com.soneso.lumenshine.model.entities.operations.Operation
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.util.Resource
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_transactions.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,6 +28,8 @@ class TransactionsFragment : LsFragment() {
 
     private lateinit var transactionsViewModel: TransactionsViewModel
     private lateinit var transactionsAdapter: TransactionsAdapter
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,38 +57,26 @@ class TransactionsFragment : LsFragment() {
 
         val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
         transactionsRecyclerView.addItemDecoration(dividerItemDecoration)
+
+        transactionsAdapter.onOperationJsonSetListener = {
+            //TODO
+        }
     }
 
     private fun subscribeForLiveData() {
-        transactionsViewModel.liveWallets.observe(this, Observer {
-            //TODO load the combobox
+        transactionsViewModel.liveWallet.observe(this, Observer {
             when (it.state) {
                 Resource.SUCCESS -> {
-                    if (!it.success().isEmpty()) {
-                        transactionsViewModel.selectWallet(it.success()[0])
-                        transactionsViewModel.selectDateFrom(Date(System.currentTimeMillis() - 7 * TransactionsUseCases.DAY_IN_MS))
-                        transactionsViewModel.selectDateTo(Date())
-                    }
+                    transactionsViewModel.selectPrimaryWallet(it.success())
                 }
             }
         })
 
-        transactionsViewModel.observeWallet()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { transactionWalletText.text = it.name }
-
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-        transactionsViewModel.observeDateFrom()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { transactionDateFromText.text = dateFormat.format(it) }
-
-        transactionsViewModel.observeDateTo()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { transactionDateToText.text = dateFormat.format(it) }
+        transactionsViewModel.liveFilters.observe(this, Observer {
+            transactionWalletText.text = it.wallet.name
+            transactionDateFromText.text = dateFormat.format(it.dateFrom)
+            transactionDateToText.text = dateFormat.format(it.dateTo)
+        })
 
         transactionsViewModel.liveOperations.observe(this, Observer {
             renderOperations(it ?: return@Observer)
@@ -99,9 +86,6 @@ class TransactionsFragment : LsFragment() {
     private fun renderOperations(resource: Resource<List<Operation>, ServerException>) {
 
         when (resource.state) {
-            Resource.LOADING -> {
-
-            }
             Resource.SUCCESS -> {
                 transactionsAdapter.setTransactionsData(resource.success())
             }
