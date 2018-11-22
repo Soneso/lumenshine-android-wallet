@@ -1,13 +1,13 @@
 package com.soneso.lumenshine.networking
 
 import android.text.TextUtils
-import android.util.Log
 import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.soneso.lumenshine.BuildConfig
-import com.soneso.lumenshine.networking.api.SgApi
+import com.soneso.lumenshine.networking.api.LsApi
 import okhttp3.OkHttpClient
 import okhttp3.internal.platform.Platform
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 object NetworkUtil {
@@ -21,7 +21,7 @@ object NetworkUtil {
             val exitValue = ipProcess.waitFor()
             return exitValue == 0
         } catch (e: Exception) {
-            Log.e(TAG, "Exception", e)
+            Timber.e(e)
         }
 
         return false
@@ -52,28 +52,16 @@ object NetworkUtil {
             val request = chain.request()
             val requestBuilder = request.newBuilder()
 
-            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_CONTENT_TYPE))) {
-                requestBuilder.addHeader(SgApi.HEADER_NAME_CONTENT_TYPE, SgApi.HEADER_VALUE_CONTENT_TYPE)
-
-                if (BuildConfig.DEBUG) {
-                    Log.d("OkHttp", "${SgApi.HEADER_NAME_CONTENT_TYPE}:${SgApi.HEADER_VALUE_CONTENT_TYPE}")
-                }
+            if (TextUtils.isEmpty(request.header(LsApi.HEADER_NAME_CONTENT_TYPE))) {
+                requestBuilder.addHeader(LsApi.HEADER_NAME_CONTENT_TYPE, LsApi.HEADER_VALUE_CONTENT_TYPE)
             }
 
-            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_AUTHORIZATION))) {
-                requestBuilder.addHeader(SgApi.HEADER_NAME_AUTHORIZATION, LsSessionProfile.jwtToken)
-
-                if (BuildConfig.DEBUG) {
-                    Log.d("OkHttp", "${SgApi.HEADER_NAME_AUTHORIZATION}:${LsSessionProfile.jwtToken}")
-                }
+            if (TextUtils.isEmpty(request.header(LsApi.HEADER_NAME_AUTHORIZATION))) {
+                requestBuilder.addHeader(LsApi.HEADER_NAME_AUTHORIZATION, LsSessionProfile.jwtToken)
             }
 
-            if (TextUtils.isEmpty(request.header(SgApi.HEADER_NAME_LANGUAGE))) {
-                requestBuilder.addHeader(SgApi.HEADER_NAME_LANGUAGE, LsSessionProfile.langKey)
-
-                if (BuildConfig.DEBUG) {
-                    Log.d("OkHttp", "${SgApi.HEADER_NAME_LANGUAGE}:${LsSessionProfile.langKey}")
-                }
+            if (TextUtils.isEmpty(request.header(LsApi.HEADER_NAME_LANGUAGE))) {
+                requestBuilder.addHeader(LsApi.HEADER_NAME_LANGUAGE, LsSessionProfile.langKey)
             }
 
             chain.proceed(requestBuilder.build())

@@ -9,9 +9,11 @@ import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.Resource
+import com.soneso.stellarmnemonics.Wallet
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
+import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,6 +25,8 @@ import javax.inject.Singleton
 @Singleton
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
+
+    private val passSubject = BehaviorSubject.create<String>()
 
     fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence,
                         country: Country?): Flowable<Resource<Boolean, ServerException>> {
@@ -38,7 +42,7 @@ class UserUseCases
                 .create<UserSecurity> {
                     it.onSuccess(helper.generateUserSecurity(userProfile.email))
                 }
-                .doOnSuccess { userRepo.setPassword(password.toString()) }
+                .doOnSuccess { passSubject.onNext(password.toString()) }
                 .toFlowable()
                 .flatMap { userRepo.createUserAccount(userProfile, it) }
     }
@@ -51,7 +55,7 @@ class UserUseCases
 
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
 
-        userRepo.setPassword(password.toString())
+        passSubject.onNext(password.toString())
         val username = email.toString()
         val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode().toFlowable()
         return tfaFlow.flatMap { tfa ->
@@ -59,11 +63,18 @@ class UserUseCases
                 if (it.isSuccessful) {
                     userRepo.getUserData(username).toFlowable().flatMap { userData ->
                         val helper = UserSecurityHelper(password.toCharArray())
-                        val publicKeyIndex188 = helper.decipherUserSecurity(userData)
-                        if (publicKeyIndex188 == null) {
+                        val decipherData = helper.decipherUserSecurityNew(userData)
+                        if (decipherData == null) {
                             Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
                         } else {
-                            userRepo.loginStep2(username, publicKeyIndex188)
+                            val keyPair = Wallet.createKeyPair(decipherData.mnemonic, null, 0)
+                            if (keyPair == null) {
+                                Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
+                            } else {
+                                //userRepo.signSEP10ChallengeIfValid()
+
+                                userRepo.loginStep2(username, userData.sep10Challenge, keyPair)
+                            }
                         }
                     }
                 } else {
@@ -75,7 +86,7 @@ class UserUseCases
 
     fun provideMnemonic(): Single<String> {
 
-        return Single.zip(userRepo.getPassword(),
+        return Single.zip(passSubject.firstOrError(),
                 userRepo.getUserData().doOnSuccess { Timber.d("UserData for: ${it.username}") },
                 BiFunction<String, UserSecurity, String> { pass, userSecurity ->
                     val helper = UserSecurityHelper(pass.toCharArray())
@@ -103,8 +114,7 @@ class UserUseCases
             userRepo.getLastUsername()
                     .flatMap { username ->
                         if (username.isNotBlank()) {
-                            userRepo.getRegistrationStatus()
-                                    .firstOrError()
+                            userRepo.getRegistrationStatus().firstOrError()
                                     .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
                         } else {
                             Single.just(false)
@@ -144,7 +154,7 @@ class UserUseCases
     fun logout() = userRepo.logout()
 
     fun setNewSession() {
-        userRepo.setPassword("")
+        passSubject.onNext("")
     }
 
     companion object {

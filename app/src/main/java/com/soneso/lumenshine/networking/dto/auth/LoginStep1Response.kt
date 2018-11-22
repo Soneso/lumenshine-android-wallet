@@ -36,6 +36,9 @@ class LoginStep1Response {
     @JsonProperty("public_key_index0")
     var publicKeyIndex0 = ""
 
+    @JsonProperty("sep10_transaction_challenge")
+    var sep10TransactionChallenge = ""
+
     fun passwordKdfSalt(): ByteArray = Base64.decode(passwordKdfSalt)
 
     fun encryptedMnemonicMasterKey(): ByteArray = Base64.decode(encryptedMnemonicMasterKey)
