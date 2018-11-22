@@ -4,10 +4,7 @@ import com.soneso.lumenshine.networking.dto.auth.*
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 /**
@@ -137,4 +134,7 @@ interface UserApi {
     fun confirmTfaSecretChange(
             @Field("tfa_code") tfaCode: String
     ): Single<Response<ConfirmTfaSecretChangeResponse>>
+
+    @GET
+    fun loadServerSigningKey(@Url url: String = "https://demo.lumenshine.com/.well-known/stellar.toml"): Single<Response<String>>
 }

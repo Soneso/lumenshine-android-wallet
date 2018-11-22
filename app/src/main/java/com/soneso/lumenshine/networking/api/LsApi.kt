@@ -1,6 +1,6 @@
 package com.soneso.lumenshine.networking.api
 
-object SgApi {
+object LsApi {
 
     //    const val BASE_URL = "http://192.168.43.230:8000/"
     const val BASE_URL = "https://demoapi.lumenshine.com/"

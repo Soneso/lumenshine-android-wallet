@@ -9,7 +9,7 @@ import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
 import com.soneso.lumenshine.networking.NetworkStateObserver
-import com.soneso.lumenshine.networking.api.SgApi
+import com.soneso.lumenshine.networking.api.LsApi
 import com.soneso.lumenshine.networking.api.UserApi
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.persistence.LsPrefs
@@ -22,13 +22,12 @@ import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.stellar.sdk.KeyPair
-import org.stellar.sdk.Network
+import org.stellar.sdk.ManageDataOperation
 import org.stellar.sdk.Transaction
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -49,7 +48,6 @@ class UserRepository @Inject constructor(
 
     private val userApi = r.create(UserApi::class.java)
     private val userDao = db.userDao()
-    private val passSubject = BehaviorSubject.create<String>()
 
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
@@ -72,7 +70,7 @@ class UserRepository @Inject constructor(
         )
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                     LsPrefs.username = userSecurity.username
                     userDao.saveUserData(userSecurity)
@@ -85,18 +83,12 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun setPassword(pass: String) {
-        passSubject.onNext(pass)
-    }
-
-    fun getPassword() = passSubject.firstOrError()
-
     fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.confirmTfaRegistration(tfaCode)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
@@ -128,7 +120,7 @@ class UserRepository @Inject constructor(
                 .doOnSuccess {
                     if (it.isSuccessful) {
                         LsPrefs.username = email
-                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
@@ -167,7 +159,7 @@ class UserRepository @Inject constructor(
         return userApi.loginStep2(signedSep10Challenge)
                 .doOnSuccess {
                     if (it.isSuccessful) {
-                        LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                        LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
                 }
                 .asHttpResourceLoader(networkStateObserver)
@@ -202,33 +194,14 @@ class UserRepository @Inject constructor(
     // TODO: specific error handling
     fun validateSEP10Envelope(base64EnvelopeXDR: String, userAccountId: String): Transaction? {
 
-        val transaction = org.stellar.sdk.Transaction.fromEnvelopeXdr(base64EnvelopeXDR)
+        val transaction = Transaction.fromEnvelopeXdr(base64EnvelopeXDR)
 
         // sequence number must be 0
-        if (transaction.sequenceNumber != 0L) {
-            return null
-        }
-
-        transaction?.operations?.let { operations ->
-            if (operations.size != 1) {
-                return null
-            }
-
-            val first = operations.first()
-            first?.sourceAccount?.accountId.let {
-                if (it != userAccountId) {
-                    return null
-                }
-            } ?: run {
-                return null
-            }
-
-            if (first !is org.stellar.sdk.ManageDataOperation) {
-                return null
-            }
-
-        } ?: run {
-            return null
+        when {
+            transaction?.sequenceNumber != 0L -> return null
+            transaction.operations?.size != 1 -> return null
+            transaction.operations?.first()?.sourceAccount?.accountId != userAccountId -> return null
+            transaction.operations?.first() !is ManageDataOperation -> return null
         }
 
         transaction.signatures?.let { signatures ->
@@ -237,10 +210,7 @@ class UserRepository @Inject constructor(
             }
             val first = signatures.first()
 
-            // this must be set globally
-            Network.useTestNetwork()
             val serverSigningKey = "GCP4BR7GWG664577XMLX2BRUPSHKHTAXQ4I4HZORLMQNILNNVMSFWVUV"
-
 
             val transactionHash = transaction.hash()
             val serverKeyPair = KeyPair.fromAccountId(serverSigningKey)

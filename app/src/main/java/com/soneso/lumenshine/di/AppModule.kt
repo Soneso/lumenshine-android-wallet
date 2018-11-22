@@ -5,13 +5,14 @@ import android.text.SpannableStringBuilder
 import androidx.room.Room
 import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.soneso.lumenshine.networking.NetworkUtil
-import com.soneso.lumenshine.networking.api.SgApi
+import com.soneso.lumenshine.networking.api.LsApi
 import com.soneso.lumenshine.networking.dto.Parse
 import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.persistence.room.DbNames
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import dagger.Module
 import dagger.Provides
+import org.stellar.sdk.Network
 import org.stellar.sdk.Server
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -34,7 +35,7 @@ class AppModule(private val context: Context) {
 
         // cristi.paval, 3/28/18 - retrofit builder
         return Retrofit.Builder()
-                .baseUrl(SgApi.BASE_URL)
+                .baseUrl(LsApi.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(JacksonConverterFactory.create(Parse.createMapper()))
                 .client(NetworkUtil.lsHttpClient())
@@ -56,6 +57,7 @@ class AppModule(private val context: Context) {
     @Provides
     @Singleton
     fun provideStellarServer(): Server {
+        Network.useTestNetwork()
         return Server("https://horizon-testnet.stellar.org")
     }
 }
