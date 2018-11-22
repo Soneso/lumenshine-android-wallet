@@ -1,6 +1,5 @@
 package com.soneso.lumenshine.domain.usecases
 
-import android.util.Log
 import com.soneso.lumenshine.BuildConfig
 import com.soneso.lumenshine.domain.util.*
 import com.soneso.lumenshine.model.DecryptedUserData
@@ -8,6 +7,7 @@ import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
 import org.bouncycastle.util.encoders.Base64
+import timber.log.Timber
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -61,28 +61,28 @@ class UserSecurityHelper(private val pass: CharArray) {
         val encryptedWordList = Cryptor.encryptValue(wordListBytes, wordListMasterKey, wordListEncryptionIv)
 
         if (BuildConfig.DEBUG) {
-            Log.d(TAG, "password kdf salt: ${Base64.toBase64String(passwordKdfSalt)}")
-            Log.d(TAG, "derived password: ${Base64.toBase64String(derivedPassword)}")
+            Timber.d("password kdf salt: ${Base64.toBase64String(passwordKdfSalt)}")
+            Timber.d("derived password: ${Base64.toBase64String(derivedPassword)}")
 
-            Log.d(TAG, "word list master key: ${Base64.toBase64String(wordListMasterKey)}")
-            Log.d(TAG, "word list master key encryption iv: ${Base64.toBase64String(wordListMasterKeyEncryptionIv)}")
-            Log.d(TAG, "encrypted word list master key: ${Base64.toBase64String(encryptedWordListMasterKey)}")
+            Timber.d("word list master key: ${Base64.toBase64String(wordListMasterKey)}")
+            Timber.d("word list master key encryption iv: ${Base64.toBase64String(wordListMasterKeyEncryptionIv)}")
+            Timber.d("encrypted word list master key: ${Base64.toBase64String(encryptedWordListMasterKey)}")
 
-            Log.d(TAG, "mnemonic master key: ${Base64.toBase64String(mnemonicMasterKey)}")
-            Log.d(TAG, "mnemonic master key encryption iv: ${Base64.toBase64String(mnemonicMasterKey)}")
-            Log.d(TAG, "encrypted mnmemonic master key: ${Base64.toBase64String(encryptedMnemonicMasterKey)}")
+            Timber.d("mnemonic master key: ${Base64.toBase64String(mnemonicMasterKey)}")
+            Timber.d("mnemonic master key encryption iv: ${Base64.toBase64String(mnemonicMasterKey)}")
+            Timber.d("encrypted mnmemonic master key: ${Base64.toBase64String(encryptedMnemonicMasterKey)}")
 
-            Log.d(TAG, "mnemonic: ${String(mnemonicChars)}")
-            Log.d(TAG, "mnemonic indexes: ${Arrays.toString(mnemonicIndexes)}")
+            Timber.d("mnemonic: ${String(mnemonicChars)}")
+            Timber.d("mnemonic indexes: ${Arrays.toString(mnemonicIndexes)}")
 
-            Log.d(TAG, "mnemonic encryption iv: ${Base64.toBase64String(mnemonicEncryptionIv)}")
-            Log.d(TAG, "encrypted mnemonic: ${Base64.toBase64String(encryptedMnemonic)}")
+            Timber.d("mnemonic encryption iv: ${Base64.toBase64String(mnemonicEncryptionIv)}")
+            Timber.d("encrypted mnemonic: ${Base64.toBase64String(encryptedMnemonic)}")
 
-            Log.d(TAG, "public key index 0: $publicKeyIndex0")
-            Log.d(TAG, "public key index 188: $publicKeyIndex188")
+            Timber.d("public key index 0: $publicKeyIndex0")
+            Timber.d("public key index 188: $publicKeyIndex188")
 
             logLongString("word list: ${wordListStringBuilder.dropLast(1)}")
-            Log.d(TAG, "word list encryption iv: ${Base64.toBase64String(wordListEncryptionIv)}")
+            Timber.d("word list encryption iv: ${Base64.toBase64String(wordListEncryptionIv)}")
             logLongString("encrypted word list: ${Base64.toBase64String(encryptedWordList)}")
         }
 
@@ -145,11 +145,9 @@ class UserSecurityHelper(private val pass: CharArray) {
         }
     }
 
-
     fun decipherUserSecurity(userSecurity: UserSecurity): String? {
 
         try {
-
             val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
 
             val wordListMasterKey = Cryptor.decryptValue(userSecurity.encryptedWordListMasterKey, derivedPassword, userSecurity.wordListMasterKeyEncryptionIv)
@@ -218,24 +216,8 @@ class UserSecurityHelper(private val pass: CharArray) {
         )
     }
 
-
     companion object {
 
         const val TAG = "UserSecurityHelper"
-
-        fun mockUserSecurity() = UserSecurity(
-                "",
-                "",
-                "",
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0),
-                ByteArray(0)
-        )
     }
 }

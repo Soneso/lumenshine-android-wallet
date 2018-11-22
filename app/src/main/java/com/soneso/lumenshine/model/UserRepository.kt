@@ -1,6 +1,7 @@
 package com.soneso.lumenshine.model
 
 import com.google.authenticator.OtpProvider
+import com.moandjiezana.toml.Toml
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.base64String
@@ -22,6 +23,10 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.Network
 import org.stellar.sdk.Transaction
@@ -29,10 +34,6 @@ import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.moandjiezana.toml.Toml
-import org.stellar.sdk.federation.StellarTomlNotFoundInvalidException
-import okhttp3.*;
-
 
 
 /**
@@ -237,7 +238,7 @@ class UserRepository @Inject constructor(
             val first = signatures.first()
 
             // this must be set globally
-            Network.useTestNetwork();
+            Network.useTestNetwork()
             val serverSigningKey = "GCP4BR7GWG664577XMLX2BRUPSHKHTAXQ4I4HZORLMQNILNNVMSFWVUV"
 
 
@@ -410,7 +411,7 @@ class UserRepository @Inject constructor(
 
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return LsPrefs.loadUsername().filter { it.isNotBlank() }
+        return LsPrefs.loadUsername()
                 .toFlowable()
                 .flatMap { userDao.getRegistrationStatus(it) }
     }

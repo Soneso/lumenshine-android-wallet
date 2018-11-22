@@ -73,7 +73,7 @@ interface UserApi {
     @FormUrlEncoded
     @POST("/portal/user/auth/login_step2")
     fun loginStep2(
-            @Field("key") publicKey188: String
+            @Field("sep10_transaction") signedSep10Challenge: String
     ): Single<Response<LoginStep2Response>>
 
 

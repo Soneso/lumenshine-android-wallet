@@ -37,7 +37,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveConfirmationMail: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
-    val liveRegistrationStatus: LiveData<RegistrationStatus?> = MutableLiveData()
+    val liveRegistrationStatus: LiveData<RegistrationStatus> = MutableLiveData()
 
     val liveRegistrationRefresh: LiveData<Resource<RegistrationStatus?, ServerException>> = MutableLiveData()
 
@@ -61,7 +61,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         val d = userUseCases.provideRegistrationStatus()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe { it ->
                     Timber.d("Registration status just published.")
                     liveRegistrationStatus.putValue(it)
                 }

@@ -3,13 +3,13 @@ package com.soneso.lumenshine.domain.usecases
 import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
-import com.soneso.lumenshine.domain.util.PrivateKeyManager
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.Resource
+import com.soneso.stellarmnemonics.Wallet
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -64,7 +64,7 @@ class UserUseCases
                         if (decipherData == null) {
                             Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
                         } else {
-                            val keyPair = PrivateKeyManager.getKeyPair(userData.publicKeyIndex0, decipherData.mnemonic.toString())
+                            val keyPair = Wallet.createKeyPair(decipherData.mnemonic, null, 0)
                             if (keyPair == null) {
                                 Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
                             } else {
@@ -111,8 +111,7 @@ class UserUseCases
             userRepo.getLastUsername()
                     .flatMap { username ->
                         if (username.isNotBlank()) {
-                            userRepo.getRegistrationStatus()
-                                    .firstOrError()
+                            userRepo.getRegistrationStatus().firstOrError()
                                     .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
                         } else {
                             Single.just(false)
