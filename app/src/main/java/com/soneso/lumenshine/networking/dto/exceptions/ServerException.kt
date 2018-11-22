@@ -8,13 +8,13 @@ import okhttp3.ResponseBody
 class ServerException(private val errorBody: ResponseBody?, throwable: Throwable?) : LsException(throwable) {
 
     private var body: List<ValidationError>? = null
-    var message: String = ""
+    var displayMessage: String = ""
         private set
 
     constructor(errorBody: ResponseBody?) : this(errorBody, null) {
         body = parseBody()
         code = body?.get(0)?.code ?: ErrorCodes.UNKNOWN
-        message = body?.get(0)?.message ?: ""
+        displayMessage = body?.get(0)?.message ?: ""
     }
 
     constructor(throwable: Throwable?) : this(null, throwable)

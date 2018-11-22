@@ -9,7 +9,7 @@ class PasswordInputView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FormInputView(context, attrs, defStyleAttr) {
 
-    private var minPasswordLength = 9
+    private val minPasswordLength = 9
 
     fun isValidPassword(): Boolean {
         when {

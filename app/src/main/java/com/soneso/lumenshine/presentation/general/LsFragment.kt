@@ -27,7 +27,7 @@ open class LsFragment : Fragment() {
 
     fun showSnackbar(text: CharSequence) {
         val view = view ?: return
-        Snackbar.make(view, text, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+        Snackbar.make(view, text, Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }
@@ -42,8 +42,8 @@ open class LsFragment : Fragment() {
     fun showErrorSnackbar(e: LsException?) {
 
         val view = view ?: return
-        val message = e?.throwable?.message ?: getString(R.string.unknown_error)
-        com.google.android.material.snackbar.Snackbar.make(view, message, com.google.android.material.snackbar.Snackbar.LENGTH_LONG)
+        val message = e?.rootCause?.message ?: getString(R.string.unknown_error)
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()
     }

@@ -5,14 +5,11 @@ import android.text.Editable
 import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.util.setDrawableEnd
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import kotlinx.android.synthetic.main.ls_input_view.view.*
 
@@ -25,6 +22,7 @@ open class FormInputView @JvmOverloads constructor(
     private var errorText: CharSequence = ""
     private var regexToMatch = ""
     var onDrawableEndClickListener: (() -> Unit)? = null
+
 
     var trimmedText: CharSequence
         get() = editTextView.text?.trim() ?: ""
@@ -44,17 +42,7 @@ open class FormInputView @JvmOverloads constructor(
 
     private fun setupListeners() {
         editTextView.setOnTextChangeListener { errorTextView.text = "" }
-        editTextView.setOnTouchListener(OnTouchListener { v, event ->
-
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (editTextView.compoundDrawables[2] != null
-                        && event.rawX >= editTextView.right - editTextView.compoundDrawables[2].bounds.width()) {
-                    onDrawableEndClickListener?.invoke()
-                    return@OnTouchListener true
-                }
-            }
-            false
-        })
+        editTextEndDrawable.setOnClickListener { onDrawableEndClickListener?.invoke() }
     }
 
 
@@ -64,6 +52,13 @@ open class FormInputView @JvmOverloads constructor(
         inputLevel = typedArray.getInt(R.styleable.FormInputView_input_level, 0)
         regexToMatch = typedArray.getString(R.styleable.FormInputView_regex) ?: ""
         errorText = typedArray.getString(R.styleable.FormInputView_error_text) ?: resources.getText(R.string.invalid)
+
+        val drawableEnd = typedArray.getDrawable(R.styleable.FormInputView_android_drawableEnd)
+        editTextEndDrawable.setImageDrawable(drawableEnd)
+        if (drawableEnd != null) {
+            editTextEndDrawable.visibility = View.VISIBLE
+        }
+
         val inputType = typedArray.getInt(R.styleable.FormInputView_android_inputType, EditorInfo.TYPE_NULL)
         if (inputType != EditorInfo.TYPE_NULL) {
             editTextView.inputType = inputType
@@ -72,7 +67,6 @@ open class FormInputView @JvmOverloads constructor(
         editTextView.hint = hint
 
         editTextView.imeOptions = typedArray.getInt(R.styleable.FormInputView_android_imeOptions, EditorInfo.IME_ACTION_UNSPECIFIED)
-        editTextView.setDrawableEnd(typedArray.getDrawable(R.styleable.FormInputView_android_drawableEnd))
 
         val imeActionId = typedArray.getInt(R.styleable.FormInputView_android_imeActionId, 0)
         editTextView.setImeActionLabel(typedArray.getString(R.styleable.FormInputView_android_imeActionLabel), imeActionId)
@@ -97,14 +91,18 @@ open class FormInputView @JvmOverloads constructor(
 
             regexToMatch.isNotEmpty() && !trimmedText.matches(Regex(regexToMatch)) -> {
                 errorTextView.text = errorText
+                return false
             }
         }
         return true
     }
 
-
     fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
         editTextView.setOnEditorActionListener(listener)
+    }
+
+    fun setSelection(index: Int) {
+        editTextView.setSelection(index)
     }
 
     var error: CharSequence

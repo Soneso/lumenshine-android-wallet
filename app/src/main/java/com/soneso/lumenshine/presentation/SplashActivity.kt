@@ -1,5 +1,7 @@
 package com.soneso.lumenshine.presentation
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -28,5 +30,12 @@ class SplashActivity : LsActivity() {
             }
             finish()
         })
+    }
+
+    companion object {
+
+        fun startInstance(context: Context) {
+            context.startActivity(Intent(context, SplashActivity::class.java))
+        }
     }
 }

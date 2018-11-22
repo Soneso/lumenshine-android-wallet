@@ -15,7 +15,7 @@
             style="@style/AppTheme.LsCardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/size_12">
+            android:layout_margin="@dimen/size_11">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,17 +36,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/size_15"
-                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginTop="@dimen/size_5"
                     android:layout_marginEnd="@dimen/size_15"
                     android:text="@string/verify_mnemonic_title"
                     android:textColor="@color/red"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/encodesans_semibold" />
 
                 <com.soneso.lumenshine.presentation.widgets.LsTextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/size_15"
-                    android:layout_marginTop="@dimen/size_15"
+                    android:layout_marginTop="@dimen/size_10"
                     android:layout_marginEnd="@dimen/size_15"
                     android:fontFamily="@font/encodesans_regular"
                     android:gravity="center"
@@ -56,7 +56,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/size_05"
-                    android:layout_marginTop="@dimen/size_10"
+                    android:layout_marginTop="@dimen/size_15"
                     android:background="@color/lightGray" />
 
                 <com.soneso.lumenshine.presentation.widgets.LsTextView
@@ -156,28 +156,29 @@
                     android:id="@+id/errorView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_15"
-                    android:fontFamily="@font/encodesans_regular"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:fontFamily="@font/encodesans_semibold"
                     android:text="@string/invalid_input"
                     android:textColor="@color/red"
                     android:textSize="@dimen/text_size_12"
                     android:visibility="invisible" />
 
-                <Button
+                <com.soneso.lumenshine.presentation.widgets.LsButton
                     android:id="@+id/nextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/size_120"
+                    android:layout_height="@dimen/size_38"
                     android:layout_marginTop="@dimen/size_5"
                     android:text="@string/finish"
                     android:textAllCaps="false" />
 
-                <Button
+                <com.soneso.lumenshine.presentation.widgets.LsButton
                     android:id="@+id/backButton"
                     style="@style/OrangeButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_15"
-                    android:layout_marginBottom="@dimen/size_15"
+                    android:minWidth="@dimen/size_260"
+                    android:layout_height="@dimen/size_38"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginBottom="@dimen/size_20"
                     android:text="@string/back_mnemonic"
                     android:textAllCaps="false" />
             </LinearLayout>

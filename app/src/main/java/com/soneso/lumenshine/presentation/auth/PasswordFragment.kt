@@ -22,6 +22,9 @@ class PasswordFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        if (BuildConfig.DEBUG) {
+//            passwordView.trimmedText = "Test1234!"
+//        }
         setupListeners()
         subscribeForLiveData()
     }
@@ -68,7 +71,7 @@ class PasswordFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                passwordView.error = e.message
+                passwordView.error = e.displayMessage
             }
             else -> {
                 showErrorSnackbar(e)

@@ -32,9 +32,9 @@
 
     <!-- Strings related to authentication -->
     <string name="hint_email">Email</string>
-    <string name="hint_password">Password</string>
+    <string name="hint_password">PASSWORD</string>
     <string name="hint_two_factor">Two Factor Code</string>
-    <string name="hint_password_confirmation">Password confirmation</string>
+    <string name="hint_password_confirmation">REPEAT PASSWORD</string>
     <string name="hint_first_name">First name</string>
     <string name="hint_last_name">Last name</string>
     <string name="action_sign_in">Login</string>
@@ -109,7 +109,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="setup_step_1">step 1 of 3</string>
     <string name="tfa_authentication_title">2 Factor Authentication (2FA)</string>
     <string name="your_2fa_secret">Your 2FA Secret:</string>
-    <string name="tfa_reason">For security reasons, your wallet will be protected by 2 Factor Authentication (2FA).</string>
+    <string name="tfa_reason">For security reasons, your wallet will be protected by 2FA</string>
     <string name="tfa_setup_steps">
         To setup 2FA, please:\n
         \n
@@ -121,7 +121,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     </string>
     <string name="email_confirm_title">Email confirmation required</string>
     <string name="mail_confirmation_alert">Please confirm your email address first.</string>
-    <string name="setup_step_2">Step 2 of 3</string>
+    <string name="setup_step_2">step 2 of 3</string>
     <string name="mnemonic_memorizing_title"><![CDATA[Note & confirm backup secret (mnemonic)]]></string>
     <string name="mnemonic_warning">This step is very important</string>
     <string name="mnemonic_instruction">Please write down your backup secret (mnemonic). You can use it if you lose your
@@ -131,7 +131,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="mnemonic_read_more">Read more about mnemonics</string>
     <string name="your_mnemonic">Your secret (24 word mnemonic):</string>
     <string name="mnemonic_confirm">Confirm noting your mnemonic</string>
-    <string name="setup_step_3">Step 3 of 3</string>
+    <string name="setup_step_3">step 3 of 3</string>
     <string name="mnemonic_confirm_title">Prove noting of menmonic</string>
     <string name="mnemonic_confirm_description">To prove the noting of your mnemonic, please complete following quiz.</string>
     <string name="mnemonic_confirm_instruction">Here are 4 random words from the mnemonic. Please indicate their position within the mnemonic.</string>
@@ -152,14 +152,14 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="failed_to_change_tfa">Failed to change 2FA Code</string>
     <string name="wallet_not_funded">(not funded)</string>
     <string name="wallet_balance">Balance</string>
-    <string name="wallet_empty_balance">0.0 XLM</string>
+    <string name="wallet_empty_balance">0 XLM</string>
     <string name="wallet_balances">Balances</string>
     <string name="wallet_availability">Available</string>
     <string name="wallet_button_send">Send</string>
     <string name="wallet_button_receive">Receive</string>
     <string name="wallet_button_details">Details</string>
     <string name="wallet_button_fund_wallet">Fund Wallet</string>
-
+    <string name="wallet">Wallet</string>
 
     <string name="error">Error</string>
 
@@ -199,13 +199,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="register">Register</string>
 
-    <string name="login_continue">Login to continue</string>
+    <string name="login_continue">Log in to your account</string>
 
     <string name="unlock_app">Unlock app</string>
 
     <string name="unlock_button">Unlock</string>
-
-    <string name="login_fill">Please fill in the form below with valid information</string>
 
     <string name="logout">Log Out</string>
 
@@ -261,9 +259,9 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="repeat_password">Repeat Password</string>
 
-    <string name="forename">Forename</string>
+    <string name="forename">FORENAME</string>
 
-    <string name="lastname">Lastname</string>
+    <string name="lastname">LASTNAME</string>
 
     <string name="company_name">Company name</string>
 
@@ -373,7 +371,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="email_already_confirmed">Already confirmed</string>
 
-    <string name="email_resend_confirmation">Resend confirmation mail</string>
+    <string name="email_resend_confirmation">Resend verification link</string>
 
     <string name="resend_email">Resend email</string>
 
@@ -626,12 +624,47 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="stellar_detail">Learn more about Stellar</string>
 
     <string name="ico_detail">Learn how to participate in an ICO</string>
+
     <string name="enter_email_address_description">Enter the email address you used to signup.</string>
+
     <string name="email_sent">Mail sent!</string>
+
     <string name="enter_email_address_reset_password_description">For resetting your password, we sent a message to your email account. Click the link to reset your password.</string>
+
     <string name="enter_email_address_reset_2fa_description">For resetting your 2FA Secret, we sent a message to your email account. Click the link to reset your 2FA Secret.</string>
+
     <string name="reset_2fa_email_sent">Reset 2fa email sent</string>
+
     <string name="reset_password_email_sent">Reset password email sent</string>
+
+    <string name="you_agree_to_abide">You agree to abide by Lumenshine\'s&#160;</string>
+
+    <string name="terms_of_service">terms of service</string>
+
+    <string name="join_lumenshine">Join Lumenshine</string>
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <string name="terms_of_service_text_comes_here">Terms of service text comes here</string>
+
+    <string name="terms_of_service_title">Terms of service</string>
+
+    <string name="password_requirement_subtitle">*%s</string>
+
+    <string-array name="password_requirements">
+        <item>9 characters|The password must have at least 9 characters</item>
+        <item>one small letter|It must contain at least one small letter</item>
+        <item>one capital letter|It must contain at least one capital letter</item>
+        <item>one number|It must contain at least one number</item>
+    </string-array>
+
+    <string name="error_verify_email">Please verify your email address first</string>
+
+    <string name="no_stellar_address">no stellar address</string>
+
+    <string name="error_invalid_forename">Invalid forename</string>
+
+    <string name="error_invalid_lastname">Invalid lastname</string>
 
     <string name="transactions_wallet">Wallet:</string>
     <string name="transactions_date_from">Date from:</string>

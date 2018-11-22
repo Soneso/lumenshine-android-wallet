@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/appBarLayout"
-    android:background="@color/lightGray"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/lightGray">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontal_guideline"
@@ -31,8 +31,8 @@
         android:layout_marginStart="@dimen/size_15"
         android:layout_marginTop="@dimen/size_3"
         android:gravity="center"
-        android:rotation="180"
         android:padding="@dimen/size_10"
+        android:rotation="180"
         android:src="@drawable/icon_hamburger_menu"
         android:tint="@color/blue"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,11 +52,11 @@
         android:id="@+id/welcomeView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_13"
         android:fontFamily="@font/encodesans_semibold"
         android:text="@string/welcome"
-        android:textColor="@color/blue"
         android:textAllCaps="true"
-        android:layout_marginTop="@dimen/size_13"
+        android:textColor="@color/blue"
         android:textSize="@dimen/text_size_19"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -66,7 +66,10 @@
         android:id="@+id/usernameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/encodesans_bold"
         android:text="@string/welcome"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_18"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -76,19 +79,20 @@
     <LinearLayout
         android:id="@+id/set_up_view"
         android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/navHostFragment"
         app:layout_constraintTop_toBottomOf="@+id/usernameView">
 
         <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/encodesans_regular"
             android:text="@string/setup_wallet"
             android:textColor="@color/yellow"
-            android:textSize="@dimen/text_size_30" />
+            android:textSize="@dimen/text_size_22" />
 
     </LinearLayout>
 

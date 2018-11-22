@@ -10,6 +10,9 @@ import com.soneso.lumenshine.presentation.general.LsDialog
 import kotlinx.android.synthetic.main.dialog_more.*
 
 class MoreDialog : LsDialog() {
+    override fun isWithHeader(): Boolean {
+        return false
+    }
 
     private var listener: View.OnClickListener? = null
 

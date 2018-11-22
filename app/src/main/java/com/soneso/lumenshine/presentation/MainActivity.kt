@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.general.LsActivity
 import com.soneso.lumenshine.presentation.general.LsFragment
@@ -20,9 +21,14 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 
 class MainActivity : LsActivity(), com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener {
 
+    private var onStopTs = 0L
+    private lateinit var viewModel: MainViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[MainViewModel::class.java]
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
@@ -55,6 +61,24 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        lockIfThresholdPassed()
+    }
+
+    private fun lockIfThresholdPassed() {
+        if (onStopTs > 0 && System.currentTimeMillis() - onStopTs > LOCK_THRESHOLD) {
+            finishAffinity()
+            SplashActivity.startInstance(this)
+        }
+    }
+
+    override fun onStop() {
+        onStopTs = System.currentTimeMillis()
+        super.onStop()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -114,6 +138,8 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
     }
 
     companion object {
+
+        private const val LOCK_THRESHOLD = 10 * 1000L
 
         fun startInstance(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))

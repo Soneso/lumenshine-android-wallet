@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.util.GeneralUtils
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
  * A simple [Fragment] subclass.
  */
 class LoginFragment : AuthFragment() {
+    private var shouldAutoPaste: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_login, container, false)
@@ -32,10 +34,6 @@ class LoginFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-
-        authViewModel.liveLastUsername.observe(this, Observer {
-            emailView.trimmedText = it
-        })
         authViewModel.liveLogin.observe(this, Observer {
             renderLoginStatus(it ?: return@Observer)
         })
@@ -88,16 +86,30 @@ class LoginFragment : AuthFragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (shouldAutoPaste) {
+            val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+            tfaCodeView.trimmedText = textFromClipboard
+            tfaCodeView.setSelection(textFromClipboard.length)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        shouldAutoPaste = true
+    }
+
     /**
      * handling login response errors
      */
     private fun handleError(e: ServerException) {
 
         when (e.code) {
-            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> emailView.error = e.message
-            ErrorCodes.LOGIN_INVALID_2FA -> tfaCodeView.error = e.message
-            ErrorCodes.LOGIN_WRONG_PASSWORD -> passwordView.error = e.message
-            ErrorCodes.MISSING_TFA -> tfaCodeView.error = e.message
+            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> emailView.error = e.displayMessage
+            ErrorCodes.LOGIN_INVALID_2FA -> tfaCodeView.error = e.displayMessage
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> passwordView.error = e.displayMessage
+            ErrorCodes.MISSING_TFA -> tfaCodeView.error = e.displayMessage
             else -> showErrorSnackbar(e)
         }
     }

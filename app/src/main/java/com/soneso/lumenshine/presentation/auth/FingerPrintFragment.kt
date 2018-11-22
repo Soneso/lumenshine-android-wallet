@@ -85,7 +85,7 @@ class FingerPrintFragment : AuthFragment() {
 
         when (e.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                passwordView.error = e.message
+                passwordView.error = e.displayMessage
             }
             else -> {
                 showErrorSnackbar(e)

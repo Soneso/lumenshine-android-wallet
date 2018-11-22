@@ -21,14 +21,17 @@ import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.subjects.BehaviorSubject
 import retrofit2.Retrofit
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Class used to user operations to server.
  * Created by cristi.paval on 3/26/18.
  */
+@Singleton
 class UserRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
         db: LsDatabase,
@@ -37,10 +40,13 @@ class UserRepository @Inject constructor(
 
     private val userApi = r.create(UserApi::class.java)
     private val userDao = db.userDao()
+    private val passSubject = BehaviorSubject.create<String>()
 
     fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 
         return userApi.registerUser(
+                userProfile.forename,
+                userProfile.lastname,
                 userProfile.email,
                 userSecurity.passwordKdfSalt.base64String(),
                 userSecurity.encryptedMnemonicMasterKey.base64String(),
@@ -59,6 +65,8 @@ class UserRepository @Inject constructor(
                     if (it.isSuccessful) {
                         LsPrefs.jwtToken = it.headers()[SgApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
                     }
+                    LsPrefs.username = userSecurity.username
+                    userDao.saveUserData(userSecurity)
                 }
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
@@ -67,6 +75,12 @@ class UserRepository @Inject constructor(
                     true
                 }, { it })
     }
+
+    fun setPassword(pass: String) {
+        passSubject.onNext(pass)
+    }
+
+    fun getPassword() = passSubject.firstOrError()
 
     fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
 
@@ -151,9 +165,9 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun getUserData(username: String? = null): Flowable<UserSecurity> {
-        val usernameFlowable = if (username == null) LsPrefs.observeUsername() else Flowable.just(username)
-        return usernameFlowable.flatMap { userDao.getUserDataById(it) }
+    fun getUserData(username: String? = null): Single<UserSecurity> {
+        val usernameSingle = if (username == null) LsPrefs.loadUsername() else Single.just(username)
+        return usernameSingle.flatMap { userDao.getUserDataById(it) }
     }
 
     fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
@@ -167,7 +181,8 @@ class UserRepository @Inject constructor(
     }
 
     fun resendConfirmationMail(): Flowable<Resource<Boolean, ServerException>> =
-            LsPrefs.observeUsername()
+            LsPrefs.loadUsername()
+                    .toFlowable()
                     .flatMap { username ->
                         userApi.resendConfirmationMail(username)
                                 .asHttpResourceLoader(networkStateObserver)
@@ -175,17 +190,17 @@ class UserRepository @Inject constructor(
                     }
 
 
-    fun refreshRegistrationStatus(): Flowable<Resource<Boolean, ServerException>> {
+    fun refreshRegistrationStatus(): Flowable<Resource<RegistrationStatus?, ServerException>> {
 
         return userApi.getRegistrationStatus()
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({
                     userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
-                    true
+                    it.toRegistrationStatus(LsPrefs.username)
                 }, { it })
     }
 
-    fun loadTfaSecret(): Single<String> = LsPrefs.observeTfaSecret().singleOrError()
+    fun loadTfaSecret(): Single<String> = LsPrefs.loadTfaSecret()
 
     fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
 
@@ -253,16 +268,15 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun loadTfaCode(): Single<String> =
-            Single.create<String> {
-                val tfaSecret = LsPrefs.tfaSecret
-                val tfaCode = OtpProvider.currentTotpCode(tfaSecret.decodeBase32()) ?: ""
-                it.onSuccess(tfaCode)
+    fun loadTfaCode(): Single<String> = LsPrefs.loadTfaSecret()
+            .map {
+                OtpProvider.currentTotpCode(it.decodeBase32()) ?: ""
             }
 
     fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 
-        return LsPrefs.observeUsername().filter { it.isNotBlank() }
+        return LsPrefs.loadUsername().filter { it.isNotBlank() }
+                .toFlowable()
                 .flatMap { userDao.getRegistrationStatus(it) }
     }
 

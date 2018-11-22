@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class WalletDto(
 
         @JsonProperty("id")
-        var id: Long,
+        var id: Long?,
 
         @JsonProperty("public_key")
-        var publicKey: String,
+        var publicKey: String?,
 
         @JsonProperty("wallet_name")
-        var name: String,
+        var name: String?,
 
         @JsonProperty("federation_address")
-        var federationAddress: String,
+        var federationAddress: String?,
 
         @JsonProperty("show_on_homescreen")
-        var showOnHomeScreen: Boolean
+        var showOnHomeScreen: Boolean?
 )

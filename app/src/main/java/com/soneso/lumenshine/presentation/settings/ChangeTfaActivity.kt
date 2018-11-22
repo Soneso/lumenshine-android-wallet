@@ -125,10 +125,10 @@ class ChangeTfaActivity : LsActivity() {
 
         when (error.code) {
             ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                change_tfa_current_pass.error = error.message
+                change_tfa_current_pass.error = error.displayMessage
             }
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfaInputVoew.error = error.message
+                tfaInputVoew.error = error.displayMessage
             }
             else -> {
                 showErrorSnackbar(error)

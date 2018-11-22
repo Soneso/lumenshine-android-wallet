@@ -2,7 +2,6 @@
 <resources>
     <color name="colorPrimary">#1a237e</color>
     <color name="colorPrimaryDark">#1a237e</color>
-    <color name="colorAccent">#d46e00</color>
     <color name="grey_800">#424242</color>
     <color name="grey_700">#616161</color>
     <color name="grey_600">#757575</color>
@@ -12,7 +11,6 @@
     <color name="cyan_400">#26c6da</color>
     <color name="cyan_300">#4dd0e1</color>
     <color name="grey_300">#e0e0e0</color>
-    <color name="white">#ffffff</color>
     <color name="text_dark">#1b1b1b</color>
     <color name="text_light">#e2e2e2</color>
     <color name="yellow">#d6de02</color>
@@ -26,10 +24,12 @@
     <color name="darkRed">#C71A20</color>
     <color name="green">#91c74a</color>
     <color name="darkGreen">#7BA83E</color>
+    <color name="lightLightGray">#F2F2F2</color>
     <color name="lightGray">#e1e1e1</color>
     <color name="gray">#a8a8a8</color>
     <color name="darkGray">#898989</color>
     <color name="darkerGray">#333333</color>
     <color name="orange">#FAAF3A</color>
     <color name="darkOrange">#D39432</color>
+    <color name="helpButtonGray">#cccccc</color>
 </resources>

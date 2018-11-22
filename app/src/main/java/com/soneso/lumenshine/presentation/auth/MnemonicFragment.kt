@@ -26,6 +26,7 @@ class MnemonicFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showLoadingView()
         setupViews()
         subscribeForLiveData()
         setupListeners()
@@ -47,6 +48,7 @@ class MnemonicFragment : AuthFragment() {
     private fun subscribeForLiveData() {
 
         authViewModel.liveMnemonic.observe(this, Observer {
+            hideLoadingView()
             wordAdapter.setMnemonic(it ?: return@Observer)
         })
     }

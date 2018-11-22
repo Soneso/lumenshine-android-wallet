@@ -1,18 +1,17 @@
 package com.soneso.lumenshine.presentation.auth
 
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.util.GeneralUtils
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
@@ -22,36 +21,64 @@ import kotlinx.android.synthetic.main.fragment_tfa_registration.*
  */
 class TfaConfirmationFragment : AuthFragment() {
 
+    private lateinit var tfaConfirmationViewModel: TFAConfirmationViewModel
+    private var tfaSecret: String = ""
+    private var shouldAutoPaste: Boolean = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_tfa_registration, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authViewModel.fetchTfaSecret()
+        tfaConfirmationViewModel = ViewModelProviders.of(this, viewModelFactory)[TFAConfirmationViewModel::class.java]
+
+        tfaConfirmationViewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
     }
 
+    override fun onPause() {
+        super.onPause()
+        shouldAutoPaste = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (shouldAutoPaste) {
+            val textFromClipboard:String = GeneralUtils.pasteFromClipboard(context!!)
+            if (textFromClipboard != tfaSecret) {
+                tfaInputView.trimmedText = textFromClipboard
+                tfaInputView.setSelection(textFromClipboard.length)
+            }
+        }
+    }
+
     private fun subscribeForLiveData() {
 
-        authViewModel.liveTfaSecret.observe(this, Observer {
+        tfaConfirmationViewModel.liveTfaSecret.observe(this, Observer {
             setupToken(it ?: return@Observer)
         })
 
-        authViewModel.liveTfaConfirmation.observe(this, Observer {
+        tfaConfirmationViewModel.liveTfaConfirmation.observe(this, Observer {
             renderTfaConfirmation(it ?: return@Observer)
         })
-        authViewModel.liveTfaChangeConfirmation.observe(this, Observer {
+        tfaConfirmationViewModel.liveTfaChangeConfirmation.observe(this, Observer {
             renderTfaConfirmation(it ?: return@Observer)
         })
     }
 
     private fun setupListeners() {
         nextButton.setOnClickListener {
+            subscribeForLiveData()
             if (tfaInputView.hasValidInput()) {
-                authViewModel.confirmTfaRegistration(tfaInputView.trimmedText)
+                tfaConfirmationViewModel.confirmTfaRegistration(tfaInputView.trimmedText)
             }
+        }
+
+        copyButton.setOnClickListener {
+            showSnackbar(R.string.copied_to_clipboard)
+            context?.let { it1 -> GeneralUtils.copyToClipboard(it1, tfaSecret) }
         }
     }
 
@@ -77,7 +104,7 @@ class TfaConfirmationFragment : AuthFragment() {
 
         when (error.code) {
             ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfaInputView.error = error.message
+                tfaInputView.error = error.displayMessage
             }
             else -> {
                 showErrorSnackbar(error)
@@ -86,15 +113,8 @@ class TfaConfirmationFragment : AuthFragment() {
     }
 
     private fun setupToken(tfaSecret: String) {
-
+        this.tfaSecret = tfaSecret
         tfaSecretView.text = getString(R.string.lbl_tfa_secret, tfaSecret)
-        copyButton.setOnClickListener {
-
-            val clipboard = context?.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("2FA secret", tfaSecret)
-            clipboard.primaryClip = clip
-            showSnackbar(getString(R.string.tfa_secret_copy))
-        }
     }
 
     companion object {

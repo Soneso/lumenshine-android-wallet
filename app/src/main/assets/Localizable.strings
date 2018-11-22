@@ -60,9 +60,6 @@
 "unlock_button" = "Unlock";
 
 /*  */
-"login_fill" = "Please fill in the form below with valid information";
-
-/*  */
 "logout" = "Log Out";
 
 /*  */
@@ -306,7 +303,7 @@
 "email_already_confirmed" = "Already confirmed";
 
 /*  */
-"email_resend_confirmation" = "Resend confirmation mail";
+"email_resend_confirmation" = "Resend confirmation link";
 
 /*  */
 "resend_email" = "Resend email";

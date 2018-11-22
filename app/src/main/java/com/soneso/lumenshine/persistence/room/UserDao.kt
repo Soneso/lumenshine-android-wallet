@@ -7,12 +7,13 @@ import androidx.room.Query
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import io.reactivex.Flowable
+import io.reactivex.Single
 
 @Dao
 interface UserDao {
 
     @Query("SELECT * FROM ${DbNames.TABLE_USER_DATA} WHERE ${DbNames.COLUMN_USERNAME} = :username")
-    fun getUserDataById(username: String): Flowable<UserSecurity>
+    fun getUserDataById(username: String): Single<UserSecurity>
 
     @Query("SELECT * FROM ${DbNames.TABLE_REGISTRATION_STATUS} WHERE ${DbNames.COLUMN_USERNAME} = :username")
     fun getRegistrationStatus(username: String): Flowable<RegistrationStatus>
