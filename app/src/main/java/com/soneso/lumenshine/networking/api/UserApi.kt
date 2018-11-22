@@ -4,10 +4,7 @@ import com.soneso.lumenshine.networking.dto.auth.*
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 /**
@@ -73,7 +70,7 @@ interface UserApi {
     @FormUrlEncoded
     @POST("/portal/user/auth/login_step2")
     fun loginStep2(
-            @Field("key") publicKey188: String
+            @Field("sep10_transaction") signedSep10Challenge: String
     ): Single<Response<LoginStep2Response>>
 
 
@@ -106,7 +103,7 @@ interface UserApi {
     @FormUrlEncoded
     @POST("/portal/user/dashboard/tfa_secret")
     fun getTfaSecret(
-            @Field("public_key_188") publicKey188: String
+            @Field("sep10_transaction") signedSep10Challenge: String
     ): Single<Response<GetTfaRequestResponse>>
 
     @GET("/portal/user/dashboard/user_auth_data")
@@ -137,4 +134,7 @@ interface UserApi {
     fun confirmTfaSecretChange(
             @Field("tfa_code") tfaCode: String
     ): Single<Response<ConfirmTfaSecretChangeResponse>>
+
+    @GET
+    fun loadServerSigningKey(@Url url: String = "https://demo.lumenshine.com/.well-known/stellar.toml"): Single<Response<String>>
 }
