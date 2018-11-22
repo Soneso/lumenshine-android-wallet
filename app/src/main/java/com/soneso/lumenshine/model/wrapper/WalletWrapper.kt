@@ -10,12 +10,11 @@ import org.stellar.sdk.responses.AccountResponse
 fun WalletDto.toWallet(): WalletEntity {
 
     return WalletEntity(
-            id,
-            publicKey,
-            name,
-            federationAddress,
-            showOnHomeScreen,
-            publicKey
+            id ?: 0L,
+            publicKey ?: "",
+            name ?: "",
+            federationAddress ?: "",
+            showOnHomeScreen ?: false
     )
 }
 

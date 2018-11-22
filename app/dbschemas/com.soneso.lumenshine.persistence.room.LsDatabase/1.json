@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "37eb716df729c5a8074cd444a162aa52",
+    "identityHash": "700170926215d80a829ebb97975255e2",
     "entities": [
       {
         "tableName": "user_data",
@@ -92,8 +92,7 @@
       },
       {
         "tableName": "wallets",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `publicKey` TEXT NOT NULL, `name` TEXT NOT NULL, `federation_address` TEXT NOT NULL, `shown_in_home_screen` INTEGER NOT NULL, PRIMARY KEY(`id`))",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `federation_address` TEXT NOT NULL, `shown_in_home_screen` INTEGER NOT NULL, `public_key` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `public_key` TEXT NOT NULL, `name` TEXT NOT NULL, `federation_address` TEXT NOT NULL, `shown_in_home_screen` INTEGER NOT NULL, `public_key` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -103,7 +102,7 @@
           },
           {
             "fieldPath": "publicKey",
-            "columnName": "publicKey",
+            "columnName": "public_key",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -126,7 +125,7 @@
             "notNull": true
           },
           {
-            "fieldPath": "publicKey",
+            "fieldPath": "publicKey$1",
             "columnName": "public_key",
             "affinity": "TEXT",
             "notNull": true
@@ -182,7 +181,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"37eb716df729c5a8074cd444a162aa52\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"700170926215d80a829ebb97975255e2\")"
     ]
   }
 }

@@ -2,8 +2,8 @@ package com.soneso.lumenshine.domain.usecases
 
 import com.soneso.lumenshine.model.TransactionRepository
 import com.soneso.lumenshine.model.WalletRepository
-import com.soneso.lumenshine.model.entities.Wallet
 import com.soneso.lumenshine.model.entities.operations.Operation
+import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import io.reactivex.Flowable
@@ -19,11 +19,11 @@ class TransactionsUseCases @Inject constructor(
     private val defaultStartDate: Date = Date(System.currentTimeMillis() - 7 * DAY_IN_MS)
     private val defaultEndDate: Date = Date()
 
-    val selectedWallet = BehaviorProcessor.create<Wallet>()
+    val selectedWallet = BehaviorProcessor.create<WalletEntity>()
     val selectedDateFrom = BehaviorProcessor.create<Date>()
     val selectedDateTo = BehaviorProcessor.create<Date>()
 
-    fun getWallets(): Flowable<Resource<List<Wallet>, ServerException>> = walletRepo.loadAllWallets()
+    fun getWallets(): Flowable<Resource<List<WalletEntity>, ServerException>> = walletRepo.loadAllWallets()
 
     fun getOperations(): Flowable<Resource<List<Operation>, ServerException>> =
             transactionRepo.loadOperations(
@@ -31,7 +31,7 @@ class TransactionsUseCases @Inject constructor(
                     if (selectedDateFrom.value != null) selectedDateFrom.value!! else defaultStartDate,
                     if (selectedDateTo.value != null) selectedDateTo.value!! else defaultEndDate)
 
-    fun setWallet(wallet: Wallet) {
+    fun setWallet(wallet: WalletEntity) {
         selectedWallet.onNext(wallet)
     }
 
