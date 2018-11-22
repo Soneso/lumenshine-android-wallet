@@ -21,7 +21,6 @@ open class FormInputView @JvmOverloads constructor(
     protected var inputLevel = 0
     private var errorText: CharSequence = ""
     private var regexToMatch = ""
-    //    private var showPasswordToggle: Boolean = false
     var onDrawableEndClickListener: (() -> Unit)? = null
 
 
@@ -53,6 +52,13 @@ open class FormInputView @JvmOverloads constructor(
         inputLevel = typedArray.getInt(R.styleable.FormInputView_input_level, 0)
         regexToMatch = typedArray.getString(R.styleable.FormInputView_regex) ?: ""
         errorText = typedArray.getString(R.styleable.FormInputView_error_text) ?: resources.getText(R.string.invalid)
+
+        val drawableEnd = typedArray.getDrawable(R.styleable.FormInputView_android_drawableEnd)
+        editTextEndDrawable.setImageDrawable(drawableEnd)
+        if (drawableEnd != null) {
+            editTextEndDrawable.visibility = View.VISIBLE
+        }
+
         val inputType = typedArray.getInt(R.styleable.FormInputView_android_inputType, EditorInfo.TYPE_NULL)
         if (inputType != EditorInfo.TYPE_NULL) {
             editTextView.inputType = inputType
