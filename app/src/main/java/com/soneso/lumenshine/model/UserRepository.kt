@@ -144,6 +144,58 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
+    fun loginStep2_(sep10Challenge: String, userKeyPair: KeyPair): Single<RegistrationStatus> =
+            Single.create<Transaction> { emitter ->
+                // cristi.paval, 11/22/18 - validate sep10 challenge
+                val transaction = Transaction.fromEnvelopeXdr(sep10Challenge)
+                when {
+                    transaction == null -> emitter.onError(LsException("Transaction must not be null!"))
+                    transaction.sequenceNumber != 0L -> emitter.onError(LsException("Sequence number is not 0!"))
+                    transaction.operations?.size != 1 -> emitter.onError(LsException("Transaction must contain a single operation!"))
+                    transaction.operations?.first()?.sourceAccount?.accountId != userKeyPair.accountId -> emitter.onError(LsException("Operation does not belong to this user!"))
+                    transaction.operations?.first() !is ManageDataOperation -> emitter.onError(LsException("Operation is not ManageDataOperation!"))
+                    transaction.signatures?.size != 1 -> emitter.onError(LsException("Transaction must contain one signature!"))
+                }
+                emitter.onSuccess(transaction)
+            }.flatMap { transaction ->
+                // cristi.paval, 11/22/18 - verify server signature
+                val firstSignature = transaction.signatures.first().signature
+                val transactionHash = transaction.hash()
+                val serverKeyPair = KeyPair.fromAccountId(LsApi.INITIAL_SERVER_KEY)
+                val valid = serverKeyPair.verify(transactionHash, firstSignature.signature)
+                if (!valid) {
+                    // cristi.paval, 11/22/18 - check if server has a new signature
+                    userApi.loadServerSigningKey()
+                            .onErrorResumeNext { Single.error(ServerException(it)) }
+                            .doOnSuccess { response ->
+                                if (response.isSuccessful) {
+                                    val serverKey = Toml().read(response.body()).getString("SERVER_SIGNING_KEY")
+                                    val newServerKeyPair = KeyPair.fromAccountId(serverKey)
+                                    val isValidWithNewKey = newServerKeyPair.verify(transactionHash, firstSignature.signature)
+                                    if (!isValidWithNewKey) {
+                                        throw LsException("Transaction is not signed by server!")
+                                    }
+                                } else {
+                                    throw ServerException(response.errorBody(), Throwable(response.message()))
+                                }
+                            }.map { transaction }
+                } else {
+                    Single.just<Transaction>(transaction)
+                }
+            }.doOnSuccess { transaction ->
+                transaction.sign(userKeyPair)
+            }.map { transaction ->
+                transaction.toEnvelopeXdrBase64()
+            }.flatMap { signedSep10Challenge ->
+                userApi.loginStep2(signedSep10Challenge)
+            }.doOnSuccess {
+                if (it.isSuccessful) {
+                    LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                } else {
+                    throw ServerException(it.errorBody())
+                }
+            }.map { it.body()?.toRegistrationStatus("") }
+
     // TODO: fix this to use challenge + user-keypair, add specific error handling
     fun loginStep2(username: String, sep10Challenge: String, userKeyPair: KeyPair): Flowable<Resource<Boolean, ServerException>> {
 

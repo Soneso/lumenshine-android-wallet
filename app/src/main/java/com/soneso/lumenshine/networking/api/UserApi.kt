@@ -136,5 +136,5 @@ interface UserApi {
     ): Single<Response<ConfirmTfaSecretChangeResponse>>
 
     @GET
-    fun loadServerSigningKey(@Url url: String = "https://demo.lumenshine.com/.well-known/stellar.toml"): Single<Response<String>>
+    fun loadServerSigningKey(@Url url: String = LsApi.TOML_URL): Single<Response<String>>
 }
