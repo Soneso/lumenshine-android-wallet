@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "37eb716df729c5a8074cd444a162aa52",
+    "identityHash": "cc72d1871250d9cf71d717606ec5037c",
     "entities": [
       {
         "tableName": "user_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `public_key_index_0` TEXT NOT NULL, `public_key_index_188` TEXT NOT NULL, `ppassword_kdf_salt` BLOB NOT NULL, `encrypted_mnemonic_master_key` BLOB NOT NULL, `mnemonic_master_key_encryption_iv` BLOB NOT NULL, `encrypted_mnemonic` BLOB NOT NULL, `mnemonic_encryption_iv` BLOB NOT NULL, `encrypted_word_list_master_key` BLOB NOT NULL, `word_list_master_key_encryption_iv` BLOB NOT NULL, `encrypted_word_list` BLOB NOT NULL, `word_list_encryption_iv` BLOB NOT NULL, PRIMARY KEY(`username`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `public_key_index_0` TEXT NOT NULL, `sep10_transaction_challenge` TEXT NOT NULL, `ppassword_kdf_salt` BLOB NOT NULL, `encrypted_mnemonic_master_key` BLOB NOT NULL, `mnemonic_master_key_encryption_iv` BLOB NOT NULL, `encrypted_mnemonic` BLOB NOT NULL, `mnemonic_encryption_iv` BLOB NOT NULL, `encrypted_word_list_master_key` BLOB NOT NULL, `word_list_master_key_encryption_iv` BLOB NOT NULL, `encrypted_word_list` BLOB NOT NULL, `word_list_encryption_iv` BLOB NOT NULL, PRIMARY KEY(`username`))",
         "fields": [
           {
             "fieldPath": "username",
@@ -21,8 +21,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "publicKeyIndex188",
-            "columnName": "public_key_index_188",
+            "fieldPath": "sep10Challenge",
+            "columnName": "sep10_transaction_challenge",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -175,7 +175,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"37eb716df729c5a8074cd444a162aa52\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"cc72d1871250d9cf71d717606ec5037c\")"
     ]
   }
 }
