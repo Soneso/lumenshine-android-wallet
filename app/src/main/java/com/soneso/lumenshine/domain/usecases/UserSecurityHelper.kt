@@ -7,6 +7,7 @@ import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
 import org.bouncycastle.util.encoders.Base64
+import org.stellar.sdk.KeyPair
 import timber.log.Timber
 import java.nio.ByteBuffer
 import java.util.*
@@ -138,6 +139,48 @@ class UserSecurityHelper(private val pass: CharArray) {
             }
 
             return DecryptedUserData(mnemonicChars, wordListMasterKey, mnemonicMasterKey)
+
+        } catch (t: Throwable) {
+
+            return null
+        }
+    }
+
+    fun decipherUserSecurity_(userSecurity: UserSecurity): KeyPair? {
+
+        try {
+            val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
+
+            val wordListMasterKey = Cryptor.decryptValue(userSecurity.encryptedWordListMasterKey, derivedPassword, userSecurity.wordListMasterKeyEncryptionIv)
+
+            val wordListCsvBytes = Cryptor.decryptValue(userSecurity.encryptedWordList, wordListMasterKey, userSecurity.wordListEncryptionIv)
+            val wordList = String(wordListCsvBytes).trim().split(",")
+
+            val mnemonicMasterKey = Cryptor.decryptValue(userSecurity.encryptedMnemonicMasterKey, derivedPassword, userSecurity.mnemonicMasterKeyEncryptionIv)
+
+            val mnemonicBytes = Cryptor.decryptValue(userSecurity.encryptedMnemonic, mnemonicMasterKey, userSecurity.mnemonicEncryptionIv)
+
+            if (mnemonicBytes.size != 48) {
+                return null
+            }
+
+            val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2) { index ->
+                val bf = ByteBuffer.wrap(mnemonicBytes, index * 2, 2)
+                bf.short
+            }
+            val mnemonicBuilder = StringBuilder()
+            mnemonicIndexes.forEach { index ->
+                mnemonicBuilder.append(wordList[index.toInt()]).append(" ")
+            }
+            mnemonicChars = mnemonicBuilder.removeSuffix(" ").toCharArray()
+
+            val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
+
+            if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
+                return null
+            }
+
+            return Wallet.createKeyPair(mnemonicChars, null, 0)
 
         } catch (t: Throwable) {
 

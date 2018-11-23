@@ -22,12 +22,9 @@ import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.ManageDataOperation
+import org.stellar.sdk.Network
 import org.stellar.sdk.Transaction
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -114,37 +111,38 @@ class UserRepository @Inject constructor(
                 .mapResource({ it.countries }, { it })
     }
 
-    fun loginStep1(email: String, tfaCode: String? = null): Flowable<Resource<Boolean, ServerException>> {
+    fun loginStep1(email: String, tfaCode: String? = null): Single<UserSecurity> {
 
         return userApi.loginStep1(email, tfaCode)
+                .onErrorResumeNext { Single.error(LsException(it)) }
                 .doOnSuccess {
                     if (it.isSuccessful) {
                         LsPrefs.username = email
                         LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                    } else {
+                        throw ServerException(it.errorBody())
                     }
                 }
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    val us = UserSecurity(
+                .map { response ->
+                    val dto = response.body()!!
+                    UserSecurity(
                             email,
-                            it.publicKeyIndex0,
-                            it.sep10TransactionChallenge,
-                            it.passwordKdfSalt(),
-                            it.encryptedMnemonicMasterKey(),
-                            it.mnemonicMasterKeyEncryptionIv(),
-                            it.encryptedMnemonic(),
-                            it.mnemonicEncryptionIv(),
-                            it.encryptedWordListMasterKey(),
-                            it.wordListMasterKeyEncryptionIv(),
-                            it.encryptedWordList(),
-                            it.wordListEncryptionIv()
+                            dto.publicKeyIndex0,
+                            dto.sep10TransactionChallenge,
+                            dto.passwordKdfSalt(),
+                            dto.encryptedMnemonicMasterKey(),
+                            dto.mnemonicMasterKeyEncryptionIv(),
+                            dto.encryptedMnemonic(),
+                            dto.mnemonicEncryptionIv(),
+                            dto.encryptedWordListMasterKey(),
+                            dto.wordListMasterKeyEncryptionIv(),
+                            dto.encryptedWordList(),
+                            dto.wordListEncryptionIv()
                     )
-                    userDao.saveUserData(us)
-                    true
-                }, { it })
+                }
     }
 
-    fun loginStep2_(sep10Challenge: String, userKeyPair: KeyPair): Single<RegistrationStatus> =
+    fun loginStep2(sep10Challenge: String, userKeyPair: KeyPair): Single<RegistrationStatus> =
             Single.create<Transaction> { emitter ->
                 // cristi.paval, 11/22/18 - validate sep10 challenge
                 val transaction = Transaction.fromEnvelopeXdr(sep10Challenge)
@@ -159,6 +157,7 @@ class UserRepository @Inject constructor(
                 emitter.onSuccess(transaction)
             }.flatMap { transaction ->
                 // cristi.paval, 11/22/18 - verify server signature
+                Network.useTestNetwork()
                 val firstSignature = transaction.signatures.first().signature
                 val transactionHash = transaction.hash()
                 val serverKeyPair = KeyPair.fromAccountId(LsApi.INITIAL_SERVER_KEY)
@@ -195,132 +194,6 @@ class UserRepository @Inject constructor(
                     throw ServerException(it.errorBody())
                 }
             }.map { it.body()?.toRegistrationStatus("") }
-
-    // TODO: fix this to use challenge + user-keypair, add specific error handling
-    fun loginStep2(username: String, sep10Challenge: String, userKeyPair: KeyPair): Flowable<Resource<Boolean, ServerException>> {
-
-        var signedSep10Challenge = signSEP10ChallengeIfValid(sep10Challenge, userKeyPair)
-
-        // TODO: error handling
-
-        // patch:
-        if (signedSep10Challenge == null) {
-            signedSep10Challenge = ""
-        }
-
-        return userApi.loginStep2(signedSep10Challenge)
-                .doOnSuccess {
-                    if (it.isSuccessful) {
-                        LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
-                    }
-                }
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    userDao.saveRegistrationStatus(it.toRegistrationStatus(username))
-                    it.tfaConfirmed && it.emailConfirmed && it.mnemonicConfirmed
-                }, { it })
-                .flatMap {
-                    return@flatMap if (it.isSuccessful && it.success()) {
-                        // /TODO: is this needed?
-                        refreshTfaSecret(signedSep10Challenge)
-                    } else {
-                        Flowable.just(it)
-                    }
-                }
-
-    }
-
-    // TODO: specific error handling
-    fun signSEP10ChallengeIfValid(base64EnvelopeXDR: String, userKeyPair: KeyPair): String? {
-
-        val transaction = validateSEP10Envelope(base64EnvelopeXDR, userKeyPair.accountId)
-        if (transaction == null || transaction.sequenceNumber != 0L) {
-            return null
-        }
-
-        transaction.sign(userKeyPair)
-
-        return transaction.toEnvelopeXdrBase64()
-    }
-
-    // TODO: specific error handling
-    fun validateSEP10Envelope(base64EnvelopeXDR: String, userAccountId: String): Transaction? {
-
-        val transaction = Transaction.fromEnvelopeXdr(base64EnvelopeXDR)
-
-        // sequence number must be 0
-        when {
-            transaction?.sequenceNumber != 0L -> return null
-            transaction.operations?.size != 1 -> return null
-            transaction.operations?.first()?.sourceAccount?.accountId != userAccountId -> return null
-            transaction.operations?.first() !is ManageDataOperation -> return null
-        }
-
-        transaction.signatures?.let { signatures ->
-            if (signatures.size != 1) {
-                return null
-            }
-            val first = signatures.first()
-
-            val serverSigningKey = "GCP4BR7GWG664577XMLX2BRUPSHKHTAXQ4I4HZORLMQNILNNVMSFWVUV"
-
-            val transactionHash = transaction.hash()
-            val serverKeyPair = KeyPair.fromAccountId(serverSigningKey)
-
-            val isValidSignature = serverKeyPair.verify(transactionHash, first.signature.signature)
-            if (isValidSignature) {
-                return transaction
-            } else {
-                val reloadedServerSigningKey = loadServerSigningKey()
-
-                if (reloadedServerSigningKey == null || reloadedServerSigningKey.equals(serverSigningKey)) {
-                    return null
-                }
-                val newServerKeyPair = KeyPair.fromAccountId(reloadedServerSigningKey)
-                val isValidSignature = newServerKeyPair.verify(transactionHash, first.signature.signature)
-                if (isValidSignature) {
-                    return transaction
-                }
-            }
-
-        } ?: run {
-            null
-        }
-        return null
-    }
-
-    fun loadServerSigningKey(): String? {
-
-        val uriBuilder = StringBuilder()
-        uriBuilder.append("https://demo.lumenshine.com/.well-known/stellar.toml")
-        val stellarTomlUri = HttpUrl.parse(uriBuilder.toString())
-        val httpClient = OkHttpClient.Builder()
-                .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
-                .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                .retryOnConnectionFailure(false)
-                .build();
-
-        val request = Request.Builder().get().url(stellarTomlUri).build()
-        var response: Response? = null
-        try {
-            response = httpClient.newCall(request).execute()
-
-            if (response!!.code() >= 300) {
-                return null
-            }
-
-            val stellarToml = Toml().read(response?.body()?.string())
-
-            return stellarToml.getString("SERVER_SIGNING_KEY")
-
-        } catch (e: Exception) {
-            return null
-        } finally {
-            if (response != null) {
-                response!!.close()
-            }
-        }
-    }
 
     fun getUserData(username: String? = null): Single<UserSecurity> {
         val usernameSingle = if (username == null) LsPrefs.loadUsername() else Single.just(username)

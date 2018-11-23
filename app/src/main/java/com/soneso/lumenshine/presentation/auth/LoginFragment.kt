@@ -11,8 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.GeneralUtils
+import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -65,7 +67,7 @@ class LoginFragment : AuthFragment() {
         )
     }
 
-    private fun renderLoginStatus(resource: Resource<Boolean, ServerException>) {
+    private fun renderLoginStatus(resource: Resource<RegistrationStatus, LsException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -77,7 +79,7 @@ class LoginFragment : AuthFragment() {
             }
             else -> {
                 hideLoadingView()
-                if (resource.success()) {
+                if (resource.success().isSetupCompleted()) {
                     authActivity.goToMain()
                 } else {
                     authActivity.goToSetup()
@@ -103,14 +105,17 @@ class LoginFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-    private fun handleError(e: ServerException) {
+    private fun handleError(e: LsException) {
 
-        when (e.code) {
-            ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> emailView.error = e.displayMessage
-            ErrorCodes.LOGIN_INVALID_2FA -> tfaCodeView.error = e.displayMessage
-            ErrorCodes.LOGIN_WRONG_PASSWORD -> passwordView.error = e.displayMessage
-            ErrorCodes.MISSING_TFA -> tfaCodeView.error = e.displayMessage
-            else -> showErrorSnackbar(e)
+        if (e is ServerException) {
+            when (e.code) {
+                ErrorCodes.LOGIN_EMAIL_NOT_EXIST -> emailView.error = e.displayMessage
+                ErrorCodes.LOGIN_INVALID_2FA -> tfaCodeView.error = e.displayMessage
+                ErrorCodes.LOGIN_WRONG_PASSWORD -> passwordView.error = e.displayMessage
+                ErrorCodes.MISSING_TFA -> tfaCodeView.error = e.displayMessage
+            }
+        } else {
+            showErrorSnackbar(e)
         }
     }
 

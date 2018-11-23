@@ -5,11 +5,12 @@ import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Failure
+import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
-import com.soneso.stellarmnemonics.Wallet
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -53,35 +54,15 @@ class UserUseCases
 
     fun provideCountries() = userRepo.getCountries()
 
-    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Flowable<Resource<Boolean, ServerException>> {
-
-        passSubject.onNext(password.toString())
-        val username = email.toString()
-        val tfaFlow = if (tfaCode != null) Flowable.just(tfaCode.toString()) else userRepo.loadTfaCode().toFlowable()
-        return tfaFlow.flatMap { tfa ->
-            userRepo.loginStep1(username, tfa).flatMap {
-                if (it.isSuccessful) {
-                    userRepo.getUserData(username).toFlowable().flatMap { userData ->
-                        val helper = UserSecurityHelper(password.toCharArray())
-                        val decipherData = helper.decipherUserSecurityNew(userData)
-                        if (decipherData == null) {
-                            Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
-                        } else {
-                            val keyPair = Wallet.createKeyPair(decipherData.mnemonic, null, 0)
-                            if (keyPair == null) {
-                                Flowable.just(Failure<Boolean, ServerException>(ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)))
-                            } else {
-                                //userRepo.signSEP10ChallengeIfValid()
-
-                                userRepo.loginStep2(username, userData.sep10Challenge, keyPair)
-                            }
-                        }
-                    }
-                } else {
-                    Flowable.just(it)
+    fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Single<RegistrationStatus> {
+        return userRepo.loginStep1(email.toString(), tfaCode?.toString())
+                .map {
+                    val sep10Challenge = it.sep10Challenge
+                    val keyPair = UserSecurityHelper(password.toCharArray()).decipherUserSecurity_(it)
+                            ?: throw LsException("Wrong password")
+                    Pair(sep10Challenge, keyPair)
                 }
-            }
-        }
+                .flatMap { userRepo.loginStep2(it.first, it.second) }
     }
 
     fun provideMnemonic(): Single<String> {

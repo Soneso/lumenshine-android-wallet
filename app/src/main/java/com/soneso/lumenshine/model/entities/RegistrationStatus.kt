@@ -20,4 +20,6 @@ data class RegistrationStatus(
 
         @ColumnInfo(name = DbNames.COLUMN_MNEMONIC_CONFIRMATION)
         val mnemonicConfirmed: Boolean
-)
+) {
+        fun isSetupCompleted() = mailConfirmed && tfaConfirmed && mnemonicConfirmed
+}

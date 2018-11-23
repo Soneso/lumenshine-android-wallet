@@ -8,8 +8,10 @@ import com.soneso.lumenshine.domain.usecases.UserUseCases
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.putValue
+import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
+import com.soneso.lumenshine.util.Success
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -43,7 +45,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveRegistration: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
-    val liveLogin: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
+    val liveLogin: LiveData<Resource<RegistrationStatus, LsException>> = MutableLiveData()
 
     val liveLogout: LiveData<Unit> = MutableLiveData()
 
@@ -111,12 +113,16 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     fun login(email: CharSequence, password: CharSequence, tfa: CharSequence? = null) {
 
+        liveLogin.putValue(Resource(Resource.LOADING))
         val d = userUseCases.login(email, password, tfa)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveLogin.putValue(it)
-                }
+                .subscribe({
+                    liveRegistrationStatus.putValue(it)
+                    liveLogin.putValue(Success(it))
+                }, {
+                    liveLogin.putValue(Failure(it as LsException))
+                })
         compositeDisposable.add(d)
     }
 

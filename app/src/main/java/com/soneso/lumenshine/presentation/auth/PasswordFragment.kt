@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_password.*
 
@@ -47,7 +49,7 @@ class PasswordFragment : AuthFragment() {
         })
     }
 
-    private fun renderLoginStatus(resource: Resource<Boolean, ServerException>) {
+    private fun renderLoginStatus(resource: Resource<RegistrationStatus, LsException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -67,15 +69,12 @@ class PasswordFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-    private fun handleError(e: ServerException) {
+    private fun handleError(e: LsException) {
 
-        when (e.code) {
-            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
-                passwordView.error = e.displayMessage
-            }
-            else -> {
-                showErrorSnackbar(e)
-            }
+        if (e is ServerException && e.code == ErrorCodes.LOGIN_WRONG_PASSWORD) {
+            passwordView.error = e.displayMessage
+        } else {
+            showErrorSnackbar(e)
         }
     }
 
