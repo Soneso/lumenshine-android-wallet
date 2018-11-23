@@ -3,7 +3,6 @@ package com.soneso.lumenshine.presentation.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.usecases.UserUseCases
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -25,15 +24,9 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveLastUsername: LiveData<String> = MutableLiveData()
 
-    @Suppress("MembeAuthViewModelrVisibilityCanBePrivate")
-    val liveSalutations: LiveData<Resource<List<String>, LsException>> = MutableLiveData()
-
     val liveTfaChangeConfirmation: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveMnemonicConfirmation: LiveData<Resource<Boolean, LsException>> = MutableLiveData()
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    val liveCountries: LiveData<Resource<List<Country>, LsException>> = MutableLiveData()
 
     val liveMnemonic: LiveData<String> = MutableLiveData()
 
@@ -42,8 +35,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     val liveRegistrationStatus: LiveData<RegistrationStatus> = MutableLiveData()
 
     val liveRegistrationRefresh: LiveData<Resource<RegistrationStatus?, ServerException>> = MutableLiveData()
-
-    val liveRegistration: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
 
     val liveLogin: LiveData<Resource<RegistrationStatus, LsException>> = MutableLiveData()
 
@@ -66,47 +57,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .subscribe { it ->
                     Timber.d("Registration status just published.")
                     liveRegistrationStatus.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun createAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence, countryPosition: Int = 0) {
-
-        val country = try {
-            liveCountries.value?.success()?.get(countryPosition)
-        } catch (ignored: Exception) {
-            null
-        }
-
-        val d = userUseCases.registerAccount(foreName, lastName, email, password, country)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveRegistration.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    @Suppress("unused")
-    fun refreshSalutations() {
-
-        val d = userUseCases.provideSalutations()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveSalutations.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    @Suppress("unused")
-    fun refreshCountries() {
-
-        val d = userUseCases.provideCountries()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveCountries.putValue(it)
                 }
         compositeDisposable.add(d)
     }

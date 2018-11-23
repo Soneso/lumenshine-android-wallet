@@ -37,9 +37,7 @@ interface UserApi {
             @Field("wordlist") encryptedWordList: String,
             @Field("wordlist_iv") wordListEncryptionIv: String,
 
-            @Field("public_key_0") publicKey0: String,
-            @Field("public_key_188") publicKey188: String,
-            @Field("country_code") countryCode: String?
+            @Field("public_key_0") publicKey0: String
 
     ): Single<Response<RegistrationResponse>>
 

@@ -8,6 +8,8 @@ import com.soneso.lumenshine.presentation.SplashViewModel
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
 import com.soneso.lumenshine.presentation.auth.LostCredentialViewModel
 import com.soneso.lumenshine.presentation.auth.TFAConfirmationViewModel
+import com.soneso.lumenshine.presentation.auth.login.LoginViewModel
+import com.soneso.lumenshine.presentation.auth.registration.RegistrationViewModel
 import com.soneso.lumenshine.presentation.home.HomeViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
@@ -19,6 +21,8 @@ class LsViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(RegistrationViewModel::class.java) -> RegistrationViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T

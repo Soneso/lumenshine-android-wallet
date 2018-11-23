@@ -3,7 +3,6 @@ package com.soneso.lumenshine.model
 import com.google.authenticator.OtpProvider
 import com.moandjiezana.toml.Toml
 import com.soneso.lumenshine.domain.data.Country
-import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
@@ -46,12 +45,12 @@ class UserRepository @Inject constructor(
     private val userApi = r.create(UserApi::class.java)
     private val userDao = db.userDao()
 
-    fun createUserAccount(userProfile: UserProfile, userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
+    fun createUserAccount(forename: String, lastName: String, email: String, userSecurity: UserSecurity): Completable {
 
         return userApi.registerUser(
-                userProfile.forename,
-                userProfile.lastname,
-                userProfile.email,
+                forename,
+                lastName,
+                email,
                 userSecurity.passwordKdfSalt.base64String(),
                 userSecurity.encryptedMnemonicMasterKey.base64String(),
                 userSecurity.mnemonicMasterKeyEncryptionIv.base64String(),
@@ -61,23 +60,19 @@ class UserRepository @Inject constructor(
                 userSecurity.wordListMasterKeyEncryptionIv.base64String(),
                 userSecurity.encryptedWordList.base64String(),
                 userSecurity.wordListEncryptionIv.base64String(),
-                userSecurity.publicKeyIndex0,
-                KeyPair.random().accountId,
-                userProfile.country?.code
-        )
+                userSecurity.publicKeyIndex0
+        ).onErrorResumeNext { Single.error(LsException(it)) }
                 .doOnSuccess {
                     if (it.isSuccessful) {
                         LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                    } else {
+                        throw ServerException(it.errorBody())
                     }
+                }.doOnSuccess {
+                    val body = it.body()!!
                     LsPrefs.username = userSecurity.username
-                    userDao.saveUserData(userSecurity)
-                }
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    LsPrefs.tfaSecret = it.token2fa
-                    userDao.saveRegistrationStatus(RegistrationStatus(userProfile.email, false, false, false))
-                    true
-                }, { it })
+                    LsPrefs.tfaSecret = body.token2fa ?: ""
+                }.ignoreElement()
     }
 
     fun confirmTfaRegistration(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {

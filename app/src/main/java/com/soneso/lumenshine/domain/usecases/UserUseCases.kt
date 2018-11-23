@@ -1,8 +1,6 @@
 package com.soneso.lumenshine.domain.usecases
 
-import com.soneso.lumenshine.domain.data.Country
 import com.soneso.lumenshine.domain.data.ErrorCodes
-import com.soneso.lumenshine.domain.data.UserProfile
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.entities.RegistrationStatus
@@ -11,6 +9,7 @@ import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -29,23 +28,19 @@ class UserUseCases
 
     private val passSubject = BehaviorSubject.create<String>()
 
-    fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence,
-                        country: Country?): Flowable<Resource<Boolean, ServerException>> {
+    fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence): Completable {
 
-        val userProfile = UserProfile()
-        userProfile.forename = foreName.toString()
-        userProfile.lastname = lastName.toString()
-        userProfile.email = email.toString()
-        userProfile.country = country
+        val forenameString = foreName.toString()
+        val lastNameString = lastName.toString()
+        val emailString = email.toString()
 
         val helper = UserSecurityHelper(password.toCharArray())
         return Single
                 .create<UserSecurity> {
-                    it.onSuccess(helper.generateUserSecurity(userProfile.email))
+                    it.onSuccess(helper.generateUserSecurity(emailString))
                 }
                 .doOnSuccess { passSubject.onNext(password.toString()) }
-                .toFlowable()
-                .flatMap { userRepo.createUserAccount(userProfile, it) }
+                .flatMapCompletable { userRepo.createUserAccount(forenameString, lastNameString, emailString, it) }
     }
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)

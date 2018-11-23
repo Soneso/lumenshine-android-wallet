@@ -10,7 +10,7 @@
 
     <fragment
         android:id="@+id/login_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.LoginFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.login.LoginFragment" />
 
 
     <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/register_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.RegistrationFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.registration.RegistrationFragment" />
 
 
     <action
