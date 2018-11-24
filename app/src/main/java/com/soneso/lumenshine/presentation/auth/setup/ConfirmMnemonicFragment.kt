@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.setup
 
 
 import android.os.Bundle
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.auth.AuthFragment
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_confirm_mnemonic.*

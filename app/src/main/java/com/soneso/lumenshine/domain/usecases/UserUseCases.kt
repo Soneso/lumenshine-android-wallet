@@ -12,9 +12,6 @@ import com.soneso.lumenshine.util.Resource
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.BiFunction
-import io.reactivex.subjects.BehaviorSubject
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,7 +23,7 @@ import javax.inject.Singleton
 class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
 
-    private val passSubject = BehaviorSubject.create<String>()
+    private var mnemonic = ""
 
     fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence): Completable {
 
@@ -38,8 +35,8 @@ class UserUseCases
         return Single
                 .create<UserSecurity> {
                     it.onSuccess(helper.generateUserSecurity(emailString))
+                    mnemonic = String(helper.mnemonicChars)
                 }
-                .doOnSuccess { passSubject.onNext(password.toString()) }
                 .flatMapCompletable { userRepo.createUserAccount(forenameString, lastNameString, emailString, it) }
     }
 
@@ -49,24 +46,16 @@ class UserUseCases
         return userRepo.loginStep1(email.toString(), tfaCode?.toString())
                 .map {
                     val sep10Challenge = it.sep10Challenge
-                    val keyPair = UserSecurityHelper(password.toCharArray()).decipherUserSecurity_(it)
+                    val helper = UserSecurityHelper(password.toCharArray())
+                    val keyPair = helper.decipherUserSecurity(it)
                             ?: throw LsException("Wrong password")
+                    mnemonic = String(helper.mnemonicChars)
                     Pair(sep10Challenge, keyPair)
                 }
                 .flatMap { userRepo.loginStep2(it.first, it.second) }
     }
 
-    fun provideMnemonic(): Single<String> {
-
-        return Single.zip(passSubject.firstOrError(),
-                userRepo.getUserData().doOnSuccess { Timber.d("UserData for: ${it.username}") },
-                BiFunction<String, UserSecurity, String> { pass, userSecurity ->
-                    val helper = UserSecurityHelper(pass.toCharArray())
-                    helper.decipherUserSecurity(userSecurity)
-                    String(helper.mnemonicChars)
-                }
-        )
-    }
+    fun getMnemonic(): String = mnemonic
 
     fun confirmMnemonic() = userRepo.confirmMnemonic()
 
@@ -83,15 +72,7 @@ class UserUseCases
     fun provideUsername() = userRepo.loadUsername()
 
     fun isUserLoggedIn(): Single<Boolean> =
-//            userRepo.loadUsername()
-//                    .flatMap { username ->
-//                        if (username.isNotBlank()) {
-//                            userRepo.getRegistrationStatus().firstOrError()
-//                                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
-//                        } else {
             Single.just(false)
-//                        }
-//                    }
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 
@@ -110,7 +91,7 @@ class UserUseCases
                 .toFlowable()
                 .flatMap {
                     val helper = UserSecurityHelper(pass.toCharArray())
-                    val publicKey188 = helper.decipherUserSecurity(it)
+                    val publicKey188 = helper.decipherUserSecurityOld(it)
                     if (publicKey188 != null) {
                         userRepo.changeTfaSecret(publicKey188)
                     } else {
@@ -121,13 +102,7 @@ class UserUseCases
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 
-//    fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
-
     fun logout() = userRepo.logout()
-
-    fun setNewSession() {
-        passSubject.onNext("")
-    }
 
     companion object {
 

@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.setup
 
 
 import android.os.Bundle
@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.auth.AuthFragment
 import com.soneso.lumenshine.presentation.util.showInfoDialog
 import kotlinx.android.synthetic.main.fragment_mnemonic.*
 
@@ -16,9 +18,16 @@ import kotlinx.android.synthetic.main.fragment_mnemonic.*
  * A simple [Fragment] subclass.
  *
  */
-class MnemonicFragment : AuthFragment() {
+class NoteMnemonicFragment : AuthFragment() {
 
     private val wordAdapter = MnemonicWordAdapter()
+    private lateinit var viewModel: NoteMnemonicViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[NoteMnemonicViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mnemonic, container, false)
@@ -26,12 +35,9 @@ class MnemonicFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showLoadingView()
         setupViews()
         subscribeForLiveData()
         setupListeners()
-
-        authViewModel.fetchMnemonic()
     }
 
     private fun setupViews() {
@@ -47,8 +53,7 @@ class MnemonicFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveMnemonic.observe(this, Observer {
-            hideLoadingView()
+        viewModel.liveMnemonic.observe(this, Observer {
             wordAdapter.setMnemonic(it ?: return@Observer)
         })
     }
@@ -64,8 +69,8 @@ class MnemonicFragment : AuthFragment() {
     }
 
     companion object {
-        const val TAG = "MnemonicFragment"
+        const val TAG = "NoteMnemonicFragment"
 
-        fun newInstance() = MnemonicFragment()
+        fun newInstance() = NoteMnemonicFragment()
     }
 }

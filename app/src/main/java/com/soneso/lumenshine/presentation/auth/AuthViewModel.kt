@@ -70,17 +70,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
         compositeDisposable.add(d)
     }
 
-    fun fetchMnemonic() {
-
-        val d = userUseCases.provideMnemonic()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { it ->
-                    liveMnemonic.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
     fun confirmMnemonic() {
 
         val d = userUseCases.confirmMnemonic()

@@ -2,7 +2,6 @@ package com.soneso.lumenshine.domain.usecases
 
 import com.soneso.lumenshine.BuildConfig
 import com.soneso.lumenshine.domain.util.*
-import com.soneso.lumenshine.model.DecryptedUserData
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.stellarmnemonics.Wallet
 import com.soneso.stellarmnemonics.mnemonic.WordList
@@ -50,7 +49,6 @@ class UserSecurityHelper(private val pass: CharArray) {
         val encryptedMnemonic = Cryptor.encryptValue(mnemonicBytes, mnemonicMasterKey, mnemonicEncryptionIv)
 
         val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-        val publicKeyIndex188 = Wallet.createKeyPair(mnemonicChars, null, 188).accountId
 
         val wordListStringBuilder = StringBuilder()
         wordList.forEach {
@@ -80,7 +78,6 @@ class UserSecurityHelper(private val pass: CharArray) {
             Timber.d("encrypted mnemonic: ${Base64.toBase64String(encryptedMnemonic)}")
 
             Timber.d("public key index 0: $publicKeyIndex0")
-            Timber.d("public key index 188: $publicKeyIndex188")
 
             logLongString("word list: ${wordListStringBuilder.dropLast(1)}")
             Timber.d("word list encryption iv: ${Base64.toBase64String(wordListEncryptionIv)}")
@@ -90,7 +87,7 @@ class UserSecurityHelper(private val pass: CharArray) {
         return UserSecurity(
                 email,
                 publicKeyIndex0,
-                publicKeyIndex188,
+                "",
                 passwordKdfSalt,
                 encryptedMnemonicMasterKey,
                 mnemonicMasterKeyEncryptionIv,
@@ -103,50 +100,7 @@ class UserSecurityHelper(private val pass: CharArray) {
         )
     }
 
-
-    fun decipherUserSecurityNew(userSecurity: UserSecurity): DecryptedUserData? {
-        try {
-
-            val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
-
-            val wordListMasterKey = Cryptor.decryptValue(userSecurity.encryptedWordListMasterKey, derivedPassword, userSecurity.wordListMasterKeyEncryptionIv)
-
-            val wordListCsvBytes = Cryptor.decryptValue(userSecurity.encryptedWordList, wordListMasterKey, userSecurity.wordListEncryptionIv)
-            val wordList = String(wordListCsvBytes).trim().split(",")
-
-            val mnemonicMasterKey = Cryptor.decryptValue(userSecurity.encryptedMnemonicMasterKey, derivedPassword, userSecurity.mnemonicMasterKeyEncryptionIv)
-
-            val mnemonicBytes = Cryptor.decryptValue(userSecurity.encryptedMnemonic, mnemonicMasterKey, userSecurity.mnemonicEncryptionIv)
-
-            if (mnemonicBytes.size != 48) {
-                return null
-            }
-
-            val mnemonicIndexes = ShortArray(mnemonicBytes.size / 2) { index ->
-                val bf = ByteBuffer.wrap(mnemonicBytes, index * 2, 2)
-                bf.short
-            }
-            val mnemonicBuilder = StringBuilder()
-            mnemonicIndexes.forEach { index ->
-                mnemonicBuilder.append(wordList[index.toInt()]).append(" ")
-            }
-            mnemonicChars = mnemonicBuilder.removeSuffix(" ").toCharArray()
-
-            val publicKeyIndex0 = Wallet.createKeyPair(mnemonicChars, null, 0).accountId
-
-            if (publicKeyIndex0 != userSecurity.publicKeyIndex0) {
-                return null
-            }
-
-            return DecryptedUserData(mnemonicChars, wordListMasterKey, mnemonicMasterKey)
-
-        } catch (t: Throwable) {
-
-            return null
-        }
-    }
-
-    fun decipherUserSecurity_(userSecurity: UserSecurity): KeyPair? {
+    fun decipherUserSecurity(userSecurity: UserSecurity): KeyPair? {
 
         try {
             val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
@@ -188,7 +142,7 @@ class UserSecurityHelper(private val pass: CharArray) {
         }
     }
 
-    fun decipherUserSecurity(userSecurity: UserSecurity): String? {
+    fun decipherUserSecurityOld(userSecurity: UserSecurity): String? {
 
         try {
             val derivedPassword = Cryptor.deriveKeyPbkdf2(userSecurity.passwordKdfSalt, pass)
@@ -246,7 +200,7 @@ class UserSecurityHelper(private val pass: CharArray) {
         return UserSecurity(
                 userSecurity.username,
                 userSecurity.publicKeyIndex0,
-                decipherUserSecurity(userSecurity) ?: "",
+                "",
                 newKdfSalt,
                 encryptedMnemonicMasterKey,
                 mnemonicMasterKeyEncryptionIv,

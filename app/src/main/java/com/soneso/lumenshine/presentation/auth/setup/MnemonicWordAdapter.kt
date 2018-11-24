@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.setup
 
 import android.view.View
 import android.view.ViewGroup

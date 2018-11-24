@@ -16,7 +16,6 @@ class SplashViewModel(userUseCase: UserUseCases) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        userUseCase.setNewSession()
         val d = userUseCase.isUserLoggedIn()
                 .subscribeOn(Schedulers.io())
                 .delay(2, TimeUnit.SECONDS)

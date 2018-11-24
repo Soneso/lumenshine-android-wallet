@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/mnemonic_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.MnemonicFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.setup.NoteMnemonicFragment" />
 
 
     <action
@@ -85,6 +85,6 @@
 
     <fragment
         android:id="@+id/confirm_mnemonic_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.ConfirmMnemonicFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.setup.ConfirmMnemonicFragment" />
 
 </navigation>
