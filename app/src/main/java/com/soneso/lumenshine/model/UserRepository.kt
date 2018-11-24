@@ -186,24 +186,30 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun resendConfirmationMail(): Flowable<Resource<Boolean, ServerException>> =
+    fun resendConfirmationMail(): Completable =
             LsPrefs.loadUsername()
-                    .toFlowable()
                     .flatMap { username ->
                         userApi.resendConfirmationMail(username)
-                                .asHttpResourceLoader(networkStateObserver)
-                                .mapResource({ true }, { it })
+                    }.onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
                     }
+                    .ignoreElement()
 
 
-    fun refreshRegistrationStatus(): Flowable<Resource<RegistrationStatus?, ServerException>> {
+    fun loadRegistrationStatus(): Single<RegistrationStatus> {
 
         return userApi.getRegistrationStatus()
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    //                    userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
-                    it.toRegistrationStatus()
-                }, { it })
+                .onErrorResumeNext { Single.error(LsException(it)) }
+                .map {
+                    if (it.isSuccessful) {
+                        it.body()!!.toRegistrationStatus()
+                    } else {
+                        throw ServerException(it.errorBody())
+                    }
+                }
     }
 
     fun loadTfaSecret(): Single<String> = LsPrefs.loadTfaSecret()
@@ -233,12 +239,7 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun getLastUsername(): Single<String> {
-
-        return Single.create<String> {
-            it.onSuccess(LsPrefs.username)
-        }
-    }
+    fun loadUsername() = LsPrefs.loadUsername()
 
     fun changeUserPassword(userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
 

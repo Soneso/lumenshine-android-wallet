@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/confirm_mail_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.MailConfirmationFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.setup.MailConfirmationFragment" />
 
 
     <action

@@ -29,11 +29,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     val liveMnemonic: LiveData<String> = MutableLiveData()
 
-    val liveConfirmationMail: LiveData<Resource<Boolean, ServerException>> = MutableLiveData()
-
     val liveRegistrationStatus: LiveData<RegistrationStatus> = MutableLiveData()
-
-    val liveRegistrationRefresh: LiveData<Resource<RegistrationStatus?, ServerException>> = MutableLiveData()
 
     val liveLogin: LiveData<Resource<RegistrationStatus, LsException>> = MutableLiveData()
 
@@ -44,7 +40,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        initLastUsername()
         initRegistrationStatus()
     }
 
@@ -93,39 +88,6 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     liveMnemonicConfirmation.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun resendConfirmationMail() {
-
-        val d = userUseCases.resendConfirmationMail()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { it ->
-                    liveConfirmationMail.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun refreshRegistrationStatus() {
-
-        val d = userUseCases.refreshRegistrationStatus()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveRegistrationRefresh.putValue(it)
-                }
-        compositeDisposable.add(d)
-    }
-
-    fun initLastUsername() {
-
-        val d = userUseCases.provideLastUsername()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { it: String ->
-                    liveLastUsername.putValue(it)
                 }
         compositeDisposable.add(d)
     }

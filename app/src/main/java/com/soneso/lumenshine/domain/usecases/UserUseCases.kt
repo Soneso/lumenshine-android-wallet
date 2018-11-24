@@ -72,7 +72,7 @@ class UserUseCases
 
     fun resendConfirmationMail() = userRepo.resendConfirmationMail()
 
-    fun refreshRegistrationStatus() = userRepo.refreshRegistrationStatus()
+    fun refreshRegistrationStatus() = userRepo.loadRegistrationStatus()
 
     fun provideTfaSecret() = userRepo.loadTfaSecret()
 
@@ -80,16 +80,16 @@ class UserUseCases
 
     fun requestTfaReset(email: String) = userRepo.requestEmailForTfaReset(email)
 
-    fun provideLastUsername() = userRepo.getLastUsername()
+    fun provideUsername() = userRepo.loadUsername()
 
     fun isUserLoggedIn(): Single<Boolean> =
-//            userRepo.getLastUsername()
+//            userRepo.loadUsername()
 //                    .flatMap { username ->
 //                        if (username.isNotBlank()) {
 //                            userRepo.getRegistrationStatus().firstOrError()
 //                                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
 //                        } else {
-                            Single.just(false)
+            Single.just(false)
 //                        }
 //                    }
 
