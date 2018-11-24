@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cc72d1871250d9cf71d717606ec5037c",
+    "identityHash": "07cbd76fb17a9477dae20c3a57bffc4c",
     "entities": [
       {
         "tableName": "user_data",
@@ -133,49 +133,11 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "registration_status",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `mail_confirmation` INTEGER NOT NULL, `tfa_confirmation` INTEGER NOT NULL, `mnemonic_confirmation` INTEGER NOT NULL, PRIMARY KEY(`username`))",
-        "fields": [
-          {
-            "fieldPath": "username",
-            "columnName": "username",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mailConfirmed",
-            "columnName": "mail_confirmation",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "tfaConfirmed",
-            "columnName": "tfa_confirmation",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mnemonicConfirmed",
-            "columnName": "mnemonic_confirmation",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "username"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"cc72d1871250d9cf71d717606ec5037c\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"07cbd76fb17a9477dae20c3a57bffc4c\")"
     ]
   }
 }

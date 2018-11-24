@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.setup
 
 
 import android.os.Bundle
@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.GeneralUtils
+import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_tfa_registration.*
 
@@ -19,9 +21,9 @@ import kotlinx.android.synthetic.main.fragment_tfa_registration.*
  * A simple [Fragment] subclass.
  *
  */
-class TfaConfirmationFragment : AuthFragment() {
+class TfaConfirmationFragment : SetupFragment() {
 
-    private lateinit var tfaConfirmationViewModel: TFAConfirmationViewModel
+    private lateinit var viewModel: TFAConfirmationViewModel
     private var tfaSecret: String = ""
     private var shouldAutoPaste: Boolean = false
 
@@ -31,9 +33,9 @@ class TfaConfirmationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tfaConfirmationViewModel = ViewModelProviders.of(this, viewModelFactory)[TFAConfirmationViewModel::class.java]
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[TFAConfirmationViewModel::class.java]
 
-        tfaConfirmationViewModel.fetchTfaSecret()
+        viewModel.fetchTfaSecret()
         subscribeForLiveData()
         setupListeners()
     }
@@ -46,7 +48,7 @@ class TfaConfirmationFragment : AuthFragment() {
     override fun onResume() {
         super.onResume()
         if (shouldAutoPaste) {
-            val textFromClipboard:String = GeneralUtils.pasteFromClipboard(context!!)
+            val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
             if (textFromClipboard != tfaSecret) {
                 tfaInputView.trimmedText = textFromClipboard
                 tfaInputView.setSelection(textFromClipboard.length)
@@ -56,14 +58,11 @@ class TfaConfirmationFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
 
-        tfaConfirmationViewModel.liveTfaSecret.observe(this, Observer {
+        viewModel.liveTfaSecret.observe(this, Observer {
             setupToken(it ?: return@Observer)
         })
 
-        tfaConfirmationViewModel.liveTfaConfirmation.observe(this, Observer {
-            renderTfaConfirmation(it ?: return@Observer)
-        })
-        tfaConfirmationViewModel.liveTfaChangeConfirmation.observe(this, Observer {
+        viewModel.liveTfaConfirmation.observe(this, Observer {
             renderTfaConfirmation(it ?: return@Observer)
         })
     }
@@ -72,7 +71,7 @@ class TfaConfirmationFragment : AuthFragment() {
         nextButton.setOnClickListener {
             subscribeForLiveData()
             if (tfaInputView.hasValidInput()) {
-                tfaConfirmationViewModel.confirmTfaRegistration(tfaInputView.trimmedText)
+                viewModel.confirmTfaRegistration(tfaInputView.trimmedText)
             }
         }
 
@@ -82,7 +81,7 @@ class TfaConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderTfaConfirmation(resource: Resource<Boolean, ServerException>) {
+    private fun renderTfaConfirmation(resource: Resource<RegistrationStatus, LsException>) {
         when (resource.state) {
             Resource.FAILURE -> {
                 hideLoadingView()
@@ -93,6 +92,7 @@ class TfaConfirmationFragment : AuthFragment() {
             }
             Resource.SUCCESS -> {
                 hideLoadingView()
+                renderRegistrationStatus(resource.success())
             }
         }
     }
@@ -100,15 +100,12 @@ class TfaConfirmationFragment : AuthFragment() {
     /**
      * handling response errors
      */
-    private fun handleError(error: ServerException) {
+    private fun handleError(error: LsException) {
 
-        when (error.code) {
-            ErrorCodes.LOGIN_INVALID_2FA -> {
-                tfaInputView.error = error.displayMessage
-            }
-            else -> {
-                showErrorSnackbar(error)
-            }
+        if (error is ServerException && error.code == ErrorCodes.LOGIN_INVALID_2FA) {
+            tfaInputView.error = error.displayMessage
+        } else {
+            showErrorSnackbar(error)
         }
     }
 

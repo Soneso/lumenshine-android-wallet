@@ -58,7 +58,7 @@
 
     <fragment
         android:id="@+id/confirm_tfa_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.TfaConfirmationFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.setup.TfaConfirmationFragment" />
 
 
     <action

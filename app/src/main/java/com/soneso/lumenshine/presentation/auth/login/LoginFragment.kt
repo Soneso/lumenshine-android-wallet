@@ -89,10 +89,11 @@ class LoginFragment : AuthFragment() {
             }
             else -> {
                 hideLoadingView()
-                if (resource.success().isSetupCompleted()) {
+                val status = resource.success()
+                if (status.isSetupCompleted()) {
                     authActivity.goToMain()
                 } else {
-                    authActivity.goToSetup()
+                    authActivity.goToSetup(status)
                 }
             }
         }

@@ -7,9 +7,9 @@ import com.soneso.lumenshine.presentation.MainViewModel
 import com.soneso.lumenshine.presentation.SplashViewModel
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
 import com.soneso.lumenshine.presentation.auth.LostCredentialViewModel
-import com.soneso.lumenshine.presentation.auth.TFAConfirmationViewModel
 import com.soneso.lumenshine.presentation.auth.login.LoginViewModel
 import com.soneso.lumenshine.presentation.auth.registration.RegistrationViewModel
+import com.soneso.lumenshine.presentation.auth.setup.TFAConfirmationViewModel
 import com.soneso.lumenshine.presentation.home.HomeViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel

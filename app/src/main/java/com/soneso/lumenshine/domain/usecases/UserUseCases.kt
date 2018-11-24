@@ -45,10 +45,6 @@ class UserUseCases
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
 
-    fun provideSalutations() = userRepo.getSalutations()
-
-    fun provideCountries() = userRepo.getCountries()
-
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Single<RegistrationStatus> {
         return userRepo.loginStep1(email.toString(), tfaCode?.toString())
                 .map {
@@ -87,15 +83,15 @@ class UserUseCases
     fun provideLastUsername() = userRepo.getLastUsername()
 
     fun isUserLoggedIn(): Single<Boolean> =
-            userRepo.getLastUsername()
-                    .flatMap { username ->
-                        if (username.isNotBlank()) {
-                            userRepo.getRegistrationStatus().firstOrError()
-                                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
-                        } else {
+//            userRepo.getLastUsername()
+//                    .flatMap { username ->
+//                        if (username.isNotBlank()) {
+//                            userRepo.getRegistrationStatus().firstOrError()
+//                                    .map { it.mailConfirmed && it.tfaConfirmed && it.mnemonicConfirmed }
+//                        } else {
                             Single.just(false)
-                        }
-                    }
+//                        }
+//                    }
 
     fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 
@@ -125,7 +121,7 @@ class UserUseCases
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 
-    fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
+//    fun provideRegistrationStatus() = userRepo.getRegistrationStatus()
 
     fun logout() = userRepo.logout()
 
