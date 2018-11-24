@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.login
 
 
 import android.os.Bundle
@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.presentation.auth.AuthFragment
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_finger_print.*
@@ -30,15 +30,8 @@ class FingerPrintFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authViewModel.isFingerprintFlow = true
         setupListeners()
         subscribeForLiveData()
-    }
-
-    override fun onDestroyView() {
-
-        authViewModel.isFingerprintFlow = false
-        super.onDestroyView()
     }
 
     private fun setupListeners() {
@@ -55,9 +48,6 @@ class FingerPrintFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveLogin.observe(this, Observer {
-            renderLoginStatus(it ?: return@Observer)
-        })
     }
 
     private fun renderLoginStatus(resource: Resource<RegistrationStatus, LsException>) {
@@ -83,9 +73,6 @@ class FingerPrintFragment : AuthFragment() {
 
     private fun attemptLogin() {
 
-        val username = authViewModel.liveLastUsername.value ?: return
-
-        authViewModel.login(username, passwordView.trimmedText)
     }
 
     companion object {
@@ -93,7 +80,7 @@ class FingerPrintFragment : AuthFragment() {
         const val TAG = "FingerPrintFragment"
         private const val FRAGMENT_TYPE = "fragment_type"
 
-        fun newInstance(fragmentType: FingerPrintFragment.FingerprintFragmentType): FingerPrintFragment {
+        fun newInstance(fragmentType: FingerprintFragmentType): FingerPrintFragment {
 
             val instance = FingerPrintFragment()
             val args = Bundle()

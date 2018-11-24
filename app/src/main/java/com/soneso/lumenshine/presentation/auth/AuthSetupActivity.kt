@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import kotlinx.android.synthetic.main.activity_base_auth.*
+import kotlinx.android.synthetic.main.layout_auth_activity.*
 
 class AuthSetupActivity : BaseAuthActivity() {
 
@@ -22,6 +24,8 @@ class AuthSetupActivity : BaseAuthActivity() {
         val registrationStatus = intent?.getSerializableExtra(EXTRA_REGISTRATION_STATUS) as? RegistrationStatus
                 ?: RegistrationStatus()
         renderRegistrationStatus(registrationStatus)
+
+        authViewModel.liveUsername.observe(this, Observer { usernameView.text = it })
     }
 
 

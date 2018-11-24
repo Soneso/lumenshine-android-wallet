@@ -23,22 +23,22 @@ class SettingsViewModel(private val userUseCases: UserUseCases) : ViewModel() {
 
     fun changePassword(oldPass: CharSequence, newPass: CharSequence) {
 
-        userUseCases.changeUserPassword(oldPass, newPass)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    livePasswordChange.putValue(it)
-                }
+//        userUseCases.changeUserPassword(oldPass, newPass)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe {
+//                    livePasswordChange.putValue(it)
+//                }
     }
 
     fun changeTfaSecret(pass: CharSequence) {
 
-        val d = userUseCases.changeTfaPassword(pass)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    liveTfaSecret.putValue(it)
-                }
-        compositeDisposable.add(d)
+//        val d = userUseCases.changeTfaPassword(pass)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe {
+//                    liveTfaSecret.putValue(it)
+//                }
+//        compositeDisposable.add(d)
     }
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) {

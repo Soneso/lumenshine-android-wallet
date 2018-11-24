@@ -2,94 +2,8 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "07cbd76fb17a9477dae20c3a57bffc4c",
+    "identityHash": "382a015a5c3efe3e96040b8169e01ec1",
     "entities": [
-      {
-        "tableName": "user_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `public_key_index_0` TEXT NOT NULL, `sep10_transaction_challenge` TEXT NOT NULL, `ppassword_kdf_salt` BLOB NOT NULL, `encrypted_mnemonic_master_key` BLOB NOT NULL, `mnemonic_master_key_encryption_iv` BLOB NOT NULL, `encrypted_mnemonic` BLOB NOT NULL, `mnemonic_encryption_iv` BLOB NOT NULL, `encrypted_word_list_master_key` BLOB NOT NULL, `word_list_master_key_encryption_iv` BLOB NOT NULL, `encrypted_word_list` BLOB NOT NULL, `word_list_encryption_iv` BLOB NOT NULL, PRIMARY KEY(`username`))",
-        "fields": [
-          {
-            "fieldPath": "username",
-            "columnName": "username",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "publicKeyIndex0",
-            "columnName": "public_key_index_0",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "sep10Challenge",
-            "columnName": "sep10_transaction_challenge",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "passwordKdfSalt",
-            "columnName": "ppassword_kdf_salt",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "encryptedMnemonicMasterKey",
-            "columnName": "encrypted_mnemonic_master_key",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mnemonicMasterKeyEncryptionIv",
-            "columnName": "mnemonic_master_key_encryption_iv",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "encryptedMnemonic",
-            "columnName": "encrypted_mnemonic",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "mnemonicEncryptionIv",
-            "columnName": "mnemonic_encryption_iv",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "encryptedWordListMasterKey",
-            "columnName": "encrypted_word_list_master_key",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "wordListMasterKeyEncryptionIv",
-            "columnName": "word_list_master_key_encryption_iv",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "encryptedWordList",
-            "columnName": "encrypted_word_list",
-            "affinity": "BLOB",
-            "notNull": true
-          },
-          {
-            "fieldPath": "wordListEncryptionIv",
-            "columnName": "word_list_encryption_iv",
-            "affinity": "BLOB",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "username"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
       {
         "tableName": "wallets",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `federation_address` TEXT NOT NULL, `shown_in_home_screen` INTEGER NOT NULL, `public_key` TEXT NOT NULL, PRIMARY KEY(`id`))",
@@ -137,7 +51,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"07cbd76fb17a9477dae20c3a57bffc4c\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"382a015a5c3efe3e96040b8169e01ec1\")"
     ]
   }
 }

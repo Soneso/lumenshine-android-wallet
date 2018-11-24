@@ -1,6 +1,5 @@
 package com.soneso.lumenshine.model
 
-import com.google.authenticator.OtpProvider
 import com.moandjiezana.toml.Toml
 import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
@@ -12,7 +11,6 @@ import com.soneso.lumenshine.networking.api.UserApi
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
-import com.soneso.lumenshine.presentation.util.decodeBase32
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.asHttpResourceLoader
@@ -25,7 +23,6 @@ import org.stellar.sdk.ManageDataOperation
 import org.stellar.sdk.Network
 import org.stellar.sdk.Transaction
 import retrofit2.Retrofit
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,7 +39,6 @@ class UserRepository @Inject constructor(
 ) {
 
     private val userApi = r.create(UserApi::class.java)
-    private val userDao = db.userDao()
 
     fun createUserAccount(forename: String, lastName: String, email: String, userSecurity: UserSecurity): Completable {
 
@@ -60,7 +56,8 @@ class UserRepository @Inject constructor(
                 userSecurity.encryptedWordList.base64String(),
                 userSecurity.wordListEncryptionIv.base64String(),
                 userSecurity.publicKeyIndex0
-        ).onErrorResumeNext { Single.error(LsException(it)) }
+        )
+                .onErrorResumeNext { Single.error(LsException(it)) }
                 .doOnSuccess {
                     if (it.isSuccessful) {
                         LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
@@ -118,7 +115,7 @@ class UserRepository @Inject constructor(
                 }
     }
 
-    fun loginStep2(sep10Challenge: String, userKeyPair: KeyPair): Single<RegistrationStatus> =
+    fun loginStep2(sep10Challenge: String, userKeyPair: KeyPair): Single<Pair<String, RegistrationStatus>> =
             Single.create<Transaction> { emitter ->
                 // cristi.paval, 11/22/18 - validate sep10 challenge
                 val transaction = Transaction.fromEnvelopeXdr(sep10Challenge)
@@ -158,32 +155,39 @@ class UserRepository @Inject constructor(
                     Single.just<Transaction>(transaction)
                 }
             }.doOnSuccess { transaction ->
+                // cristi.paval, 11/23/18 - sign transaction
                 transaction.sign(userKeyPair)
             }.map { transaction ->
+                // cristi.paval, 11/23/18 - encode transaction
                 transaction.toEnvelopeXdrBase64()
             }.flatMap { signedSep10Challenge ->
+                // cristi.paval, 11/23/18 - send to server
                 userApi.loginStep2(signedSep10Challenge)
-            }.doOnSuccess {
-                if (it.isSuccessful) {
-                    LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
-                } else {
-                    throw ServerException(it.errorBody())
-                }
-            }.map { it.body()?.toRegistrationStatus() }
+                        .doOnSuccess {
+                            if (it.isSuccessful) {
+                                LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: return@doOnSuccess
+                            } else {
+                                throw ServerException(it.errorBody())
+                            }
+                        }
+                        .map { Pair(signedSep10Challenge, it.body()!!.toRegistrationStatus()) }
+            }
 
-    fun getUserData(username: String? = null): Single<UserSecurity> {
-        val usernameSingle = if (username == null) LsPrefs.loadUsername() else Single.just(username)
-        return usernameSingle.flatMap { userDao.getUserDataById(it) }
-    }
+//    fun getUserData(username: String? = null): Single<UserSecurity> {
+//        val usernameSingle = if (username == null) LsPrefs.loadUsername() else Single.just(username)
+//        return usernameSingle.flatMap { userDao.getUserDataById(it) }
+//    }
 
-    fun confirmMnemonic(): Flowable<Resource<Boolean, LsException>> {
+    fun confirmMnemonic(): Completable {
 
         return userApi.confirmMnemonic()
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    //                    userDao.saveRegistrationStatus(RegistrationStatus(LsPrefs.username, true, true, true))
-                    true
-                }, { it })
+                .onErrorResumeNext { Single.error(LsException(it)) }
+                .doOnSuccess {
+                    if (!it.isSuccessful) {
+                        throw ServerException(it.errorBody())
+                    }
+                }
+                .ignoreElement()
     }
 
     fun resendConfirmationMail(): Completable =
@@ -228,15 +232,19 @@ class UserRepository @Inject constructor(
                 .mapResource({ true }, { it })
     }
 
-    private fun refreshTfaSecret(signedSep10Challenge: String): Flowable<Resource<Boolean, ServerException>> {
+    fun loadTfaSecret(signedSep10Challenge: String): Single<String> {
 
         return userApi.getTfaSecret(signedSep10Challenge)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    Timber.d("Tfa secret refreshed.")
-                    LsPrefs.tfaSecret = it.tfaSecret
-                    true
-                }, { it })
+                .onErrorResumeNext { Single.error(LsException(it)) }
+                .map {
+                    if (it.isSuccessful) {
+                        val secret = it.body()!!.tfaSecret
+                        LsPrefs.tfaSecret = secret
+                        secret
+                    } else {
+                        throw ServerException(it.errorBody())
+                    }
+                }
     }
 
     fun loadUsername() = LsPrefs.loadUsername()
@@ -275,11 +283,6 @@ class UserRepository @Inject constructor(
                     true
                 }, { it })
     }
-
-    fun loadTfaCode(): Single<String> = LsPrefs.loadTfaSecret()
-            .map {
-                OtpProvider.currentTotpCode(it.decodeBase32()) ?: ""
-            }
 
 //    fun getRegistrationStatus(): Flowable<RegistrationStatus> {
 //

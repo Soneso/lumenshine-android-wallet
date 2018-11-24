@@ -19,8 +19,6 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.auth.AuthFragment
-import com.soneso.lumenshine.presentation.auth.PasswordRequirementsDialog
-import com.soneso.lumenshine.presentation.auth.TermsOfServiceDialog
 import com.soneso.lumenshine.presentation.util.color
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import com.soneso.lumenshine.presentation.widgets.LsEditText

@@ -40,7 +40,7 @@
 
     <fragment
         android:id="@+id/pass_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.PasswordFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.login.PasswordFragment" />
 
 
     <action
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/fingerprint_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.FingerPrintFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.login.FingerPrintFragment" />
 
 
     <action

@@ -8,7 +8,9 @@ import com.soneso.lumenshine.presentation.SplashViewModel
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
 import com.soneso.lumenshine.presentation.auth.LostCredentialViewModel
 import com.soneso.lumenshine.presentation.auth.login.LoginViewModel
+import com.soneso.lumenshine.presentation.auth.login.PasswordViewModel
 import com.soneso.lumenshine.presentation.auth.registration.RegistrationViewModel
+import com.soneso.lumenshine.presentation.auth.setup.ConfirmMnemonicViewModel
 import com.soneso.lumenshine.presentation.auth.setup.MailConfirmationViewModel
 import com.soneso.lumenshine.presentation.auth.setup.NoteMnemonicViewModel
 import com.soneso.lumenshine.presentation.auth.setup.TFAConfirmationViewModel
@@ -23,12 +25,14 @@ class LsViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(RegistrationViewModel::class.java) -> RegistrationViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(TFAConfirmationViewModel::class.java) -> TFAConfirmationViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(MailConfirmationViewModel::class.java) -> MailConfirmationViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(NoteMnemonicViewModel::class.java) -> NoteMnemonicViewModel(appComponent.userUseCases) as T
-            modelClass.isAssignableFrom(AuthViewModel::class.java) -> AuthViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(ConfirmMnemonicViewModel::class.java) -> ConfirmMnemonicViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(PasswordViewModel::class.java) -> PasswordViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(appComponent.userUseCases) as T

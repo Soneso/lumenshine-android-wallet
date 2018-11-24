@@ -14,7 +14,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
-import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.LsActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
@@ -133,6 +132,5 @@ abstract class BaseAuthActivity : LsActivity() {
         set_up_view.visibility = View.VISIBLE
         view?.visibility = View.GONE
         usernameView.visibility = View.VISIBLE
-        usernameView.text = LsPrefs.username
     }
 }
