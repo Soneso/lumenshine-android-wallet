@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.domain.util.Cryptor
 import com.soneso.lumenshine.domain.util.toByteArray
-import io.reactivex.Single
 import org.bouncycastle.util.encoders.Base64
 import timber.log.Timber
 import java.util.*
@@ -24,6 +23,7 @@ object LsPrefs {
     private const val KEY_USERNAME = "username"
     const val KEY_JWT_TOKEN = "api-token"
     private const val KEY_TFA_SECRET = "tfa-secret"
+    private const val KEY_REGISTRATION_COMPLETE = "registration-complete"
     private const val KEY_FINGERPRINT_ENABLED = "fingerprint_enabled"
 
     private val listeners = mutableListOf<((String) -> Unit)>()
@@ -110,6 +110,15 @@ object LsPrefs {
             encryptAndSaveString(KEY_TFA_SECRET, value)
         }
 
+    var registrationCompleted: Boolean
+        get() {
+            val value = decryptAndGetString(KEY_REGISTRATION_COMPLETE)
+            return if (value.isBlank()) false else value.toBoolean()
+        }
+        set(value) {
+            encryptAndSaveString(KEY_REGISTRATION_COMPLETE, value.toString())
+        }
+
     var isFingeprintEnabled: Boolean
         get() = prefs.getBoolean(KEY_FINGERPRINT_ENABLED, false)
         set(value) = prefs.edit()
@@ -153,13 +162,5 @@ object LsPrefs {
 
     fun registerListener(listener: ((String) -> Unit)) {
         listeners.add(listener)
-    }
-
-    fun loadUsername(): Single<String> = Single.create {
-        it.onSuccess(username)
-    }
-
-    fun loadTfaSecret(): Single<String> = Single.create {
-        it.onSuccess(tfaSecret)
     }
 }

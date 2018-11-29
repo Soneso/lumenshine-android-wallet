@@ -9,6 +9,7 @@ import com.soneso.lumenshine.presentation.util.decodeBase32
 import com.soneso.lumenshine.util.LsException
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +22,6 @@ class UserUseCases
 @Inject constructor(private val userRepo: UserRepository) {
 
     private var mnemonic = ""
-    private var tfaSecret = ""
 
     fun registerAccount(foreName: CharSequence, lastName: CharSequence, email: CharSequence, password: CharSequence): Completable {
 
@@ -40,11 +40,15 @@ class UserUseCases
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
 
-    fun login(password: CharSequence): Single<RegistrationStatus> {
-        val tfaCode = OtpProvider.currentTotpCode(tfaSecret.decodeBase32()) ?: ""
-        return userRepo.loadUsername()
-                .flatMap { login(it, password.toString(), tfaCode) }
-    }
+    fun login(password: CharSequence): Single<RegistrationStatus> =
+            Single.zip(
+                    userRepo.loadUsername(),
+                    userRepo.loadTfaSecret(),
+                    BiFunction<String, String, Pair<String, String>> { username, tfaSecret ->
+                        val tfaCode = OtpProvider.currentTotpCode(tfaSecret.decodeBase32()) ?: ""
+                        Pair(username, tfaCode)
+                    }
+            ).flatMap { login(it.first, password.toString(), it.second) }
 
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Single<RegistrationStatus> {
         return userRepo.loginStep1(email.toString(), tfaCode?.toString())
@@ -57,14 +61,6 @@ class UserUseCases
                     Pair(sep10Challenge, keyPair)
                 }
                 .flatMap { userRepo.loginStep2(it.first, it.second) }
-                .flatMap { pair ->
-                    val status = pair.second
-                    if (status.isSetupCompleted()) {
-                        userRepo.loadTfaSecret(pair.first).doOnSuccess { tfaSecret = it }.flatMap { Single.just(status) }
-                    } else {
-                        Single.just(status)
-                    }
-                }
     }
 
     fun getMnemonic() = mnemonic
@@ -81,9 +77,9 @@ class UserUseCases
 
     fun requestTfaReset(email: String) = userRepo.requestEmailForTfaReset(email)
 
-    fun provideUsername() = userRepo.loadUsername()
+    fun provideUsername(): Single<String> = userRepo.loadUsername()
 
-    fun isUserLoggedIn() = tfaSecret.isNotEmpty()
+    fun isUserLoggedIn(): Single<Boolean> = userRepo.isUserLoggedIn()
 
 //    fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
 //
@@ -117,7 +113,6 @@ class UserUseCases
         return userRepo.logout()
                 .doOnComplete {
                     mnemonic = ""
-                    tfaSecret = ""
                 }
     }
 
