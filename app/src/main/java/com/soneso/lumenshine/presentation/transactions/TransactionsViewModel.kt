@@ -3,7 +3,7 @@ package com.soneso.lumenshine.presentation.transactions
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.soneso.lumenshine.domain.data.OperationFilter
+import com.soneso.lumenshine.domain.data.TransactionsFilter
 import com.soneso.lumenshine.domain.usecases.TransactionsUseCases
 import com.soneso.lumenshine.model.entities.operations.Operation
 import com.soneso.lumenshine.model.entities.wallet.WalletEntity
@@ -18,12 +18,12 @@ class TransactionsViewModel(private val transactionsUseCases: TransactionsUseCas
     private val compositeDisposable = CompositeDisposable()
 
     val liveWallet: LiveData<Resource<WalletEntity, ServerException>> = MutableLiveData()
-    val liveFilters: LiveData<OperationFilter> = MutableLiveData()
+    val liveFilters: LiveData<TransactionsFilter> = MutableLiveData()
     val liveOperations: LiveData<Resource<List<Operation>, ServerException>> = MutableLiveData()
 
     init {
         compositeDisposable.add(fetchWallet())
-        compositeDisposable.add(transactionsUseCases.operationFilter.subscribe { fetchOperations() })
+        compositeDisposable.add(fetchOperations())
         observeFilters()
     }
 
@@ -41,7 +41,7 @@ class TransactionsViewModel(private val transactionsUseCases: TransactionsUseCas
                 (liveOperations as MutableLiveData).value = it
             }
 
-    private fun observeFilters() = transactionsUseCases.operationFilter
+    private fun observeFilters() = transactionsUseCases.transactionsFilter
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { (liveFilters as MutableLiveData).value = it }

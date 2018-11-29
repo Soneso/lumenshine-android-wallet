@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGray">
+
+    <com.soneso.lumenshine.presentation.widgets.LsCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_11"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                android:id="@+id/walletNameTag"
+                style="@style/LsCardTitleDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:text="@string/wallet_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/walletSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintTop_toBottomOf="@id/walletNameTag" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5"
+                app:layout_constraintTop_toBottomOf="@id/walletSpinner" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                android:id="@+id/dateFromTag"
+                style="@style/LsCardTitleDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:text="@string/transactions_date_from"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/walletSpinner" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                android:id="@+id/dateToTag"
+                style="@style/LsCardTitleDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:text="@string/transactions_date_to"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/walletSpinner" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dateFromView"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_36"
+                android:layout_margin="@dimen/size_11"
+                android:background="@color/lightGray"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/MemoTag"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateFromTag">
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:id="@+id/dateFromText"
+                    style="@style/LsDateWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_11"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="25.08.2018" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsImageView
+                    android:id="@+id/dateFromIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_11"
+                    android:src="@drawable/icon_copy24"
+                    android:tint="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dateToView"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_36"
+                android:layout_margin="@dimen/size_11"
+                android:background="@color/lightGray"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/MemoTag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/dateFromTag">
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    android:id="@+id/dateToText"
+                    style="@style/LsDateWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_11"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="26.08.2018" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsImageView
+                    android:id="@+id/dateToIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/size_6"
+                    android:src="@drawable/icon_copy24"
+                    android:tint="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                android:id="@+id/MemoTag"
+                style="@style/LsCardTitleDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:text="@string/memo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateFromView" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsEditText
+                android:id="@+id/memoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:background="@drawable/bg_input_box"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/MemoTag" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/paymentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_45"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintTop_toBottomOf="@id/memoText">
+
+                <Switch
+                    android:id="@+id/paymentsSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    style="@style/LsCardTitleBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_36"
+                    android:text="@string/payments"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/paymentsSwitch"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/offersContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_45"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintTop_toBottomOf="@id/paymentContainer">
+
+                <Switch
+                    android:id="@+id/switchOffers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    style="@style/LsCardTitleBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_36"
+                    android:text="@string/offers"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/switchOffers"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/otherContainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/size_45"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintTop_toBottomOf="@id/offersContainer">
+
+                <Switch
+                    android:id="@+id/switchOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.soneso.lumenshine.presentation.widgets.LsTextView
+                    style="@style/LsCardTitleBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_36"
+                    android:text="@string/other"
+                    android:textAllCaps="false"
+                    app:layout_constraintStart_toEndOf="@id/switchOther"
+                    app:layout_constraintTop_toTopOf="@id/switchOther" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <com.soneso.lumenshine.presentation.widgets.LsButton
+                android:id="@+id/clearAllFilterButton"
+                style="@style/WhiteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_60"
+                android:layout_marginEnd="@dimen/size_11"
+                android:layout_marginBottom="@dimen/size_11"
+                android:text="@string/clear_all"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/otherContainer" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsButton
+                android:id="@+id/applyFilterButton"
+                style="@style/WhiteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_11"
+                android:layout_marginTop="@dimen/size_60"
+                android:layout_marginBottom="@dimen/size_11"
+                android:text="@string/apply"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@id/otherContainer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.soneso.lumenshine.presentation.widgets.LsCardView>
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/poweredByView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_10"
+        android:src="@drawable/soneso"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/brandedBackgroundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:src="@drawable/soneso_background"
+        app:layout_constraintBottom_toTopOf="@id/poweredByView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

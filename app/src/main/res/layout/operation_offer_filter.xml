@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGray">
+
+    <com.soneso.lumenshine.presentation.widgets.LsCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_11"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Switch
+                android:id="@+id/sellingCurrencySwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/selling_currency"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/sellingCurrencySwitch"
+                app:layout_constraintTop_toTopOf="@id/sellingCurrencySwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsEditText
+                android:id="@+id/sellingCurrencyText"
+                style="@style/AppTheme.LsFilterEditText"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_36"
+                android:layout_margin="@dimen/size_11"
+                android:enabled="false"
+                android:hint="@string/all"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sellingCurrencySwitch" />
+
+            <Switch
+                android:id="@+id/buyingCurrencySwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sellingCurrencyText" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/buying_currency"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/buyingCurrencySwitch"
+                app:layout_constraintTop_toTopOf="@id/buyingCurrencySwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsEditText
+                android:id="@+id/buyingCurrencyText"
+                style="@style/AppTheme.LsFilterEditText"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_36"
+                android:layout_margin="@dimen/size_11"
+                android:enabled="false"
+                android:hint="@string/all"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buyingCurrencySwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsButton
+                android:id="@+id/clearOffersFilterButton"
+                style="@style/WhiteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_45"
+                android:layout_marginBottom="@dimen/size_11"
+                android:text="@string/clear"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buyingCurrencyText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.soneso.lumenshine.presentation.widgets.LsCardView>
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/poweredByView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_10"
+        android:src="@drawable/soneso"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/brandedBackgroundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:src="@drawable/soneso_background"
+        app:layout_constraintBottom_toTopOf="@id/poweredByView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

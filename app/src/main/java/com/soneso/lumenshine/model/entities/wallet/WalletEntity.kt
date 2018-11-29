@@ -23,4 +23,6 @@ data class WalletEntity(
 
         @ColumnInfo(name = DbNames.COLUMN_IN_HOME_SCREEN)
         val shownInHomeScreen: Boolean
-)
+) {
+    override fun toString(): String = name
+}

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.soneso.lumenshine.BuildConfig
 import com.soneso.lumenshine.LsApp
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.util.LsException
@@ -25,7 +26,9 @@ open class LsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         hideStatusBar()
-        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        if (!BuildConfig.DEBUG) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
         super.onCreate(savedInstanceState)
         viewModelFactory = LsViewModelFactory(lsApp.appComponent)
     }

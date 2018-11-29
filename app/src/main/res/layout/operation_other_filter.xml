@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGray">
+
+    <com.soneso.lumenshine.presentation.widgets.LsCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_11"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Switch
+                android:id="@+id/setOptionsSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/filter_set_options"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/setOptionsSwitch"
+                app:layout_constraintTop_toTopOf="@id/setOptionsSwitch" />
+
+            <Switch
+                android:id="@+id/inflationSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/setOptionsSwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/filter_inflation"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/inflationSwitch"
+                app:layout_constraintTop_toTopOf="@id/inflationSwitch" />
+
+            <Switch
+                android:id="@+id/manageDataSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/inflationSwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/filter_manage_data"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/manageDataSwitch"
+                app:layout_constraintTop_toTopOf="@id/manageDataSwitch" />
+
+            <Switch
+                android:id="@+id/trustSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/manageDataSwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/filter_trust"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/trustSwitch"
+                app:layout_constraintTop_toTopOf="@id/trustSwitch" />
+
+            <Switch
+                android:id="@+id/accountMergeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/trustSwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/filter_account_merge"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/accountMergeSwitch"
+                app:layout_constraintTop_toTopOf="@id/accountMergeSwitch" />
+
+            <Switch
+                android:id="@+id/bumpSequenceSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/accountMergeSwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleLightBlack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_36"
+                android:text="@string/filter_bump_sequence"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toEndOf="@id/bumpSequenceSwitch"
+                app:layout_constraintTop_toTopOf="@id/bumpSequenceSwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsButton
+                android:id="@+id/clearFilterButton"
+                style="@style/WhiteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_45"
+                android:layout_marginBottom="@dimen/size_11"
+                android:text="@string/clear"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bumpSequenceSwitch" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.soneso.lumenshine.presentation.widgets.LsCardView>
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/poweredByView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_10"
+        android:src="@drawable/soneso"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/brandedBackgroundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:src="@drawable/soneso_background"
+        app:layout_constraintBottom_toTopOf="@id/poweredByView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

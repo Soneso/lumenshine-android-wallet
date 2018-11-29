@@ -13,7 +13,9 @@ import retrofit2.Retrofit
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class TransactionRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
         r: Retrofit

@@ -33,6 +33,16 @@
         <item name="android:paddingBottom">@dimen/size_8</item>
     </style>
 
+    <style name="AppTheme.LsFilterEditText" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/bg_input_filter</item>
+        <item name="android:textColorHint">@color/input_filter_hint</item>
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:padding">@dimen/size_8</item>
+    </style>
+
     <style name="AppTheme.LsCardView">
         <item name="cardBackgroundColor">@android:color/white</item>
         <item name="cardCornerRadius">@dimen/size_10</item>
@@ -207,6 +217,15 @@
         <item name="android:textColor">@color/blue_selectable</item>
     </style>
 
+    <style name="LsDateWhite" parent="AppTheme.LsTextView">
+        <item name="android:paddingEnd">@dimen/size_8</item>
+        <item name="android:paddingStart">@dimen/size_8</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="LsTabView">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/blue_selectable</item>
@@ -256,5 +275,10 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
+    </style>
+
+    <style name="FiltersAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
     </style>
 </resources>

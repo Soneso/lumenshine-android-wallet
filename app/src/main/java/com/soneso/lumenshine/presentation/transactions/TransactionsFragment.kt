@@ -46,6 +46,15 @@ class TransactionsFragment : LsFragment() {
 
         setupRecyclerView()
         subscribeForLiveData()
+
+        transactionFilterButton.setOnClickListener {
+            activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, TransactionsFilterFragment.newInstance(), TransactionsFilterFragment.TAG)
+//                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .addToBackStack(TransactionsFilterFragment.TAG)
+                    .commit()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -67,7 +76,9 @@ class TransactionsFragment : LsFragment() {
         transactionsViewModel.liveWallet.observe(this, Observer {
             when (it.state) {
                 Resource.SUCCESS -> {
-                    transactionsViewModel.selectPrimaryWallet(it.success())
+                    if (transactionsViewModel.liveFilters.value == null) {
+                        transactionsViewModel.selectPrimaryWallet(it.success())
+                    }
                 }
             }
         })

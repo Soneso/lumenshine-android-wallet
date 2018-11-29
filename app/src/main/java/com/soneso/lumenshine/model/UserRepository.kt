@@ -28,6 +28,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.ManageDataOperation
+import org.stellar.sdk.Network
 import org.stellar.sdk.Transaction
 import retrofit2.Retrofit
 import timber.log.Timber
@@ -212,6 +213,7 @@ class UserRepository @Inject constructor(
 
             val serverSigningKey = "GCP4BR7GWG664577XMLX2BRUPSHKHTAXQ4I4HZORLMQNILNNVMSFWVUV"
 
+            Network.useTestNetwork()
             val transactionHash = transaction.hash()
             val serverKeyPair = KeyPair.fromAccountId(serverSigningKey)
 

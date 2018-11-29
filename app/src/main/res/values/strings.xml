@@ -728,6 +728,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="source_account">Source account</string>
 
     <string name="wallet_name">Wallet name</string>
+    <string name="clear">CLEAR</string>
     <string name="clear_all">CLEAR ALL</string>
     <string name="apply">APPLY</string>
     <string name="payments">Payments</string>
@@ -744,4 +745,14 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="filter_trust">Trust</string>
     <string name="filter_account_merge">Account Merge</string>
     <string name="filter_bump_sequence">Bump sequence</string>
+    <string name="filter_received">received</string>
+    <string name="filter_sent">sent</string>
+    <string name="filter_currency">currency</string>
+    <string name="received_from">Received from</string>
+    <string name="received_to">Received to</string>
+    <string name="amount_from">Amount from</string>
+    <string name="amount_to">Amount to</string>
+    <string name="all">All</string>
+    <string name="selling_currency">Selling currency</string>
+    <string name="buying_currency">Buying currency</string>
 </resources>
