@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.persistence.LsPrefs
+import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
 import com.soneso.lumenshine.presentation.general.LsActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
@@ -123,15 +123,14 @@ abstract class BaseAuthActivity : LsActivity() {
         MainActivity.startInstance(this)
     }
 
-    fun goToSetup() {
+    fun goToSetup(registrationStatus: RegistrationStatus = RegistrationStatus()) {
         finishAffinity()
-        AuthSetupActivity.startInstance(this)
+        AuthSetupActivity.startInstance(this, registrationStatus)
     }
 
     fun setupHeader() {
         set_up_view.visibility = View.VISIBLE
         view?.visibility = View.GONE
         usernameView.visibility = View.VISIBLE
-        usernameView.text = LsPrefs.username
     }
 }

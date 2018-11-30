@@ -10,20 +10,17 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
-class SplashViewModel(userUseCase: UserUseCases) : ViewModel() {
+class SplashViewModel(useCase: UserUseCases) : ViewModel() {
 
-    val liveIsUserLoggedIn: LiveData<Boolean> = MutableLiveData()
     private val compositeDisposable = CompositeDisposable()
+    val liveIsUserLoggedIn: LiveData<Boolean> = MutableLiveData<Boolean>()
 
     init {
-        userUseCase.setNewSession()
-        val d = userUseCase.isUserLoggedIn()
+        val d = useCase.isUserLoggedIn()
+                .delay(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
-                .delay(2, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { it ->
-                    liveIsUserLoggedIn.putValue(it)
-                }
+                .subscribe { it -> liveIsUserLoggedIn.putValue(it) }
         compositeDisposable.add(d)
     }
 

@@ -6,22 +6,22 @@ import com.soneso.lumenshine.networking.dto.auth.ConfirmTfaSecretChangeResponse
 import com.soneso.lumenshine.networking.dto.auth.GetRegistrationStatusResponse
 import com.soneso.lumenshine.networking.dto.auth.LoginStep2Response
 
-fun GetRegistrationStatusResponse.toRegistrationStatus(username: String): RegistrationStatus {
+fun GetRegistrationStatusResponse.toRegistrationStatus(): RegistrationStatus {
 
-    return RegistrationStatus(username, mailConfirmed, tfaConfirmed, mnemonicConfirmed)
+    return RegistrationStatus(mailConfirmed, tfaConfirmed, mnemonicConfirmed)
 }
 
-fun ConfirmTfaResponse.toRegistrationStatus(username: String): RegistrationStatus {
+fun ConfirmTfaResponse.toRegistrationStatus(): RegistrationStatus {
 
-    return RegistrationStatus(username, emailConfirmed, tfaConfirmed, mnemonicConfirmed)
+    return RegistrationStatus(emailConfirmed, tfaConfirmed, mnemonicConfirmed)
 }
 
-fun ConfirmTfaSecretChangeResponse.toRegistrationStatus(username: String): RegistrationStatus {
+fun ConfirmTfaSecretChangeResponse.toRegistrationStatus(): RegistrationStatus {
 
-    return RegistrationStatus(username, mailConfirmed, tfaConfirmed, mnemonicConfirmed)
+    return RegistrationStatus(mailConfirmed, tfaConfirmed, mnemonicConfirmed)
 }
 
-fun LoginStep2Response.toRegistrationStatus(username: String): RegistrationStatus {
+fun LoginStep2Response.toRegistrationStatus(): RegistrationStatus {
 
-    return RegistrationStatus(username, emailConfirmed, tfaConfirmed, mnemonicConfirmed)
+    return RegistrationStatus(emailConfirmed, tfaConfirmed, mnemonicConfirmed)
 }

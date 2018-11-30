@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.registration
 
 
 import android.os.Bundle
@@ -14,12 +14,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
+import com.soneso.lumenshine.presentation.auth.AuthFragment
 import com.soneso.lumenshine.presentation.util.color
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import com.soneso.lumenshine.presentation.widgets.LsEditText
+import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_registration.*
 import kotlinx.android.synthetic.main.ls_input_view.view.*
@@ -36,6 +39,14 @@ class RegistrationFragment : AuthFragment() {
     private var passwordCompleted: Boolean = false
     private var repeatPasswordCompleted: Boolean = false
     private var termsOfServiceAccepted: Boolean = false
+
+    private lateinit var viewModel: RegistrationViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[RegistrationViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_registration, container, false)
@@ -86,7 +97,7 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun subscribeForLiveData() {
-        authViewModel.liveRegistration.observe(this, Observer {
+        viewModel.liveRegistration.observe(this, Observer {
             renderRegistration(it ?: return@Observer)
         })
     }
@@ -139,7 +150,7 @@ class RegistrationFragment : AuthFragment() {
                 && repeatPasswordCompleted && termsOfServiceAccepted
     }
 
-    private fun renderRegistration(resource: Resource<Boolean, ServerException>) {
+    private fun renderRegistration(resource: Resource<Unit, LsException>) {
         when (resource.state) {
 
             Resource.LOADING -> {
@@ -160,15 +171,12 @@ class RegistrationFragment : AuthFragment() {
     /**
      * handling login response errors
      */
-    private fun handleError(e: ServerException) {
+    private fun handleError(e: LsException) {
 
-        when (e.code) {
-            ErrorCodes.SIGNUP_EMAIL_ALREADY_EXIST -> {
-                emailView.error = e.displayMessage
-            }
-            else -> {
-                showErrorSnackbar(e)
-            }
+        if (e is ServerException && e.code == ErrorCodes.SIGNUP_EMAIL_ALREADY_EXIST) {
+            emailView.error = e.displayMessage
+        } else {
+            showErrorSnackbar(e)
         }
     }
 
@@ -179,8 +187,7 @@ class RegistrationFragment : AuthFragment() {
         }
 
         showLoadingView()
-
-        authViewModel.createAccount(
+        viewModel.register(
                 foreName.trimmedText,
                 lastName.trimmedText,
                 emailView.trimmedText,

@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth;
+package com.soneso.lumenshine.presentation.auth.registration
 
 import android.content.Context
 import android.view.LayoutInflater

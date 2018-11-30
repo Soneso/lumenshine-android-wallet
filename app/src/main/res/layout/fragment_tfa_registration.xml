@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                tools:context=".presentation.auth.TfaConfirmationFragment">
+                tools:context=".presentation.auth.setup.TfaConfirmationFragment">
 
                 <com.soneso.lumenshine.presentation.widgets.LsTextView
                     style="@style/LsCardTitleDetail"
