@@ -327,7 +327,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="face_recognition">Face Recognition</string>
 
-    <string name="hint_face_fingerprint">If you activate, the app will request your %@ instead of password when opened. Entering the password will not be required each time you open the app. To activate %@ please first insert your password below.</string>
+    <string name="hint_face_fingerprint">If you activate, the app will request your fingerprint instead of password when opened. Entering the password will not be required each time you open the app. To activate fingerprint please first insert your password below.</string>
 
     <string name="enabled">Enabled</string>
 

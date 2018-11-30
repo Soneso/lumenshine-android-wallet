@@ -1,6 +1,5 @@
 package com.soneso.lumenshine.presentation.auth.login
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.model.entities.RegistrationStatus
@@ -23,6 +23,14 @@ import kotlinx.android.synthetic.main.fragment_finger_print.*
  *
  */
 class FingerPrintFragment : AuthFragment() {
+
+    private lateinit var viewModel: FingerprintViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[FingerprintViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_finger_print, container, false)
@@ -74,25 +82,4 @@ class FingerPrintFragment : AuthFragment() {
     private fun attemptLogin() {
 
     }
-
-    companion object {
-
-        const val TAG = "FingerPrintFragment"
-        private const val FRAGMENT_TYPE = "fragment_type"
-
-        fun newInstance(fragmentType: FingerprintFragmentType): FingerPrintFragment {
-
-            val instance = FingerPrintFragment()
-            val args = Bundle()
-            args.putSerializable(FRAGMENT_TYPE, fragmentType)
-            instance.arguments = args
-            return instance
-        }
-    }
-
-    enum class FingerprintFragmentType {
-        FINGERPRINT, FACE_ID
-    }
-
-
 }

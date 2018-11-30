@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.NavDestination
 import com.google.android.material.navigation.NavigationView
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.auth.more.LostCredentialFragment
 import kotlinx.android.synthetic.main.activity_base_auth.*
 import kotlinx.android.synthetic.main.tabs_auth_logged_user.*
 

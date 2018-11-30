@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.more
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

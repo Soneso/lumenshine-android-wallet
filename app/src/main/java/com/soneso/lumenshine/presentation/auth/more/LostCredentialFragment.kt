@@ -1,4 +1,5 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.more
+
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,29 +9,28 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.auth.AuthFragment
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
-import kotlinx.android.synthetic.main.fragment_mail_lost_credential.*
-
+import kotlinx.android.synthetic.main.fragment_lost_credential.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class EmailLostCredentialFragment : AuthFragment() {
+class LostCredentialFragment : AuthFragment() {
+
     private lateinit var credential: Credential
-    private lateinit var email: String
     private lateinit var lostCredentialViewModel: LostCredentialViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lostCredentialViewModel = ViewModelProviders.of(this, viewModelFactory)[LostCredentialViewModel::class.java]
 
-        credential = arguments?.getSerializable(EmailLostCredentialFragment.ARG_CREDENTIAL) as? Credential ?: Credential.PASSWORD
-        email = arguments?.getString(EmailLostCredentialFragment.ARG_EMAIL).toString()
+        credential = arguments?.getSerializable(ARG_CREDENTIAL) as? Credential ?: Credential.PASSWORD
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_mail_lost_credential, container, false)
+            inflater.inflate(R.layout.fragment_lost_credential, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,25 +41,31 @@ class EmailLostCredentialFragment : AuthFragment() {
     }
 
     private fun populateViews() {
+
         when (credential) {
-            Credential.PASSWORD -> {
-                subtitleSuccessView.setText(R.string.reset_password_email_sent)
-                subTitleView.setText(R.string.enter_email_address_reset_password_description)
-            }
-            Credential.TFA -> {
-                subtitleSuccessView.setText(R.string.reset_2fa_email_sent)
-                subTitleView.setText(R.string.enter_email_address_reset_2fa_description)
-            }
+            Credential.PASSWORD -> titleView.setText(R.string.reset_password)
+            Credential.TFA -> titleView.setText(R.string.reset_2fa)
         }
     }
 
     private fun setupListeners() {
-        resendEmailButton.setOnClickListener {
+        nextButton.setOnClickListener {
             sendRequest()
         }
+    }
 
-        doneButton.setOnClickListener {
-            authActivity.navigate(R.id.to_login)
+    private fun sendRequest() {
+        if (!isValidForm()) {
+            return
+        }
+
+        when (credential) {
+            Credential.PASSWORD -> {
+                lostCredentialViewModel.requestPasswordResetEmail(emailView.trimmedText)
+            }
+            Credential.TFA -> {
+                lostCredentialViewModel.requestTfaResetEmail(emailView.trimmedText)
+            }
         }
     }
 
@@ -70,6 +76,7 @@ class EmailLostCredentialFragment : AuthFragment() {
     }
 
     private fun renderCredentialReset(resource: Resource<Unit, LsException>) {
+
         when (resource.state) {
             Resource.LOADING -> {
                 showLoadingView()
@@ -81,31 +88,29 @@ class EmailLostCredentialFragment : AuthFragment() {
             else -> {
                 hideLoadingView()
                 showSnackbar(getString(R.string.email_sent))
+                when (credential) {
+                    Credential.PASSWORD -> authActivity.navigate(R.id.to_email_lost_credential_screen,
+                            EmailLostCredentialFragment.argForPassword(emailView.trimmedText.toString()))
+                    Credential.TFA -> authActivity.navigate(R.id.to_email_lost_credential_screen,
+                            EmailLostCredentialFragment.argForTfa(emailView.trimmedText.toString()))
+                }
             }
         }
     }
 
-    private fun sendRequest() {
-        when (credential) {
-            Credential.PASSWORD -> lostCredentialViewModel.requestPasswordResetEmail(email)
-            Credential.TFA -> lostCredentialViewModel.requestTfaResetEmail(email)
-        }
-    }
+    private fun isValidForm() = emailView.hasValidInput()
 
     companion object {
 
-        const val TAG = "EmailLostCredentialFragment"
+        const val TAG = "LostCredentialFragment"
         private const val ARG_CREDENTIAL = "$TAG.ARG_CREDENTIAL"
-        private const val ARG_EMAIL = "$TAG.ARG_EMAIL"
 
-        fun argForPassword(email: String) = Bundle().apply {
+        fun argForPassword() = Bundle().apply {
             putSerializable(ARG_CREDENTIAL, Credential.PASSWORD)
-            putString(ARG_EMAIL, email)
         }
 
-        fun argForTfa(email: String) = Bundle().apply {
+        fun argForTfa() = Bundle().apply {
             putSerializable(ARG_CREDENTIAL, Credential.TFA)
-            putString(ARG_EMAIL, email)
         }
     }
 }
