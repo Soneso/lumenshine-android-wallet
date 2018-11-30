@@ -25,7 +25,6 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
         navigate(R.id.to_pass_screen)
     }
 
-
     override fun invalidateCurrentSelection(destination: NavDestination) {
         signOutTab.isSelected = false
         homeTab.isSelected = false
@@ -80,6 +79,10 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
         }
         selectMenuItem(R.id.login_item)
         drawerView.setNavigationItemSelectedListener(navItemListener)
+    }
+
+    fun hideFingerprintTab() {
+        fingerprintTab.visibility = View.GONE
     }
 
     companion object {

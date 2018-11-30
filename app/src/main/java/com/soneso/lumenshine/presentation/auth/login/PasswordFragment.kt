@@ -12,6 +12,7 @@ import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.auth.AuthFragment
+import com.soneso.lumenshine.presentation.auth.AuthLoggedUserActivity
 import com.soneso.lumenshine.util.GeneralUtils
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
@@ -104,6 +105,7 @@ class PasswordFragment : AuthFragment() {
                     tfaCodeView.error = e.displayMessage
                 } else {
                     tfaCodeView.visibility = View.VISIBLE
+                    (authActivity as AuthLoggedUserActivity).hideFingerprintTab()
                 }
             }
         }
