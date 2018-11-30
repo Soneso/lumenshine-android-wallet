@@ -50,6 +50,10 @@ class UserUseCases
                     }
             ).flatMap { login(it.first, password.toString(), it.second) }
 
+    fun login(password: CharSequence, tfaCode: CharSequence): Single<RegistrationStatus> =
+            userRepo.loadUsername()
+                    .flatMap { login(it, password.toString(), tfaCode.toString()) }
+
     fun login(email: CharSequence, password: CharSequence, tfaCode: CharSequence?): Single<RegistrationStatus> {
         return userRepo.loginStep1(email.toString(), tfaCode?.toString())
                 .map {
