@@ -74,7 +74,7 @@ class LostCredentialFragment : AuthFragment() {
         })
     }
 
-    private fun renderCredentialReset(resource: Resource<Boolean, LsException>) {
+    private fun renderCredentialReset(resource: Resource<Unit, LsException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -87,17 +87,11 @@ class LostCredentialFragment : AuthFragment() {
             else -> {
                 hideLoadingView()
                 showSnackbar(getString(R.string.email_sent))
-                if (resource.success()) {
-                    when (credential) {
-
-                        Credential.PASSWORD -> authActivity.navigate(R.id.to_email_lost_credential_screen,
-                                EmailLostCredentialFragment.argForPassword(emailView.trimmedText.toString()))
-                        Credential.TFA -> authActivity.navigate(R.id.to_email_lost_credential_screen,
-                                EmailLostCredentialFragment.argForTfa(emailView.trimmedText.toString()))
-                    }
-
-                } else {
-                    showErrorSnackbar(resource.failure())
+                when (credential) {
+                    Credential.PASSWORD -> authActivity.navigate(R.id.to_email_lost_credential_screen,
+                            EmailLostCredentialFragment.argForPassword(emailView.trimmedText.toString()))
+                    Credential.TFA -> authActivity.navigate(R.id.to_email_lost_credential_screen,
+                            EmailLostCredentialFragment.argForTfa(emailView.trimmedText.toString()))
                 }
             }
         }

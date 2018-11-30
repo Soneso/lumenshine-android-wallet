@@ -20,6 +20,7 @@ object LsPrefs {
     private const val KEY_APP_PASS = "app-pass"
     private const val KEY_ENCRYPTION_IV = "encryption-iv"
     private const val KEY_PASS_SALT = "pass-salt"
+
     private const val KEY_USERNAME = "username"
     const val KEY_JWT_TOKEN = "api-token"
     private const val KEY_TFA_SECRET = "tfa-secret"
@@ -162,5 +163,11 @@ object LsPrefs {
 
     fun registerListener(listener: ((String) -> Unit)) {
         listeners.add(listener)
+    }
+
+    fun clearAllKeys() {
+        jwtToken = ""
+        tfaSecret = ""
+        registrationCompleted = false
     }
 }

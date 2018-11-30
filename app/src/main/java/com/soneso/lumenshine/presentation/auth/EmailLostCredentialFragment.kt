@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_mail_lost_credential.*
  */
 class EmailLostCredentialFragment : AuthFragment() {
     private lateinit var credential: Credential
-    private lateinit var email : String
+    private lateinit var email: String
     private lateinit var lostCredentialViewModel: LostCredentialViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class EmailLostCredentialFragment : AuthFragment() {
         })
     }
 
-    private fun renderCredentialReset(resource: Resource<Boolean, LsException>) {
+    private fun renderCredentialReset(resource: Resource<Unit, LsException>) {
         when (resource.state) {
             Resource.LOADING -> {
                 showLoadingView()
@@ -81,10 +81,6 @@ class EmailLostCredentialFragment : AuthFragment() {
             else -> {
                 hideLoadingView()
                 showSnackbar(getString(R.string.email_sent))
-                if (resource.success()) {
-                } else {
-                    showErrorSnackbar(resource.failure())
-                }
             }
         }
     }
@@ -102,12 +98,12 @@ class EmailLostCredentialFragment : AuthFragment() {
         private const val ARG_CREDENTIAL = "$TAG.ARG_CREDENTIAL"
         private const val ARG_EMAIL = "$TAG.ARG_EMAIL"
 
-        fun argForPassword(email : String) = Bundle().apply {
+        fun argForPassword(email: String) = Bundle().apply {
             putSerializable(ARG_CREDENTIAL, Credential.PASSWORD)
             putString(ARG_EMAIL, email)
         }
 
-        fun argForTfa(email : String) = Bundle().apply {
+        fun argForTfa(email: String) = Bundle().apply {
             putSerializable(ARG_CREDENTIAL, Credential.TFA)
             putString(ARG_EMAIL, email)
         }

@@ -237,19 +237,25 @@ class UserRepository @Inject constructor(
 
     fun loadTfaSecret(): Single<String> = Single.just(LsPrefs.tfaSecret)
 
-    fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
+    fun requestEmailForPasswordReset(email: String): Completable =
+            userApi.requestResetPasswordEmail(email)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
-        return userApi.requestResetPasswordEmail(email)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
-
-    fun requestEmailForTfaReset(email: String): Flowable<Resource<Boolean, LsException>> {
-
-        return userApi.requestResetTfaEmail(email)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
+    fun requestEmailForTfaReset(email: String): Completable =
+            userApi.requestResetTfaEmail(email)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
     fun loadUsername(): Single<String> = Single.just(LsPrefs.username)
 
@@ -293,6 +299,7 @@ class UserRepository @Inject constructor(
     fun logout(): Completable {
         return Completable.create {
             try {
+                LsPrefs.clearAllKeys()
                 db.clearAllTables()
                 it.onComplete()
             } catch (e: Exception) {

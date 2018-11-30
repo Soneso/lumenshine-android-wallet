@@ -73,9 +73,9 @@ class UserUseCases
 
     fun provideTfaSecret() = userRepo.loadTfaSecret()
 
-    fun requestPasswordReset(email: String) = userRepo.requestEmailForPasswordReset(email)
+    fun requestPasswordReset(email: String): Completable = userRepo.requestEmailForPasswordReset(email)
 
-    fun requestTfaReset(email: String) = userRepo.requestEmailForTfaReset(email)
+    fun requestTfaReset(email: String): Completable = userRepo.requestEmailForTfaReset(email)
 
     fun provideUsername(): Single<String> = userRepo.loadUsername()
 
