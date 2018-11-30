@@ -8,9 +8,8 @@ import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
-import com.soneso.lumenshine.presentation.MainActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.layout_auth_activity.*
 
 class AuthSetupActivity : BaseAuthActivity() {
 
@@ -22,23 +21,20 @@ class AuthSetupActivity : BaseAuthActivity() {
 
         setupDrawer()
         setupHeader()
-        subscribeToLiveData()
-        Timber.d("Auth setup activity created.")
+        val registrationStatus = intent?.getSerializableExtra(EXTRA_REGISTRATION_STATUS) as? RegistrationStatus
+                ?: RegistrationStatus()
+        renderRegistrationStatus(registrationStatus)
+
+        authViewModel.liveUsername.observe(this, Observer { usernameView.text = it })
     }
 
-    private fun subscribeToLiveData() {
-        authViewModel.liveRegistrationStatus.observe(this, Observer {
-            renderRegistrationStatus(it ?: return@Observer)
-        })
-    }
 
-    private fun renderRegistrationStatus(status: RegistrationStatus) {
+    fun renderRegistrationStatus(status: RegistrationStatus) {
 
         if (status.tfaConfirmed && status.mailConfirmed && status.mnemonicConfirmed) {
             goToMain()
             return
         }
-
         when {
             !status.tfaConfirmed -> {
                 navigate(R.id.to_confirm_tfa_screen)
@@ -51,10 +47,10 @@ class AuthSetupActivity : BaseAuthActivity() {
             !status.mnemonicConfirmed -> {
                 navigate(R.id.to_mnemonic_screen)
             }
-            authViewModel.isFingerprintFlow -> {
-                finishAffinity()
-                MainActivity.startInstanceWithFingerprintSetup(this)
-            }
+//            authViewModel.isFingerprintFlow -> {
+//                finishAffinity()
+//                MainActivity.startInstanceWithFingerprintSetup(this)
+//            }
         }
     }
 
@@ -72,9 +68,12 @@ class AuthSetupActivity : BaseAuthActivity() {
 
     companion object {
         const val TAG = "AuthSetupActivity"
+        private const val EXTRA_REGISTRATION_STATUS = "$TAG.EXTRA_REGISTRATION_STATUS"
 
-        fun startInstance(context: Context) {
-            val intent = Intent(context, AuthSetupActivity::class.java)
+        fun startInstance(context: Context, registrationStatus: RegistrationStatus) {
+            val intent = Intent(context, AuthSetupActivity::class.java).apply {
+                putExtra(EXTRA_REGISTRATION_STATUS, registrationStatus)
+            }
             context.startActivity(intent)
         }
     }

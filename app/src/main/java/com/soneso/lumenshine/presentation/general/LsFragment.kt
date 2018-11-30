@@ -42,7 +42,7 @@ open class LsFragment : Fragment() {
     fun showErrorSnackbar(e: LsException?) {
 
         val view = view ?: return
-        val message = e?.rootCause?.message ?: getString(R.string.unknown_error)
+        val message = e?.cause?.message ?: getString(R.string.unknown_error)
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.ok, null)
                 .show()

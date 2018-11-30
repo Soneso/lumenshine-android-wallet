@@ -1,4 +1,4 @@
-package com.soneso.lumenshine.presentation.auth
+package com.soneso.lumenshine.presentation.auth.setup
 
 
 import android.os.Bundle
@@ -9,10 +9,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.buildSpannedString
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.TypefaceSpan
+import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
 
@@ -21,7 +23,15 @@ import kotlinx.android.synthetic.main.fragment_mail_confirmation.*
  * A simple [Fragment] subclass.
  *
  */
-class MailConfirmationFragment : AuthFragment() {
+class MailConfirmationFragment : SetupFragment() {
+
+    private lateinit var viewModel: MailConfirmationViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory)[MailConfirmationViewModel::class.java]
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_mail_confirmation, container, false)
@@ -29,7 +39,6 @@ class MailConfirmationFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authViewModel.initLastUsername()
         setupListeners()
         subscribeForLiveData()
     }
@@ -52,14 +61,14 @@ class MailConfirmationFragment : AuthFragment() {
 
     private fun subscribeForLiveData() {
 
-        authViewModel.liveLastUsername.observe(this, Observer {
+        viewModel.liveUsername.observe(this, Observer {
             setupDescription(it ?: return@Observer)
         })
-        authViewModel.liveRegistrationRefresh.observe(this, Observer {
+        viewModel.liveRegistrationStatus.observe(this, Observer {
             renderRegistrationRefresh(it ?: return@Observer)
         })
-        authViewModel.liveConfirmationMail.observe(this, Observer {
-            renderConfirmationMail(it ?: return@Observer)
+        viewModel.liveMailResend.observe(this, Observer {
+            renderMailResend(it ?: return@Observer)
         })
     }
 
@@ -67,16 +76,16 @@ class MailConfirmationFragment : AuthFragment() {
 
         resendButton.setOnClickListener {
             errorView.text = ""
-            authViewModel.resendConfirmationMail()
+            viewModel.resendConfirmationMail()
         }
         submitButton.setOnClickListener {
             errorView.text = ""
 
-            authViewModel.refreshRegistrationStatus()
+            viewModel.refreshRegistrationStatus()
         }
     }
 
-    private fun renderRegistrationRefresh(resource: Resource<RegistrationStatus?, ServerException>) {
+    private fun renderRegistrationRefresh(resource: Resource<RegistrationStatus, LsException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -84,8 +93,11 @@ class MailConfirmationFragment : AuthFragment() {
             }
             Resource.SUCCESS -> {
                 hideLoadingView()
-                if (!resource.success()?.mailConfirmed!!) {
+                val status = resource.success()
+                if (!status.mailConfirmed) {
                     errorView.setText(R.string.error_verify_email)
+                } else {
+                    renderRegistrationStatus(status)
                 }
             }
             Resource.FAILURE -> {
@@ -95,7 +107,7 @@ class MailConfirmationFragment : AuthFragment() {
         }
     }
 
-    private fun renderConfirmationMail(resource: Resource<Boolean, ServerException>) {
+    private fun renderMailResend(resource: Resource<Unit, LsException>) {
 
         when (resource.state) {
             Resource.LOADING -> {
@@ -107,8 +119,16 @@ class MailConfirmationFragment : AuthFragment() {
             }
             Resource.FAILURE -> {
                 hideLoadingView()
-                errorView.text = resource.failure().displayMessage
+                handleError(resource.failure())
             }
+        }
+    }
+
+    private fun handleError(e: LsException?) {
+        if (e is ServerException) {
+            errorView.text = e.displayMessage
+        } else {
+            showErrorSnackbar(e)
         }
     }
 

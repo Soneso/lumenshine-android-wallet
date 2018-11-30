@@ -5,6 +5,7 @@ import com.ihsanbal.logging.Level
 import com.ihsanbal.logging.LoggingInterceptor
 import com.soneso.lumenshine.BuildConfig
 import com.soneso.lumenshine.networking.api.LsApi
+import com.soneso.lumenshine.persistence.LsPrefs
 import okhttp3.OkHttpClient
 import okhttp3.internal.platform.Platform
 import timber.log.Timber
@@ -13,6 +14,17 @@ import java.util.concurrent.TimeUnit
 object NetworkUtil {
 
     const val TAG = "NetworkUtil"
+    private var jwtToken = LsPrefs.jwtToken
+
+    init {
+        LsPrefs.registerListener { key ->
+            when (key) {
+                LsPrefs.KEY_JWT_TOKEN -> {
+                    jwtToken = LsPrefs.jwtToken
+                }
+            }
+        }
+    }
 
     fun isNetworkAvailable(): Boolean {
         val runtime = Runtime.getRuntime()
@@ -57,11 +69,11 @@ object NetworkUtil {
             }
 
             if (TextUtils.isEmpty(request.header(LsApi.HEADER_NAME_AUTHORIZATION))) {
-                requestBuilder.addHeader(LsApi.HEADER_NAME_AUTHORIZATION, LsSessionProfile.jwtToken)
+                requestBuilder.addHeader(LsApi.HEADER_NAME_AUTHORIZATION, jwtToken)
             }
 
             if (TextUtils.isEmpty(request.header(LsApi.HEADER_NAME_LANGUAGE))) {
-                requestBuilder.addHeader(LsApi.HEADER_NAME_LANGUAGE, LsSessionProfile.langKey)
+                requestBuilder.addHeader(LsApi.HEADER_NAME_LANGUAGE, "EN")
             }
 
             chain.proceed(requestBuilder.build())

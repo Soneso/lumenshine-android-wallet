@@ -47,7 +47,7 @@ open class LsActivity : AppCompatActivity() {
 
     fun showErrorSnackbar(e: LsException?) {
 
-        val message = e?.rootCause?.message ?: getString(R.string.unknown_error)
+        val message = e?.cause?.message ?: getString(R.string.unknown_error)
         showSnackbar(message)
     }
 }
