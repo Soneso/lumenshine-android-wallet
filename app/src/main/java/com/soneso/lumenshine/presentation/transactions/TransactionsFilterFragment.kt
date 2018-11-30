@@ -38,6 +38,7 @@ class TransactionsFilterFragment : LsFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         subscribeForLiveData()
+
         dateFromView.setOnClickListener {
             dateFromDialog.show()
         }
@@ -85,12 +86,10 @@ class TransactionsFilterFragment : LsFragment() {
     }
 
     private fun subscribeForLiveData() {
-        filterViewModel.liveWallets.takeIf { true }?.observe(this, Observer { })
-
         filterViewModel.liveWallets.observe(this, Observer {
             when (it.state) {
                 Resource.SUCCESS -> {
-                    val arrayAdapter = ArrayAdapter<WalletEntity>(context!!, R.layout.support_simple_spinner_dropdown_item, it.success())
+                    val arrayAdapter = ArrayAdapter<WalletEntity>(context!!, R.layout.support_simple_spinner_dropdown_item, emptyArray())
                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     walletSpinner.adapter = arrayAdapter
                 }
@@ -99,12 +98,11 @@ class TransactionsFilterFragment : LsFragment() {
 
         filterViewModel.liveTransactionsFilter.observe(this, Observer {
             //TODO question in Trello
-            if (walletSpinner.adapter != null)
-                for (i in 0 until walletSpinner.adapter.count) {
-                    if (walletSpinner.adapter.getItem(i) == it.wallet) {
-                        walletSpinner.setSelection(i)
-                    }
+            for (i in 0 until walletSpinner.adapter.count) {
+                if (walletSpinner.adapter.getItem(i) == it.wallet) {
+                    walletSpinner.setSelection(i)
                 }
+            }
             updateDates(it.dateFrom, it.dateTo)
         })
     }
