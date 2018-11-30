@@ -89,7 +89,7 @@ class TransactionsFilterFragment : LsFragment() {
         filterViewModel.liveWallets.observe(this, Observer {
             when (it.state) {
                 Resource.SUCCESS -> {
-                    val arrayAdapter = ArrayAdapter<WalletEntity>(context!!, R.layout.support_simple_spinner_dropdown_item, emptyArray())
+                    val arrayAdapter = ArrayAdapter<WalletEntity>(context!!, R.layout.support_simple_spinner_dropdown_item, it.success())
                     arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     walletSpinner.adapter = arrayAdapter
                 }

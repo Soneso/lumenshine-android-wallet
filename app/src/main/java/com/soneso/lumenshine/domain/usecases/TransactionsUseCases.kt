@@ -1,6 +1,5 @@
 package com.soneso.lumenshine.domain.usecases
 
-import com.jakewharton.rxrelay2.BehaviorRelay
 import com.soneso.lumenshine.domain.data.OperationsFilter
 import com.soneso.lumenshine.domain.data.TransactionsFilter
 import com.soneso.lumenshine.model.TransactionRepository
@@ -10,7 +9,6 @@ import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.mapResource
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.schedulers.Schedulers
@@ -29,20 +27,25 @@ class TransactionsUseCases @Inject constructor(
     // not a stream
     val operationsFilter = BehaviorProcessor.create<OperationsFilter>()
 
-    val wallets = BehaviorRelay.create<Resource<List<WalletEntity>, ServerException>>()
+    val wallets = BehaviorProcessor.create<Resource<List<WalletEntity>, ServerException>>()
 
     init {
         walletRepo.loadAllWallets()
                 .doOnComplete {
-                    Timber.e("Walles - ON COMPLETE")
+                    Timber.e("TUC - ON COMPLETE")
                 }
                 .subscribeOn(Schedulers.io())
                 .subscribe(wallets)
     }
 
-    fun getWallet(): Flowable<Resource<WalletEntity, ServerException>> = wallets.toFlowable(BackpressureStrategy.LATEST).mapResource({ it -> it[0] }, { it })
+    fun getWallet(): Flowable<Resource<WalletEntity, ServerException>> =
+            wallets
+                    .doOnNext {
+                        Timber.d("TUC - Resource state: ${it.state}")
+                    }
+                    .mapResource({ it -> it[0] }, { it })
 
-    fun getWallets(): Flowable<Resource<List<WalletEntity>, ServerException>> = wallets.toFlowable(BackpressureStrategy.LATEST)
+    fun getWallets(): Flowable<Resource<List<WalletEntity>, ServerException>> = wallets
 
     fun getOperations(): Flowable<Resource<List<Operation>, ServerException>> =
             transactionsFilter
