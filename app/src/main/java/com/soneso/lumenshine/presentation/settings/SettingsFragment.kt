@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.presentation.general.LsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -23,12 +22,7 @@ class SettingsFragment : LsFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initView()
         setupListeners()
-    }
-
-    private fun initView() {
-        fingerpint_enabled_switch.isChecked = LsPrefs.isFingeprintEnabled
     }
 
     private fun setupListeners() {
@@ -39,11 +33,6 @@ class SettingsFragment : LsFragment() {
         settings_change_tfa_setting.setOnClickListener {
             startActivity(Intent(context, ChangeTfaActivity::class.java))
         }
-
-        fingerpint_enabled_switch.setOnCheckedChangeListener { _, b ->
-            LsPrefs.isFingeprintEnabled = b
-        }
-
     }
 
     companion object {

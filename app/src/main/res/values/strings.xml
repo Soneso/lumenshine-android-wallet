@@ -161,6 +161,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="wallet_button_fund_wallet">Fund Wallet</string>
     <string name="wallet">Wallet</string>
 
+    <string name="no_fingerprint_available">You have to set a fingerprint in your phone settings if you want to use this feature!</string>
+
     <string name="error">Error</string>
 
     <string name="ok">OK</string>
@@ -661,5 +663,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="error_invalid_forename">Invalid forename</string>
 
     <string name="error_invalid_lastname">Invalid lastname</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

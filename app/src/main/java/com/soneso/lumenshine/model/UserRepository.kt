@@ -308,6 +308,12 @@ class UserRepository @Inject constructor(
         }
     }
 
+    fun savePassword(password: String): Completable =
+            Completable.create {
+                LsPrefs.userPassword = password
+                it.onComplete()
+            }
+
     companion object {
 
         const val TAG = "UserRepository"

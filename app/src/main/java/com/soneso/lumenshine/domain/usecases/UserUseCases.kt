@@ -111,6 +111,8 @@ class UserUseCases
 //                }
 //    }
 
+    fun savePassword(password: CharSequence): Completable = userRepo.savePassword(password.toString())
+
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 
     fun logout(): Completable {

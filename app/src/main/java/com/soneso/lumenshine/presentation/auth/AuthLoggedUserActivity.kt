@@ -7,8 +7,10 @@ import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavDestination
 import com.google.android.material.navigation.NavigationView
+import com.mtramin.rxfingerprint.RxFingerprint
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.auth.more.LostCredentialFragment
+import com.soneso.lumenshine.presentation.util.showAlert
 import kotlinx.android.synthetic.main.activity_base_auth.*
 import kotlinx.android.synthetic.main.tabs_auth_logged_user.*
 
@@ -23,7 +25,13 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
 
         setupDrawer()
         setupTabs()
-        navigate(R.id.to_pass_screen)
+
+        val hasFingerprint = intent?.getBooleanExtra(EXTRA_FINGERPRINT, false) ?: false
+        if (hasFingerprint) {
+//            navigate()
+        } else {
+            navigate(R.id.to_pass_screen)
+        }
     }
 
     override fun invalidateCurrentSelection(destination: NavDestination) {
@@ -36,7 +44,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                 homeTab.isSelected = true
                 selectMenuItem(R.id.home_item)
             }
-            R.id.fingerprint_screen -> {
+            R.id.fingerprint_setup_screen -> {
                 fingerprintTab.isSelected = true
                 selectMenuItem(R.id.fingerprit_item)
             }
@@ -52,12 +60,22 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                     selectMenuItem(R.id.lostpass_item)
                 }
                 R.id.homeTab -> navigate(R.id.to_pass_screen)
-                R.id.fingerprintTab -> navigate(R.id.to_fingerprint_screen)
+                R.id.fingerprintTab -> {
+                    if (RxFingerprint.isAvailable(this)) {
+                        navigate(R.id.to_fingerprint_setup_screen)
+                    } else {
+                        showAlert(R.string.error, R.string.no_fingerprint_available)
+                    }
+                }
             }
         }
         homeTab.setOnClickListener(tabClickListener)
         signOutTab.setOnClickListener(tabClickListener)
         fingerprintTab.setOnClickListener(tabClickListener)
+
+        if (!RxFingerprint.isHardwareDetected(this)) {
+            fingerprintTab.visibility = View.GONE
+        }
     }
 
     private fun setupDrawer() {
@@ -88,9 +106,11 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
 
     companion object {
         const val TAG = "AuthLoggedUserActivity"
+        private const val EXTRA_FINGERPRINT = "$TAG.EXTRA_FINGERPRINT"
 
-        fun startInstance(context: Context) {
+        fun startInstance(context: Context, hasFingerprint: Boolean = false) {
             val intent = Intent(context, AuthLoggedUserActivity::class.java)
+            intent.putExtra(EXTRA_FINGERPRINT, hasFingerprint)
             context.startActivity(intent)
         }
     }
