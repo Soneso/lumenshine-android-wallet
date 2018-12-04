@@ -19,6 +19,8 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
     override val tabLayoutId: Int
         get() = R.layout.tabs_auth_logged_user
     private lateinit var tabClickListener: View.OnClickListener
+    var loginWithTouchConfigured: Boolean = false
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +28,8 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
         setupDrawer()
         setupTabs()
 
-        val hasFingerprint = intent?.getBooleanExtra(EXTRA_FINGERPRINT, false) ?: false
-        if (hasFingerprint) {
+        loginWithTouchConfigured = intent?.getBooleanExtra(EXTRA_FINGERPRINT, false) ?: false
+        if (loginWithTouchConfigured) {
             navigate(R.id.to_fingerprint_screen)
         } else {
             navigate(R.id.to_pass_screen)
@@ -44,7 +46,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                 homeTab.isSelected = true
                 selectMenuItem(R.id.home_item)
             }
-            R.id.fingerprint_setup_screen -> {
+            R.id.fingerprint_setup_screen, R.id.fingerprint_screen -> {
                 fingerprintTab.isSelected = true
                 selectMenuItem(R.id.fingerprit_item)
             }
@@ -61,10 +63,10 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                 }
                 R.id.homeTab -> navigate(R.id.to_pass_screen)
                 R.id.fingerprintTab -> {
-                    if (RxFingerprint.isAvailable(this)) {
-                        navigate(R.id.to_fingerprint_setup_screen)
-                    } else {
-                        showAlert(R.string.error, R.string.no_fingerprint_available)
+                    when {
+                        loginWithTouchConfigured -> navigate(R.id.to_fingerprint_screen)
+                        RxFingerprint.isAvailable(this) -> navigate(R.id.to_fingerprint_setup_screen)
+                        else -> showAlert(R.string.error, R.string.no_fingerprint_available)
                     }
                 }
             }
@@ -74,7 +76,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
         fingerprintTab.setOnClickListener(tabClickListener)
 
         if (!RxFingerprint.isHardwareDetected(this)) {
-            fingerprintTab.visibility = View.GONE
+            hideFingerprintTab()
         }
     }
 

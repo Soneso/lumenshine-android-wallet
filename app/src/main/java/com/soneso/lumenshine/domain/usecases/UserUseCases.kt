@@ -40,6 +40,13 @@ class UserUseCases
 
     fun confirmTfaRegistration(tfaCode: String) = userRepo.confirmTfaRegistration(tfaCode)
 
+    fun login(): Single<RegistrationStatus> =
+            userRepo.loadUserCredentials()
+                    .flatMap {
+                        val tfaCode = OtpProvider.currentTotpCode(it.tfaSecret.decodeBase32()) ?: ""
+                        login(it.username, it.password, tfaCode)
+                    }
+
     fun login(password: CharSequence): Single<RegistrationStatus> =
             userRepo.loadUserCredentials()
                     .flatMap {

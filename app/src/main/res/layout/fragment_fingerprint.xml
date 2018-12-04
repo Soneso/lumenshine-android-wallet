@@ -16,8 +16,23 @@
             style="@style/LsCardTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_continue" />
+            android:text="@string/login_with_fingerprint" />
 
+        <com.soneso.lumenshine.presentation.widgets.LsImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_10"
+            android:src="@drawable/icon_fingerprint" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/cancelButton"
+            style="@style/WhiteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_10"
+            android:text="@string/cancel" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

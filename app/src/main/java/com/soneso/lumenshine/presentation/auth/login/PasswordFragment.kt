@@ -38,8 +38,18 @@ class PasswordFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupFingerprintButton()
         setupListeners()
         subscribeForLiveData()
+    }
+
+    private fun setupFingerprintButton() {
+        val hasFingerprint = (authActivity as? AuthLoggedUserActivity)?.loginWithTouchConfigured
+        if (hasFingerprint == true) {
+            fingerprintButton.visibility = View.VISIBLE
+        } else {
+            fingerprintButton.visibility = View.GONE
+        }
     }
 
     override fun onResume() {
@@ -60,9 +70,9 @@ class PasswordFragment : AuthFragment() {
 
     private fun setupListeners() {
 
+        fingerprintButton.setOnClickListener { authActivity.navigate(R.id.to_fingerprint_screen) }
         unlockButton.setOnClickListener { attemptLogin() }
-        lostPassButton.setOnClickListener {
-        }
+        lostPassButton.setOnClickListener {}
     }
 
     private fun subscribeForLiveData() {
@@ -105,6 +115,7 @@ class PasswordFragment : AuthFragment() {
                     tfaCodeView.error = e.displayMessage
                 } else {
                     tfaCodeView.visibility = View.VISIBLE
+                    fingerprintButton.visibility = View.GONE
                     (authActivity as AuthLoggedUserActivity).hideFingerprintTab()
                 }
             }
