@@ -13,14 +13,14 @@ import com.soneso.lumenshine.presentation.auth.AuthFragment
  * A simple [Fragment] subclass.
  *
  */
-class FingerprintLoginFragment : AuthFragment() {
+class FingerprintFragment : AuthFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_fingerprint_login, container, false)
+            inflater.inflate(R.layout.fragment_fingerprint, container, false)
 
     companion object {
-        const val TAG = "FingerprintLoginFragment"
+        const val TAG = "FingerprintFragment"
 
-        fun newInstance() = FingerprintLoginFragment()
+        fun newInstance() = FingerprintFragment()
     }
 }

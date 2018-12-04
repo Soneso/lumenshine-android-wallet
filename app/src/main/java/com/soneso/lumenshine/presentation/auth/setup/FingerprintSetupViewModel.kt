@@ -9,7 +9,9 @@ import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.Success
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class FingerprintSetupViewModel(private val useCase: UserUseCases) : ViewModel() {
 
@@ -19,7 +21,9 @@ class FingerprintSetupViewModel(private val useCase: UserUseCases) : ViewModel()
     fun loginAndSetFingerPrint(password: CharSequence) {
         liveLogin.putValue(Resource(Resource.LOADING))
         val d = useCase.login(password)
+                .subscribeOn(Schedulers.io())
                 .flatMapCompletable { useCase.savePassword(password) }
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveLogin.putValue(Success(Unit))
                 }, {

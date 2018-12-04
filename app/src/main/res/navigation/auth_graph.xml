@@ -42,13 +42,13 @@
         android:id="@+id/pass_screen"
         android:name="com.soneso.lumenshine.presentation.auth.login.PasswordFragment" />
 
-    <!--<action-->
-    <!--android:id="@+id/to_pass_screen"-->
-    <!--app:destination="@id/pass_screen" />-->
+    <action
+        android:id="@+id/to_fingerprint_screen"
+        app:destination="@id/fingerprint_screen" />
 
-    <!--<fragment-->
-    <!--android:id="@+id/pass_screen"-->
-    <!--android:name="com.soneso.lumenshine.presentation.auth.login.PasswordFragment" />-->
+    <fragment
+        android:id="@+id/fingerprint_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.login.FingerprintFragment" />
 
 
     <action

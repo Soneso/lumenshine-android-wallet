@@ -3,6 +3,7 @@ package com.soneso.lumenshine.model
 import com.moandjiezana.toml.Toml
 import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
+import com.soneso.lumenshine.model.entities.UserCredentialsEntity
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
 import com.soneso.lumenshine.networking.NetworkStateObserver
@@ -126,7 +127,7 @@ class UserRepository @Inject constructor(
                 .doOnSuccess { LsPrefs.registrationCompleted = it.isSetupCompleted() }
     }
 
-    fun loginStep1(email: String, tfaCode: String? = null): Single<UserSecurity> {
+    fun loginStep1(email: String, tfaCode: String?): Single<UserSecurity> {
 
         return userApi.loginStep1(email, tfaCode)
                 .onErrorResumeNext { Single.error(LsException(it)) }
@@ -237,6 +238,9 @@ class UserRepository @Inject constructor(
 
     fun loadTfaSecret(): Single<String> = Single.just(LsPrefs.tfaSecret)
 
+    fun loadUserCredentials(): Single<UserCredentialsEntity> =
+            Single.just(UserCredentialsEntity(LsPrefs.username, LsPrefs.tfaSecret, LsPrefs.userPassword, LsPrefs.registrationCompleted))
+
     fun requestEmailForPasswordReset(email: String): Completable =
             userApi.requestResetPasswordEmail(email)
                     .onErrorResumeNext { Single.error(LsException(it)) }
@@ -293,8 +297,6 @@ class UserRepository @Inject constructor(
                     true
                 }, { it })
     }
-
-    fun isUserLoggedIn(): Single<Boolean> = Single.just(LsPrefs.registrationCompleted && LsPrefs.tfaSecret.isNotEmpty())
 
     fun logout(): Completable {
         return Completable.create {

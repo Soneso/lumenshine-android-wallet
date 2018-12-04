@@ -28,7 +28,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
 
         val hasFingerprint = intent?.getBooleanExtra(EXTRA_FINGERPRINT, false) ?: false
         if (hasFingerprint) {
-//            navigate()
+            navigate(R.id.to_fingerprint_screen)
         } else {
             navigate(R.id.to_pass_screen)
         }
