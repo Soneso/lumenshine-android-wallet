@@ -20,9 +20,8 @@ class FingerprintSetupViewModel(private val useCase: UserUseCases) : ViewModel()
 
     fun loginAndSetFingerPrint(password: CharSequence) {
         liveLogin.putValue(Resource(Resource.LOADING))
-        val d = useCase.login(password)
+        val d = useCase.loginAndSavePass(password)
                 .subscribeOn(Schedulers.io())
-                .flatMapCompletable { useCase.savePassword(password) }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     liveLogin.putValue(Success(Unit))

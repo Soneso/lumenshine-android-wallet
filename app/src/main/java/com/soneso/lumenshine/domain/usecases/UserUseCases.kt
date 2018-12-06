@@ -2,12 +2,13 @@ package com.soneso.lumenshine.domain.usecases
 
 import com.google.authenticator.OtpProvider
 import com.soneso.lumenshine.domain.data.CredentialStatus
+import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.domain.util.toCharArray
 import com.soneso.lumenshine.model.UserRepository
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserSecurity
+import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.util.decodeBase32
-import com.soneso.lumenshine.util.LsException
 import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
@@ -54,6 +55,9 @@ class UserUseCases
                         login(it.username, password.toString(), tfaCode)
                     }
 
+    fun loginAndSavePass(password: CharSequence): Completable =
+            login(password).flatMapCompletable { userRepo.savePassword(password.toString()) }
+
     fun login(password: CharSequence, tfaCode: CharSequence): Single<RegistrationStatus> =
             userRepo.loadUserCredentials()
                     .flatMap { login(it.username, password.toString(), tfaCode.toString()) }
@@ -64,11 +68,24 @@ class UserUseCases
                     val sep10Challenge = it.sep10Challenge
                     val helper = UserSecurityHelper(password.toCharArray())
                     val keyPair = helper.decipherUserSecurity(it)
-                            ?: throw LsException("Wrong password")
+                            ?: throw ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)
                     mnemonic = String(helper.mnemonicChars)
                     Pair(sep10Challenge, keyPair)
                 }
                 .flatMap { userRepo.loginStep2(it.first, it.second) }
+                .flatMap { status ->
+                    userRepo.loadUserCredentials()
+                            .flatMapCompletable {
+                                if (it.password.isNotEmpty()) {
+                                    // cristi.paval, 12/5/18 - that means the user has configured biometric login, so we update the password
+                                    userRepo.savePassword(password.toString())
+                                } else {
+                                    Completable.complete()
+                                }
+                            }
+                            .toSingle { status }
+
+                }
     }
 
     fun getMnemonic() = mnemonic
@@ -123,8 +140,6 @@ class UserUseCases
 //                    }
 //                }
 //    }
-
-    fun savePassword(password: CharSequence): Completable = userRepo.savePassword(password.toString())
 
     fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
 

@@ -44,7 +44,7 @@ class PasswordFragment : AuthFragment() {
     }
 
     private fun setupFingerprintButton() {
-        val hasFingerprint = (authActivity as? AuthLoggedUserActivity)?.loginWithTouchConfigured
+        val hasFingerprint = (authActivity as? AuthLoggedUserActivity)?.canLoginWithTouch()
         if (hasFingerprint == true) {
             fingerprintButton.visibility = View.VISIBLE
         } else {

@@ -19,8 +19,7 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
     override val tabLayoutId: Int
         get() = R.layout.tabs_auth_logged_user
     private lateinit var tabClickListener: View.OnClickListener
-    var loginWithTouchConfigured: Boolean = false
-        private set
+    private var loginWithTouchConfigured: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +50,10 @@ class AuthLoggedUserActivity : BaseAuthActivity() {
                 selectMenuItem(R.id.fingerprit_item)
             }
         }
+    }
+
+    fun canLoginWithTouch(): Boolean {
+        return loginWithTouchConfigured && fingerprintTab.visibility == View.VISIBLE
     }
 
     private fun setupTabs() {
