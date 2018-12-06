@@ -3,6 +3,7 @@ package com.soneso.lumenshine.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.soneso.lumenshine.domain.data.CredentialStatus
 import com.soneso.lumenshine.domain.usecases.UserUseCases
 import com.soneso.lumenshine.presentation.util.putValue
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,10 +14,10 @@ import java.util.concurrent.TimeUnit
 class SplashViewModel(useCase: UserUseCases) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    val liveIsUserLoggedIn: LiveData<Boolean> = MutableLiveData<Boolean>()
+    val liveIsUserLoggedIn: LiveData<CredentialStatus> = MutableLiveData<CredentialStatus>()
 
     init {
-        val d = useCase.isUserLoggedIn()
+        val d = useCase.loginCredentialStatus()
                 .delay(1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -161,6 +161,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="wallet_button_fund_wallet">Fund Wallet</string>
     <string name="wallet">Wallet</string>
 
+    <string name="no_fingerprint_available">You have to set a fingerprint in your phone settings if you want to use this feature!</string>
+
     <string name="error">Error</string>
 
     <string name="ok">OK</string>
@@ -327,7 +329,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="face_recognition">Face Recognition</string>
 
-    <string name="hint_face_fingerprint">If you activate, the app will request your %@ instead of password when opened. Entering the password will not be required each time you open the app. To activate %@ please first insert your password below.</string>
+    <string name="hint_face_fingerprint">If you activate, the app will request your fingerprint instead of password when opened. Entering the password will not be required each time you open the app. To activate fingerprint please first insert your password below.</string>
 
     <string name="enabled">Enabled</string>
 
@@ -661,5 +663,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="error_invalid_forename">Invalid forename</string>
 
     <string name="error_invalid_lastname">Invalid lastname</string>
+
+    <string name="login_with_fingerprint">Log in with fingerprint</string>
 
 </resources>

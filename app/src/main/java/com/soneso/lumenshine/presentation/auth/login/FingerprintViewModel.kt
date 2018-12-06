@@ -14,29 +14,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class PasswordViewModel(private val useCases: UserUseCases) : ViewModel() {
+class FingerprintViewModel(private val useCase: UserUseCases) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     val liveLogin: LiveData<Resource<RegistrationStatus, LsException>> = MutableLiveData()
 
-    fun login(password: CharSequence, tfaCode: CharSequence) {
+    fun login() {
 
         liveLogin.putValue(Resource(Resource.LOADING))
-        val d = useCases.login(password, tfaCode)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveLogin.putValue(Success(it))
-                }, {
-                    liveLogin.putValue(Failure(it as LsException))
-                })
-        compositeDisposable.add(d)
-    }
-
-    fun login(password: CharSequence) {
-
-        liveLogin.putValue(Resource(Resource.LOADING))
-        val d = useCases.login(password)
+        val d = useCase.login()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

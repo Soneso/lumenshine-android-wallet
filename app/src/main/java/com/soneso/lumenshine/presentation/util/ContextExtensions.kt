@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.soneso.lumenshine.R
@@ -68,4 +69,12 @@ fun Context.color(@ColorRes colorId: Int): Int {
     } else {
         ContextCompat.getColor(this, colorId)
     }
+}
+
+fun Context.showAlert(titleResId: Int, messageResId: Int) {
+    AlertDialog.Builder(this)
+            .setTitle(titleResId)
+            .setMessage(messageResId)
+            .setNeutralButton(R.string.ok) { dialog, _ -> dialog.dismiss() }
+            .show()
 }

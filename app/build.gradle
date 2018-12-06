@@ -62,7 +62,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     // cristi.paval, 3/9/18 - RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
     implementation 'com.github.pwittchen:reactivenetwork-rx2:2.1.0'
     // cristi.paval, 3/26/18 - Retrofit
     implementation('com.squareup.retrofit2:retrofit:2.3.0') {
@@ -75,9 +75,9 @@ dependencies {
         exclude group: "com.squareup.okhttp3"
     }
     // cristi.paval, 3/16/18 - library to load images
-    implementation 'com.github.bumptech.glide:glide:4.7.1'
-    kapt 'com.github.bumptech.glide:compiler:4.7.1'
-    implementation 'com.github.bumptech.glide:annotations:4.7.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.bumptech.glide:annotations:4.8.0'
     // cristi.paval, 3/19/18 - library used to draw charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     // cristi.paval, 3/28/18 - Bouncy castle, library for java security compatibility
@@ -113,6 +113,7 @@ dependencies {
         exclude group: "net.i2p.crypto"
         exclude group: "commons-io"
     }
+    implementation 'com.mtramin:rxfingerprint:2.2.1'
 }
 
 

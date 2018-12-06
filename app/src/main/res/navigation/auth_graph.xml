@@ -28,11 +28,11 @@
 
     <fragment
         android:id="@+id/lost_credential_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.LostCredentialFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.more.LostCredentialFragment" />
 
     <fragment
         android:id="@+id/to_email_lost_credential_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.EmailLostCredentialFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.more.EmailLostCredentialFragment" />
 
     <action
         android:id="@+id/to_pass_screen"
@@ -42,14 +42,22 @@
         android:id="@+id/pass_screen"
         android:name="com.soneso.lumenshine.presentation.auth.login.PasswordFragment" />
 
-
     <action
         android:id="@+id/to_fingerprint_screen"
         app:destination="@id/fingerprint_screen" />
 
     <fragment
         android:id="@+id/fingerprint_screen"
-        android:name="com.soneso.lumenshine.presentation.auth.login.FingerPrintFragment" />
+        android:name="com.soneso.lumenshine.presentation.auth.login.FingerprintFragment" />
+
+
+    <action
+        android:id="@+id/to_fingerprint_setup_screen"
+        app:destination="@id/fingerprint_setup_screen" />
+
+    <fragment
+        android:id="@+id/fingerprint_setup_screen"
+        android:name="com.soneso.lumenshine.presentation.auth.setup.FingerprintSetupFragment" />
 
 
     <action

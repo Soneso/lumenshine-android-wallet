@@ -20,11 +20,12 @@ object LsPrefs {
     private const val KEY_APP_PASS = "app-pass"
     private const val KEY_ENCRYPTION_IV = "encryption-iv"
     private const val KEY_PASS_SALT = "pass-salt"
+
     private const val KEY_USERNAME = "username"
     const val KEY_JWT_TOKEN = "api-token"
     private const val KEY_TFA_SECRET = "tfa-secret"
+    private const val KEY_USER_PASSWORD = "user-password"
     private const val KEY_REGISTRATION_COMPLETE = "registration-complete"
-    private const val KEY_FINGERPRINT_ENABLED = "fingerprint_enabled"
 
     private val listeners = mutableListOf<((String) -> Unit)>()
     private val prefs: SharedPreferences
@@ -110,6 +111,12 @@ object LsPrefs {
             encryptAndSaveString(KEY_TFA_SECRET, value)
         }
 
+    var userPassword: String
+        get() = decryptAndGetString(KEY_USER_PASSWORD)
+        set(value) {
+            encryptAndSaveString(KEY_USER_PASSWORD, value)
+        }
+
     var registrationCompleted: Boolean
         get() {
             val value = decryptAndGetString(KEY_REGISTRATION_COMPLETE)
@@ -118,12 +125,6 @@ object LsPrefs {
         set(value) {
             encryptAndSaveString(KEY_REGISTRATION_COMPLETE, value.toString())
         }
-
-    var isFingeprintEnabled: Boolean
-        get() = prefs.getBoolean(KEY_FINGERPRINT_ENABLED, false)
-        set(value) = prefs.edit()
-                .putBoolean(KEY_FINGERPRINT_ENABLED, value)
-                .apply()
 
     private fun encryptAndSaveString(key: String, value: String) {
 
@@ -162,5 +163,12 @@ object LsPrefs {
 
     fun registerListener(listener: ((String) -> Unit)) {
         listeners.add(listener)
+    }
+
+    fun clearAllKeys() {
+        jwtToken = ""
+        tfaSecret = ""
+        userPassword = ""
+        registrationCompleted = false
     }
 }

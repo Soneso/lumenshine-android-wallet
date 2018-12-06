@@ -1,10 +1,9 @@
-package com.soneso.lumenshine.presentation.auth.login
+package com.soneso.lumenshine.presentation.auth.setup
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.soneso.lumenshine.domain.usecases.UserUseCases
-import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.util.putValue
 import com.soneso.lumenshine.util.Failure
 import com.soneso.lumenshine.util.LsException
@@ -14,33 +13,18 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class PasswordViewModel(private val useCases: UserUseCases) : ViewModel() {
+class FingerprintSetupViewModel(private val useCase: UserUseCases) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    val liveLogin: LiveData<Resource<RegistrationStatus, LsException>> = MutableLiveData()
+    val liveLogin: LiveData<Resource<Unit, LsException>> = MutableLiveData()
 
-    fun login(password: CharSequence, tfaCode: CharSequence) {
-
+    fun loginAndSetFingerPrint(password: CharSequence) {
         liveLogin.putValue(Resource(Resource.LOADING))
-        val d = useCases.login(password, tfaCode)
+        val d = useCase.loginAndSavePass(password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    liveLogin.putValue(Success(it))
-                }, {
-                    liveLogin.putValue(Failure(it as LsException))
-                })
-        compositeDisposable.add(d)
-    }
-
-    fun login(password: CharSequence) {
-
-        liveLogin.putValue(Resource(Resource.LOADING))
-        val d = useCases.login(password)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    liveLogin.putValue(Success(it))
+                    liveLogin.putValue(Success(Unit))
                 }, {
                     liveLogin.putValue(Failure(it as LsException))
                 })

@@ -61,11 +61,11 @@ object OtpProvider {
         }
 
         val codeLength = if (challenge == null) PIN_LENGTH else REFLECTIVE_PIN_LENGTH
-        val pcg = PassCodeGenerator(codeLength, {
+        val pcg = PassCodeGenerator(codeLength) {
             val mac = Mac.getInstance("HMACSHA1")
             mac.init(SecretKeySpec(secret.toByteArray(), ""))
             mac.doFinal(it)
-        })
+        }
 
         return pcg.generateResponseCode(otp_state, challenge)
     }

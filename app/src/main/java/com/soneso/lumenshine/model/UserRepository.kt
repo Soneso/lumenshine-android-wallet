@@ -3,6 +3,7 @@ package com.soneso.lumenshine.model
 import com.moandjiezana.toml.Toml
 import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
+import com.soneso.lumenshine.model.entities.UserCredentialsEntity
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
 import com.soneso.lumenshine.networking.NetworkStateObserver
@@ -126,7 +127,7 @@ class UserRepository @Inject constructor(
                 .doOnSuccess { LsPrefs.registrationCompleted = it.isSetupCompleted() }
     }
 
-    fun loginStep1(email: String, tfaCode: String? = null): Single<UserSecurity> {
+    fun loginStep1(email: String, tfaCode: String?): Single<UserSecurity> {
 
         return userApi.loginStep1(email, tfaCode)
                 .onErrorResumeNext { Single.error(LsException(it)) }
@@ -237,19 +238,28 @@ class UserRepository @Inject constructor(
 
     fun loadTfaSecret(): Single<String> = Single.just(LsPrefs.tfaSecret)
 
-    fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
+    fun loadUserCredentials(): Single<UserCredentialsEntity> =
+            Single.just(UserCredentialsEntity(LsPrefs.username, LsPrefs.tfaSecret, LsPrefs.userPassword, LsPrefs.registrationCompleted))
 
-        return userApi.requestResetPasswordEmail(email)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
+    fun requestEmailForPasswordReset(email: String): Completable =
+            userApi.requestResetPasswordEmail(email)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
-    fun requestEmailForTfaReset(email: String): Flowable<Resource<Boolean, LsException>> {
-
-        return userApi.requestResetTfaEmail(email)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
+    fun requestEmailForTfaReset(email: String): Completable =
+            userApi.requestResetTfaEmail(email)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
     fun loadUsername(): Single<String> = Single.just(LsPrefs.username)
 
@@ -288,11 +298,10 @@ class UserRepository @Inject constructor(
                 }, { it })
     }
 
-    fun isUserLoggedIn(): Single<Boolean> = Single.just(LsPrefs.registrationCompleted && LsPrefs.tfaSecret.isNotEmpty())
-
     fun logout(): Completable {
         return Completable.create {
             try {
+                LsPrefs.clearAllKeys()
                 db.clearAllTables()
                 it.onComplete()
             } catch (e: Exception) {
@@ -300,6 +309,12 @@ class UserRepository @Inject constructor(
             }
         }
     }
+
+    fun savePassword(password: String): Completable =
+            Completable.create {
+                LsPrefs.userPassword = password
+                it.onComplete()
+            }
 
     companion object {
 
