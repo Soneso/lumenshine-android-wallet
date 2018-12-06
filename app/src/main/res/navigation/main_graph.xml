@@ -21,6 +21,7 @@
         android:id="@+id/wallets_screen"
         android:name="com.soneso.lumenshine.presentation.wallets.WalletsFragment" />
 
+
     <action
         android:id="@+id/to_settings_screen"
         app:destination="@id/settings_screen" />
@@ -28,5 +29,14 @@
     <fragment
         android:id="@+id/settings_screen"
         android:name="com.soneso.lumenshine.presentation.settings.SettingsFragment" />
+
+
+    <action
+        android:id="@+id/to_change_pass_screen"
+        app:destination="@id/change_pass_screen" />
+
+    <fragment
+        android:id="@+id/change_pass_screen"
+        android:name="com.soneso.lumenshine.presentation.settings.ChangePasswordFragment" />
 
 </navigation>

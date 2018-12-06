@@ -8,6 +8,7 @@ import com.soneso.lumenshine.networking.api.LsApi
 import com.soneso.lumenshine.persistence.LsPrefs
 import okhttp3.OkHttpClient
 import okhttp3.internal.platform.Platform
+import org.stellar.sdk.Network
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -17,6 +18,7 @@ object NetworkUtil {
     private var jwtToken = LsPrefs.jwtToken
 
     init {
+        Network.useTestNetwork()
         LsPrefs.registerListener { key ->
             when (key) {
                 LsPrefs.KEY_JWT_TOKEN -> {

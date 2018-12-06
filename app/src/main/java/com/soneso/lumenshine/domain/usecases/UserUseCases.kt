@@ -33,7 +33,7 @@ class UserUseCases
         val helper = UserSecurityHelper(password.toCharArray())
         return Single
                 .create<UserSecurity> {
-                    it.onSuccess(helper.generateUserSecurity(emailString))
+                    it.onSuccess(helper.generateUserSecurity())
                     mnemonic = String(helper.mnemonicChars)
                 }
                 .flatMapCompletable { userRepo.createUserAccount(forenameString, lastNameString, emailString, it) }
@@ -115,16 +115,22 @@ class UserUseCases
                 }
     }
 
-//    fun changeUserPassword(currentPass: CharSequence, newPass: CharSequence): Flowable<Resource<Boolean, ServerException>> {
-//
-//        return userRepo.getUserData()
-//                .toFlowable()
-//                .flatMap {
-//                    val helper = UserSecurityHelper(currentPass.toCharArray())
-//                    val us = helper.changePassword(it, newPass.toCharArray())
-//                    userRepo.changeUserPassword(us)
-//                }
-//    }
+    fun changeUserPassword(oldPass: CharSequence, newPass: CharSequence): Completable =
+            userRepo.loadUserAuthData()
+                    .flatMapCompletable { us ->
+                        val helper = UserSecurityHelper(oldPass.toCharArray())
+                        val keyPair = helper.decipherUserSecurity(us)
+                        if (keyPair == null) {
+                            throw ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)
+                        } else {
+                            val newUs = helper.changePassword(us, newPass.toCharArray())
+                            userRepo.loadAndSignSep10Challenge(keyPair)
+                                    .flatMapCompletable {
+                                        newUs.sep10Challenge = it
+                                        userRepo.changeUserPassword(newUs)
+                                    }
+                        }
+                    }
 //
 //    fun changeTfaPassword(pass: CharSequence): Flowable<Resource<String, ServerException>> {
 //
