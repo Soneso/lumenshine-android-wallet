@@ -65,13 +65,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".presentation.settings.FingerPrintSetupActivity" />
-
-        <activity
-            android:name=".presentation.settings.ChangePasswordActivity"
-            android:label="@string/change_password_label"
-            android:parentActivityName=".presentation.MainActivity" />
-
         <activity
             android:name=".presentation.settings.ChangeTfaActivity"
             android:label="@string/change_tfa_label"

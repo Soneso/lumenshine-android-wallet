@@ -11,6 +11,7 @@
         <attr name="android:imeActionId" />
         <attr name="android:imeActionLabel" />
         <attr name="android:drawableEnd" />
+        <attr name="android:textAllCaps" />
     </declare-styleable>
 
     <declare-styleable name="PasswordInputView">

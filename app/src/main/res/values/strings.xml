@@ -525,11 +525,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="change_password_hint">To change your password please provide current and new password.</string>
 
-    <string name="current_password">Current password</string>
+    <string name="current_password">CURRENT PASSWORD</string>
 
-    <string name="new_password">New password</string>
+    <string name="new_password">NEW PASSWORD</string>
 
-    <string name="repeat_new_password">Repeat new password</string>
+    <string name="repeat_new_password">REPEAT NEW PASSWORD</string>
 
     <string name="password_changed">Password successfully changed</string>
 

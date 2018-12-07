@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.general.LsFragment
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -28,7 +29,7 @@ class SettingsFragment : LsFragment() {
     private fun setupListeners() {
 
         settings_change_password_setting.setOnClickListener {
-            startActivity(Intent(context, ChangePasswordActivity::class.java))
+            NavHostFragment.findNavController(this).navigate(R.id.to_change_pass_screen)
         }
         settings_change_tfa_setting.setOnClickListener {
             startActivity(Intent(context, ChangeTfaActivity::class.java))

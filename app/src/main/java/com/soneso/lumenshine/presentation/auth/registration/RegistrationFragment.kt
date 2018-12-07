@@ -103,7 +103,7 @@ class RegistrationFragment : AuthFragment() {
     }
 
     private fun showPasswordRequirements() {
-        PasswordRequirementsDialog.showInstance(activity!!.supportFragmentManager)
+        PasswordRequirementsDialog.showInstance(activity?.supportFragmentManager ?: return)
     }
 
     private fun setupListeners() {
