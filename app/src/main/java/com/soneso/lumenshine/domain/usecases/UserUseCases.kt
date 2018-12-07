@@ -128,6 +128,15 @@ class UserUseCases
                                     .flatMapCompletable {
                                         newUs.sep10Challenge = it
                                         userRepo.changeUserPassword(newUs)
+                                                .andThen(userRepo.loadUserCredentials())
+                                                .flatMapCompletable {
+                                                    if (it.password.isNotEmpty()) {
+                                                        // cristi.paval, 12/6/18 - if the user has password saved locally, update it
+                                                        userRepo.savePassword(newPass.toString())
+                                                    } else {
+                                                        Completable.complete()
+                                                    }
+                                                }
                                     }
                         }
                     }

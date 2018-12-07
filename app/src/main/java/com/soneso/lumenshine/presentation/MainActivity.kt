@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
@@ -118,6 +119,10 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
 
     private fun changeTitle(titleId: Int) {
         toolbar.title = getString(titleId)
+    }
+
+    fun showLoadingView(show: Boolean) {
+        loadingView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     companion object {

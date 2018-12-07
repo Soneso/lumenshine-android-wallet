@@ -66,6 +66,9 @@ open class FormInputView @JvmOverloads constructor(
         val hint = typedArray.getString(R.styleable.FormInputView_android_hint)
         editTextView.hint = hint
 
+        val textAllCaps = typedArray.getBoolean(R.styleable.FormInputView_android_textAllCaps, false)
+        editTextView.isAllCaps = textAllCaps
+
         editTextView.imeOptions = typedArray.getInt(R.styleable.FormInputView_android_imeOptions, EditorInfo.IME_ACTION_UNSPECIFIED)
 
         val imeActionId = typedArray.getInt(R.styleable.FormInputView_android_imeActionId, 0)

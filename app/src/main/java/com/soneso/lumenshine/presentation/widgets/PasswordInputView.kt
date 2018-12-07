@@ -1,6 +1,7 @@
 package com.soneso.lumenshine.presentation.widgets
 
 import android.content.Context
+import android.text.method.PasswordTransformationMethod
 import android.util.AttributeSet
 import com.soneso.lumenshine.R
 import kotlinx.android.synthetic.main.ls_input_view.view.*
@@ -8,6 +9,10 @@ import kotlinx.android.synthetic.main.ls_input_view.view.*
 class PasswordInputView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FormInputView(context, attrs, defStyleAttr) {
+
+    init {
+        editTextView.transformationMethod = PasswordTransformationMethod.getInstance()
+    }
 
     private val minPasswordLength = 9
 
