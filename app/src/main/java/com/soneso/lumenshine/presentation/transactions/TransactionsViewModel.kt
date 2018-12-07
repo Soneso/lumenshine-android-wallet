@@ -41,7 +41,7 @@ class TransactionsViewModel(private val transactionsUseCases: TransactionsUseCas
                 (liveOperations as MutableLiveData).value = it
             }
 
-    private fun observeFilters() = transactionsUseCases.transactionsFilter
+    private fun observeFilters() = transactionsUseCases.observeTransactionsFilter()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { (liveFilters as MutableLiveData).value = it }

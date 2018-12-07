@@ -57,6 +57,9 @@ class TransactionsFilterFragment : LsFragment() {
             calendar.add(Calendar.SECOND, 59)
             dateTo = calendar.time
             filterViewModel.updateFilters(walletSpinner.selectedItem as WalletEntity, dateFrom, dateTo)
+
+            filterViewModel.updateOperationFilter(memoText.text.toString(), paymentsSwitch.isChecked, offersSwitch.isChecked, othersSwitch.isChecked)
+
             activity!!.supportFragmentManager.popBackStack()
         }
 
@@ -83,6 +86,41 @@ class TransactionsFilterFragment : LsFragment() {
                     .addToBackStack(OtherFilterFragment.TAG)
                     .commit()
         }
+
+        paymentsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            filterViewModel.updatePaymentOperationFilter(isChecked)
+        }
+        paymentSwitchContainer.setOnClickListener {
+            paymentsSwitch.isEnabled = true
+            paymentsSwitch.performClick()
+            paymentSwitchContainer.visibility = View.GONE
+        }
+
+        offersSwitch.setOnCheckedChangeListener { _, isChecked ->
+            filterViewModel.updateOfferOperationFilter(isChecked)
+        }
+        offersSwitchContainer.setOnClickListener {
+            offersSwitch.isEnabled = true
+            offersSwitch.performClick()
+            offersSwitchContainer.visibility = View.GONE
+        }
+
+        othersSwitch.setOnCheckedChangeListener { _, isChecked ->
+            filterViewModel.updateOtherOperationFilter(isChecked)
+        }
+        othersSwitchContainer.setOnClickListener {
+            othersSwitch.isEnabled = true
+            othersSwitch.performClick()
+            othersSwitchContainer.visibility = View.GONE
+        }
+
+        clearAllFilterButton.setOnClickListener {
+            filterViewModel.resetOperationFilter()
+            initiateOperationFilterData()
+            initiateTransactionFilterData(filterViewModel.initialTransactionFilterState)
+        }
+
+        initiateOperationFilterData()
     }
 
     private fun subscribeForLiveData() {
@@ -97,14 +135,55 @@ class TransactionsFilterFragment : LsFragment() {
         })
 
         filterViewModel.liveTransactionsFilter.observe(this, Observer {
-            //TODO question in Trello
-            for (i in 0 until walletSpinner.adapter.count) {
-                if (walletSpinner.adapter.getItem(i) == it.wallet) {
-                    walletSpinner.setSelection(i)
-                }
-            }
-            updateDates(it.dateFrom, it.dateTo)
+            initiateTransactionFilterData(it)
+            filterViewModel.initialTransactionFilterState = it
         })
+    }
+
+    private fun initiateTransactionFilterData(it: TransactionsFilter) {
+        for (i in 0 until walletSpinner.adapter.count) {
+            if (walletSpinner.adapter.getItem(i) == it.wallet) {
+                walletSpinner.setSelection(i)
+            }
+        }
+        updateDates(it.dateFrom, it.dateTo)
+    }
+
+    private fun initiateOperationFilterData() {
+        val operationFilter = filterViewModel.getOperationFilter()
+        memoText.setText(operationFilter.memo)
+
+        if (operationFilter.paymentsFilter.active) {
+            if (operationFilter.paymentsFilter.partialFilter()) {//#Zica
+                paymentsSwitch.isEnabled = false
+                paymentSwitchContainer.visibility = View.VISIBLE
+            } else {
+                paymentsSwitch.isEnabled = true
+                paymentSwitchContainer.visibility = View.GONE
+            }
+        }
+        if (operationFilter.offersFilter.active) {
+            if (operationFilter.offersFilter.partialFilter()) {
+                offersSwitch.isEnabled = false
+                offersSwitchContainer.visibility = View.VISIBLE
+            } else {
+                offersSwitch.isEnabled = true
+                offersSwitchContainer.visibility = View.GONE
+            }
+        }
+        if (operationFilter.othersFilter.active) {
+            if (operationFilter.othersFilter.partialFilter()) {
+                othersSwitch.isEnabled = false
+                othersSwitchContainer.visibility = View.VISIBLE
+            } else {
+                othersSwitch.isEnabled = true
+                othersSwitchContainer.visibility = View.GONE
+            }
+        }
+
+        paymentsSwitch.isChecked = operationFilter.paymentsFilter.active
+        offersSwitch.isChecked = operationFilter.offersFilter.active
+        othersSwitch.isChecked = operationFilter.othersFilter.active
     }
 
     private fun updateDates(dateFrom: Date, dateTo: Date) {
@@ -114,7 +193,7 @@ class TransactionsFilterFragment : LsFragment() {
         val calendar = Calendar.getInstance()
         calendar.time = dateFrom
 
-        dateFromDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        dateFromDialog = DatePickerDialog(context!!, R.style.MaterialDatePickerTheme, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             val selectedDate: String = dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year
             dateFromText.text = selectedDate
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
@@ -122,7 +201,7 @@ class TransactionsFilterFragment : LsFragment() {
         dateFromDialog.datePicker.maxDate = Date(dateTo.time - TransactionsFilter.DAY_IN_MS).time
 
         calendar.time = dateTo
-        dateToDialog = DatePickerDialog(context!!, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+        dateToDialog = DatePickerDialog(context!!, R.style.MaterialDatePickerTheme, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             val selectedDate: String = dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year
             dateToText.text = selectedDate
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))

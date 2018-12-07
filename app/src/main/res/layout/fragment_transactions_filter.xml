@@ -171,6 +171,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <View
+                    android:id="@+id/paymentSwitchContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/paymentsSwitch"
+                    app:layout_constraintEnd_toEndOf="@id/paymentsSwitch"
+                    app:layout_constraintStart_toStartOf="@id/paymentsSwitch"
+                    app:layout_constraintTop_toTopOf="@id/paymentsSwitch" />
+
                 <com.soneso.lumenshine.presentation.widgets.LsTextView
                     style="@style/LsCardTitleBlue"
                     android:layout_width="wrap_content"
@@ -192,12 +202,22 @@
                 app:layout_constraintTop_toBottomOf="@id/paymentContainer">
 
                 <Switch
-                    android:id="@+id/switchOffers"
+                    android:id="@+id/offersSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/offersSwitchContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/offersSwitch"
+                    app:layout_constraintEnd_toEndOf="@id/offersSwitch"
+                    app:layout_constraintStart_toStartOf="@id/offersSwitch"
+                    app:layout_constraintTop_toTopOf="@id/offersSwitch" />
 
                 <com.soneso.lumenshine.presentation.widgets.LsTextView
                     style="@style/LsCardTitleBlue"
@@ -207,7 +227,7 @@
                     android:text="@string/offers"
                     android:textAllCaps="false"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/switchOffers"
+                    app:layout_constraintStart_toEndOf="@id/offersSwitch"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -220,12 +240,22 @@
                 app:layout_constraintTop_toBottomOf="@id/offersContainer">
 
                 <Switch
-                    android:id="@+id/switchOther"
+                    android:id="@+id/othersSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/othersSwitchContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/othersSwitch"
+                    app:layout_constraintEnd_toEndOf="@id/othersSwitch"
+                    app:layout_constraintStart_toStartOf="@id/othersSwitch"
+                    app:layout_constraintTop_toTopOf="@id/othersSwitch" />
 
                 <com.soneso.lumenshine.presentation.widgets.LsTextView
                     style="@style/LsCardTitleBlue"
@@ -234,8 +264,8 @@
                     android:layout_marginStart="@dimen/size_36"
                     android:text="@string/other"
                     android:textAllCaps="false"
-                    app:layout_constraintStart_toEndOf="@id/switchOther"
-                    app:layout_constraintTop_toTopOf="@id/switchOther" />
+                    app:layout_constraintStart_toEndOf="@id/othersSwitch"
+                    app:layout_constraintTop_toTopOf="@id/othersSwitch" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

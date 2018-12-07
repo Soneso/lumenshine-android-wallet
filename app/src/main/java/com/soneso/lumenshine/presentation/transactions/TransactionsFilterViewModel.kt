@@ -13,6 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.*
+import kotlin.collections.HashSet
 
 class TransactionsFilterViewModel(private val transactionsUseCases: TransactionsUseCases) : ViewModel() {
 
@@ -20,6 +21,7 @@ class TransactionsFilterViewModel(private val transactionsUseCases: Transactions
 
     val liveWallets: LiveData<Resource<List<WalletEntity>, ServerException>> = MutableLiveData()
     val liveTransactionsFilter: LiveData<TransactionsFilter> = MutableLiveData()
+    lateinit var initialTransactionFilterState: TransactionsFilter
 
     init {
         compositeDisposable.add(fetchAllWallets())
@@ -48,4 +50,33 @@ class TransactionsFilterViewModel(private val transactionsUseCases: Transactions
         compositeDisposable.dispose()
         super.onCleared()
     }
+
+    fun updatePaymentOperationFilter(paymentsActive: Boolean) {
+        transactionsUseCases.operationFilter.paymentsFilter.active = paymentsActive
+        if (!paymentsActive) transactionsUseCases.clearPaymentsFilters()
+
+    }
+
+    fun updateOfferOperationFilter(offerActive: Boolean) {
+        transactionsUseCases.operationFilter.offersFilter.active = offerActive
+        if (!offerActive) transactionsUseCases.clearOffersFilters()
+    }
+
+    fun updateOtherOperationFilter(otherActive: Boolean) {
+        transactionsUseCases.operationFilter.othersFilter.active = otherActive
+        if (!otherActive) transactionsUseCases.operationFilter.othersFilter.otherOperations = HashSet()
+    }
+
+    fun updateOperationFilter(memo: String, paymentsActive: Boolean, offersActive: Boolean, otherActive: Boolean) {
+        transactionsUseCases.operationFilter.memo = memo
+        transactionsUseCases.operationFilter.paymentsFilter.active = paymentsActive
+        transactionsUseCases.operationFilter.offersFilter.active = offersActive
+        transactionsUseCases.operationFilter.othersFilter.active = otherActive
+    }
+
+    fun resetOperationFilter() {
+        transactionsUseCases.operationFilter.resetFilter()
+    }
+
+    fun getOperationFilter() = transactionsUseCases.operationFilter
 }

@@ -2,7 +2,14 @@ package com.soneso.lumenshine.presentation.transactions
 
 import androidx.lifecycle.ViewModel
 import com.soneso.lumenshine.domain.usecases.TransactionsUseCases
+import com.soneso.lumenshine.model.entities.operations.Operation
 
 class OtherFilterViewModel(private val transactionsUseCases: TransactionsUseCases) : ViewModel() {
-    //TODO
+
+    fun updateOtherTypesFilter(otherTypesFilter: HashSet<Operation.Type>) {
+        transactionsUseCases.operationFilter.othersFilter.otherOperations = otherTypesFilter
+    }
+
+    fun getOtherTypesFilter(): Set<Operation.Type> =
+            transactionsUseCases.operationFilter.othersFilter.otherOperations
 }

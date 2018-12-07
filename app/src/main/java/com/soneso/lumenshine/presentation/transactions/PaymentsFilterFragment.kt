@@ -43,7 +43,47 @@ class PaymentsFilterFragment : LsFragment() {
             }
         }
 
+        currencySwitch.setOnCheckedChangeListener { _, isChecked ->
+            currencyText.isEnabled = isChecked
+            if (!isChecked) currencyText.text.clear()
+        }
+
+        initiateFilterData()
         clearPaymentFilterButton.setOnClickListener { clearAllFilters() }
+    }
+
+    override fun onDestroyView() {
+        paymentsFilterViewModel.updateReceivedFilter(
+                receivedSwitch.isChecked,
+                if (receivedFromText.text.isEmpty()) null else receivedFromText.text.toString().toInt(),
+                if (receivedToText.text.isEmpty()) null else receivedToText.text.toString().toInt()
+        )
+
+        paymentsFilterViewModel.updateSentFilter(
+                sentSwitch.isChecked,
+                if (amountFromText.text.isEmpty()) null else amountFromText.text.toString().toInt(),
+                if (amountToText.text.isEmpty()) null else amountToText.text.toString().toInt()
+        )
+
+        paymentsFilterViewModel.updateCurrencyFiler(
+                currencySwitch.isChecked,
+                if (currencyText.text.isEmpty()) null else currencyText.text.toString()
+        )
+
+        super.onDestroyView()
+    }
+
+    private fun initiateFilterData() {
+        val paymentFilterData = paymentsFilterViewModel.getPaymentFilterData()
+
+        receivedSwitch.isChecked = paymentFilterData.filterReceived
+        if (paymentFilterData.receivedFrom != null) receivedFromText.setText(paymentFilterData.receivedFrom!!.toString())
+        if (paymentFilterData.receivedTo != null) receivedToText.setText(paymentFilterData.receivedTo!!.toString())
+        sentSwitch.isChecked = paymentFilterData.filterSent
+        if (paymentFilterData.sentFrom != null) amountFromText.setText(paymentFilterData.sentFrom!!.toString())
+        if (paymentFilterData.sentTo != null) amountToText.setText(paymentFilterData.sentTo!!.toString())
+        currencySwitch.isChecked = paymentFilterData.filterCurrency
+        if (paymentFilterData.currency != null) currencyText.setText(paymentFilterData.currency!!)
     }
 
     private fun clearAllFilters() {

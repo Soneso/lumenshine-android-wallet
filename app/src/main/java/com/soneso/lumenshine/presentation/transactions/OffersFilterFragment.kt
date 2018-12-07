@@ -35,7 +35,31 @@ class OffersFilterFragment : LsFragment() {
             if (!isChecked) sellingCurrencyText.text.clear()
         }
 
+        initiateFilterData()
         clearOffersFilterButton.setOnClickListener { clearAllFilters() }
+    }
+
+    override fun onDestroyView() {
+        offersFilterViewModel.updateSellingCurrency(
+                sellingCurrencySwitch.isChecked,
+                if (sellingCurrencyText.text.isEmpty()) null else sellingCurrencyText.text.toString()
+        )
+
+        offersFilterViewModel.updateBuyingCurrency(
+                buyingCurrencySwitch.isChecked,
+                if (buyingCurrencyText.text.isEmpty()) null else buyingCurrencyText.text.toString()
+        )
+
+        super.onDestroyView()
+    }
+
+    private fun initiateFilterData() {
+        val offerFilterData = offersFilterViewModel.getOfferFilterData()
+
+        sellingCurrencySwitch.isChecked = offerFilterData.filterSellingCurrency
+        if (offerFilterData.sellingCurrency != null) sellingCurrencyText.setText(offerFilterData.sellingCurrency)
+        buyingCurrencySwitch.isChecked = offerFilterData.filterBuyingCurrency
+        if (offerFilterData.buyingCurrency != null) buyingCurrencyText.setText(offerFilterData.buyingCurrency)
     }
 
     private fun clearAllFilters() {

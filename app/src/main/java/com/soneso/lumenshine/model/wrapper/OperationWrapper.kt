@@ -85,7 +85,7 @@ fun OperationDto.toOperation(walletPK: String): Operation {
 
             val decodedBytes = Base64.decode(details.value, Base64.DEFAULT)
             val value = String(decodedBytes, StandardCharsets.US_ASCII)
-            //TODO the case where the content is binary
+            //#ZICA the case where the content is binary
 
             return ManageData(
                     id, fee, order, dateFormat.format(created), byCurrentWallet,

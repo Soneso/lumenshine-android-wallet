@@ -68,7 +68,7 @@ class TransactionsFragment : LsFragment() {
         transactionsRecyclerView.addItemDecoration(dividerItemDecoration)
 
         transactionsAdapter.onOperationJsonSetListener = {
-            //TODO
+            //#ZICA
         }
     }
 

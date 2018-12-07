@@ -138,13 +138,12 @@
                 app:layout_constraintStart_toEndOf="@id/currencySwitch"
                 app:layout_constraintTop_toTopOf="@id/currencySwitch" />
 
-            <com.soneso.lumenshine.presentation.widgets.LsTextView
-                android:id="@+id/allCurrency"
+            <com.soneso.lumenshine.presentation.widgets.LsEditText
+                android:id="@+id/currencyText"
                 style="@style/AppTheme.LsFilterEditText"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/size_36"
                 android:layout_margin="@dimen/size_11"
-                android:background="@color/lightGray"
                 android:enabled="false"
                 android:hint="@string/all"
                 app:layout_constrainedHeight="true"
@@ -164,7 +163,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/allCurrency" />
+                app:layout_constraintTop_toBottomOf="@id/currencyText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

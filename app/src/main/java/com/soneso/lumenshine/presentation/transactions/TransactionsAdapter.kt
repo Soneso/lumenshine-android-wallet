@@ -59,7 +59,7 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
                 SetOptionHolder(transactionsFragment, view)
             }
             else -> {
-                //TODO - no operations case
+                //#ZICA - no operations case
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.operation_item, parent, false)
                 PaymentHolder(transactionsFragment, view)
             }
@@ -129,7 +129,7 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
             }
 
             itemView.operationId.setOnClickListener {
-                //TODO load the JSON from the response
+                //#ZICA load the JSON from the response
                 transactionsFragment.showInfoDialog(R.string.json_content, R.layout.operation_json)
                 onOperationJsonSetListener?.invoke("Test JSON")
             }
