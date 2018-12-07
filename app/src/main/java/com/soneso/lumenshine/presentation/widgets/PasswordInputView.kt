@@ -11,6 +11,7 @@ class PasswordInputView @JvmOverloads constructor(
 ) : FormInputView(context, attrs, defStyleAttr) {
 
     init {
+        editTextView.setSingleLine()
         editTextView.transformationMethod = PasswordTransformationMethod.getInstance()
     }
 

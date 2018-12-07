@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -49,22 +52,26 @@ class ChangePasswordFragment : FragmentInMain() {
 
     private fun setupListeners() {
         newPassInput.onDrawableEndClickListener = { activity?.let { PasswordRequirementsDialog.showInstance(it.supportFragmentManager) } }
-        submitButton.setOnClickListener {
-            if (validInput()) {
-                viewModel.changePassword(oldPassInput.trimmedText, newPassInput.trimmedText)
+        newPassConfirmationInput.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                attemptPassChange()
+                return@OnEditorActionListener true
             }
-        }
+            false
+        })
+        submitButton.setOnClickListener { attemptPassChange() }
+        doneButton.setOnClickListener { NavHostFragment.findNavController(this).navigateUp() }
     }
 
-    private fun validInput(): Boolean {
+    private fun attemptPassChange() {
         if (!oldPassInput.isValidPassword() || !newPassInput.isValidPassword()) {
-            return false
+            return
         }
-        if (newPassInput.trimmedText != newPassConfirmationInput.trimmedText) {
+        if (newPassInput.trimmedText.toString() != newPassConfirmationInput.trimmedText.toString()) {
             newPassConfirmationInput.error = getString(R.string.invalid_repassword)
-            return false
+            return
         }
-        return true
+        viewModel.changePassword(oldPassInput.trimmedText, newPassInput.trimmedText)
     }
 
     private fun renderPassChange(resource: Resource<Unit, LsException>) {
@@ -76,7 +83,7 @@ class ChangePasswordFragment : FragmentInMain() {
             }
             Resource.SUCCESS -> {
                 showLoadingView(false)
-
+                viewFlipper.displayedChild = viewFlipper.indexOfChild(successLayout)
             }
         }
     }
@@ -84,7 +91,7 @@ class ChangePasswordFragment : FragmentInMain() {
     private fun handleError(failure: LsException) {
 
         if (failure is ServerException && failure.code == ErrorCodes.LOGIN_WRONG_PASSWORD) {
-            oldPassInput.error = failure.displayMessage
+            oldPassInput.error = getString(R.string.login_password_wrong)
         } else {
             showErrorSnackbar(failure)
         }
