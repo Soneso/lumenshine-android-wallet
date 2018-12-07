@@ -713,9 +713,9 @@
         android:singleLine="true"
         android:text="@string/source_account"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homeDomainTag" />
+        app:layout_constraintTop_toBottomOf="@+id/homeDomainTag"
+        tools:visibility="visible" />
 
     <com.soneso.lumenshine.presentation.widgets.LsTextView
         android:id="@+id/operationAccountPK"
