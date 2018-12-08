@@ -14,7 +14,6 @@ abstract class Operation(
 ) {
 
 
-
     enum class Type(val value: Int) {
         CREATE_ACCOUNT(0),
         PAYMENT(1),
@@ -30,4 +29,6 @@ abstract class Operation(
     }
 
     fun hasMemo(): Boolean = transactionMemoType != "none"
+    abstract fun getSortAmount(): Double?
+    abstract fun getSortCurrency(): String?
 }

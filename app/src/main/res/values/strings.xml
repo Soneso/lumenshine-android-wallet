@@ -755,4 +755,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="all">All</string>
     <string name="selling_currency">Selling currency</string>
     <string name="buying_currency">Buying currency</string>
+
+    <string name="sort_button_description">Click to change sort type</string>
 </resources>

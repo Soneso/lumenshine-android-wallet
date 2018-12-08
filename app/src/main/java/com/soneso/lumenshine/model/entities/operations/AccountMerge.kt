@@ -11,4 +11,8 @@ class AccountMerge(
         transactionMemoType: String,
         transactionMemo: String,
         val mergedAccount: String
-) : Operation(id, Type.ACCOUNT_MERGE, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, bySelectedWallet)
+) : Operation(id, Type.ACCOUNT_MERGE, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, bySelectedWallet) {
+
+    override fun getSortAmount(): Nothing? = null
+    override fun getSortCurrency(): Nothing? = null
+}

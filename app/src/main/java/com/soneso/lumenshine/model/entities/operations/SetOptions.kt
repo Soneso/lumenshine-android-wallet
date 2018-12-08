@@ -23,4 +23,7 @@ class SetOptions(
     var signerType: String? = null
     var signerWeight: Int? = null
     var homeDomain: String? = null
+    
+    override fun getSortAmount(): Nothing? = null
+    override fun getSortCurrency(): Nothing? = null
 }

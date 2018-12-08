@@ -12,4 +12,7 @@ class BumpSequence(
         transactionMemo: String,
         val bumpTo: Long
 ) : Operation(id, Type.BUMP_SEQUENCE, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, bySelectedWallet) {
+
+    override fun getSortAmount(): Nothing? = null
+    override fun getSortCurrency(): Nothing? = null
 }

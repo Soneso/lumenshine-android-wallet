@@ -1,7 +1,11 @@
 package com.soneso.lumenshine.domain.usecases
 
+import com.google.common.collect.ComparisonChain
+import com.google.common.collect.Ordering
 import com.soneso.lumenshine.domain.data.OperationsFilter
+import com.soneso.lumenshine.domain.data.OperationsSort
 import com.soneso.lumenshine.domain.data.TransactionsFilter
+import com.soneso.lumenshine.domain.util.SortType
 import com.soneso.lumenshine.model.TransactionRepository
 import com.soneso.lumenshine.model.WalletRepository
 import com.soneso.lumenshine.model.entities.operations.Offer
@@ -14,6 +18,8 @@ import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Flowable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.schedulers.Schedulers
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -24,8 +30,8 @@ class TransactionsUseCases @Inject constructor(
 ) {
 
     private val transactionsFilter = BehaviorProcessor.create<TransactionsFilter>()
-    // Maybe not a stream
-    private val operationsFilter = BehaviorProcessor.create<OperationsFilter>()
+    var operationsSort = OperationsSort()
+    // #Zica replace the object with 1 Processor / Operations Filter Fragment and unify them in 1
     val operationFilter = OperationsFilter()
 
     val wallets = BehaviorProcessor.create<Resource<List<WalletEntity>, ServerException>>()
@@ -50,7 +56,8 @@ class TransactionsUseCases @Inject constructor(
                     .map {
                         when (it.state) {
                             Resource.SUCCESS -> {
-                                val filteredOperations: List<Operation> = getFilteredList(it.success())
+                                var filteredOperations: List<Operation> = getFilteredList(it.success())
+                                Collections.sort(filteredOperations, OperationComparator(operationsSort))
                                 Resource(it.state, filteredOperations)
                             }
                             else -> it
@@ -149,5 +156,44 @@ class TransactionsUseCases @Inject constructor(
         operationFilter.offersFilter.sellingCurrency = null
         operationFilter.offersFilter.filterBuyingCurrency = false
         operationFilter.offersFilter.buyingCurrency = null
+    }
+
+    class OperationComparator(private val operationsSort: OperationsSort) : Comparator<Operation> {
+
+        override fun compare(o1: Operation?, o2: Operation?): Int {
+
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy 'at' hh:mm:ssa", Locale.getDefault())
+            var chainStart = ComparisonChain.start()
+
+            if (operationsSort.sortByDate)
+                chainStart =
+                        if (SortType.ASC == operationsSort.dateSortType)
+                            chainStart.compare(dateFormat.parse(o1!!.date), dateFormat.parse(o2!!.date))
+                        else
+                            chainStart.compare(dateFormat.parse(o2!!.date), dateFormat.parse(o1!!.date))
+
+            if (operationsSort.sortByType)
+                chainStart =
+                        if (SortType.ASC == operationsSort.typeSortType)
+                            chainStart.compare(o1!!.type.name, o2!!.type.name)
+                        else
+                            chainStart.compare(o2!!.type.name, o1!!.type.name)
+
+            if (operationsSort.sortByAmount)
+                chainStart =
+                        if (SortType.ASC == operationsSort.amountSortType)
+                            chainStart.compare(o1!!.getSortAmount(), o2!!.getSortAmount(), nullsLast())
+                        else
+                            chainStart.compare(o2!!.getSortAmount(), o1!!.getSortAmount(), nullsLast())
+
+            if (operationsSort.sortByCurrency)
+                chainStart =
+                        if (SortType.ASC == operationsSort.currencySortType)
+                            chainStart.compare(o1!!.getSortCurrency(), o2!!.getSortCurrency(), nullsLast())
+                        else
+                            chainStart.compare(o2!!.getSortCurrency(), o1!!.getSortCurrency(), nullsLast())
+
+            return chainStart.result()
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGray">
@@ -16,7 +17,7 @@
             android:layout_height="wrap_content">
 
             <Switch
-                android:id="@+id/setOptionsSwitch"
+                android:id="@+id/dateSortSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_11"
@@ -29,126 +30,146 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_36"
-                android:text="@string/filter_set_options"
+                android:text="@string/transactions_date"
                 android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="@id/setOptionsSwitch"
-                app:layout_constraintStart_toEndOf="@id/setOptionsSwitch"
-                app:layout_constraintTop_toTopOf="@id/setOptionsSwitch" />
+                app:layout_constraintBottom_toBottomOf="@id/dateSortSwitch"
+                app:layout_constraintStart_toEndOf="@id/dateSortSwitch"
+                app:layout_constraintTop_toTopOf="@id/dateSortSwitch" />
+
+            <ImageButton
+                android:id="@+id/dateSortButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:background="@drawable/icon_sort_numeric_src"
+                android:backgroundTint="@color/sort_type_icon_color"
+                android:contentDescription="@string/sort_button_description"
+                app:layout_constraintBottom_toBottomOf="@id/dateSortSwitch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dateSortSwitch" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_margin="@dimen/size_11"
                 android:background="@color/lightGray"
-                app:layout_constraintBottom_toTopOf="@+id/manageDataSwitch"
-                app:layout_constraintTop_toBottomOf="@id/setOptionsSwitch" />
+                app:layout_constraintBottom_toTopOf="@id/typeSortSwitch"
+                app:layout_constraintTop_toBottomOf="@id/dateSortSwitch" />
 
             <Switch
-                android:id="@+id/manageDataSwitch"
+                android:id="@+id/typeSortSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_11"
                 android:layout_marginTop="@dimen/size_22"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/setOptionsSwitch" />
+                app:layout_constraintTop_toBottomOf="@id/dateSortSwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsTextView
                 style="@style/LsCardTitleLightBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_36"
-                android:text="@string/filter_manage_data"
+                android:text="@string/transactions_type"
                 android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="@id/manageDataSwitch"
-                app:layout_constraintStart_toEndOf="@id/manageDataSwitch"
-                app:layout_constraintTop_toTopOf="@id/manageDataSwitch" />
+                app:layout_constraintBottom_toBottomOf="@id/typeSortSwitch"
+                app:layout_constraintStart_toEndOf="@id/typeSortSwitch"
+                app:layout_constraintTop_toTopOf="@id/typeSortSwitch" />
+
+            <ImageButton
+                android:id="@+id/typeSortButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:background="@drawable/icon_sort_alpha_src"
+                android:backgroundTint="@color/sort_type_icon_color"
+                android:contentDescription="@string/sort_button_description"
+                app:layout_constraintBottom_toBottomOf="@id/typeSortSwitch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/typeSortSwitch" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_margin="@dimen/size_11"
                 android:background="@color/lightGray"
-                app:layout_constraintBottom_toTopOf="@+id/trustSwitch"
-                app:layout_constraintTop_toBottomOf="@id/manageDataSwitch" />
+                app:layout_constraintBottom_toTopOf="@id/amountSortSwitch"
+                app:layout_constraintTop_toBottomOf="@id/typeSortSwitch" />
 
             <Switch
-                android:id="@+id/trustSwitch"
+                android:id="@+id/amountSortSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_11"
                 android:layout_marginTop="@dimen/size_22"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/manageDataSwitch" />
+                app:layout_constraintTop_toBottomOf="@id/typeSortSwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsTextView
                 style="@style/LsCardTitleLightBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_36"
-                android:text="@string/filter_trust"
+                android:text="@string/transactions_amount"
                 android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="@id/trustSwitch"
-                app:layout_constraintStart_toEndOf="@id/trustSwitch"
-                app:layout_constraintTop_toTopOf="@id/trustSwitch" />
+                app:layout_constraintBottom_toBottomOf="@id/amountSortSwitch"
+                app:layout_constraintStart_toEndOf="@id/amountSortSwitch"
+                app:layout_constraintTop_toTopOf="@id/amountSortSwitch" />
+
+            <ImageButton
+                android:id="@+id/amountSortButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:background="@drawable/icon_sort_amount_src"
+                android:backgroundTint="@color/sort_type_icon_color"
+                android:contentDescription="@string/sort_button_description"
+                app:layout_constraintBottom_toBottomOf="@id/amountSortSwitch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/amountSortSwitch" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_margin="@dimen/size_11"
                 android:background="@color/lightGray"
-                app:layout_constraintBottom_toTopOf="@+id/accountMergeSwitch"
-                app:layout_constraintTop_toBottomOf="@id/trustSwitch" />
+                app:layout_constraintBottom_toTopOf="@id/currencySortSwitch"
+                app:layout_constraintTop_toBottomOf="@id/amountSortSwitch" />
 
             <Switch
-                android:id="@+id/accountMergeSwitch"
+                android:id="@+id/currencySortSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_11"
                 android:layout_marginTop="@dimen/size_22"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/trustSwitch" />
+                app:layout_constraintTop_toBottomOf="@id/amountSortSwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsTextView
                 style="@style/LsCardTitleLightBlack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/size_36"
-                android:text="@string/filter_account_merge"
+                android:text="@string/transactions_currency"
                 android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="@id/accountMergeSwitch"
-                app:layout_constraintStart_toEndOf="@id/accountMergeSwitch"
-                app:layout_constraintTop_toTopOf="@id/accountMergeSwitch" />
+                app:layout_constraintBottom_toBottomOf="@id/currencySortSwitch"
+                app:layout_constraintStart_toEndOf="@id/currencySortSwitch"
+                app:layout_constraintTop_toTopOf="@id/currencySortSwitch" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
+            <ImageButton
+                android:id="@+id/currencySortButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_11"
-                android:background="@color/lightGray"
-                app:layout_constraintBottom_toTopOf="@+id/bumpSequenceSwitch"
-                app:layout_constraintTop_toBottomOf="@id/accountMergeSwitch" />
-
-            <Switch
-                android:id="@+id/bumpSequenceSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_11"
-                android:layout_marginTop="@dimen/size_22"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/accountMergeSwitch" />
-
-            <com.soneso.lumenshine.presentation.widgets.LsTextView
-                style="@style/LsCardTitleLightBlack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_36"
-                android:text="@string/filter_bump_sequence"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="@id/bumpSequenceSwitch"
-                app:layout_constraintStart_toEndOf="@id/bumpSequenceSwitch"
-                app:layout_constraintTop_toTopOf="@id/bumpSequenceSwitch" />
+                android:background="@drawable/icon_sort_alpha_src"
+                android:backgroundTint="@color/sort_type_icon_color"
+                android:contentDescription="@string/sort_button_description"
+                app:layout_constraintBottom_toBottomOf="@id/currencySortSwitch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/currencySortSwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsButton
-                android:id="@+id/clearFilterButton"
+                android:id="@+id/clearSortButton"
                 style="@style/WhiteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -158,7 +179,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/bumpSequenceSwitch" />
+                app:layout_constraintTop_toBottomOf="@id/currencySortSwitch" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.soneso.lumenshine.presentation.widgets.LsCardView>

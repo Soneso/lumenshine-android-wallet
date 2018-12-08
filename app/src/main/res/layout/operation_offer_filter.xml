@@ -31,6 +31,7 @@
                 android:text="@string/selling_currency"
                 android:textAllCaps="false"
                 app:layout_constraintStart_toEndOf="@id/sellingCurrencySwitch"
+                app:layout_constraintBottom_toBottomOf="@id/sellingCurrencySwitch"
                 app:layout_constraintTop_toTopOf="@id/sellingCurrencySwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsEditText
@@ -51,7 +52,8 @@
                 android:id="@+id/buyingCurrencySwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/size_11"
+                android:layout_marginTop="@dimen/size_36"
+                android:layout_marginStart="@dimen/size_11"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sellingCurrencyText" />
 
@@ -63,6 +65,7 @@
                 android:text="@string/buying_currency"
                 android:textAllCaps="false"
                 app:layout_constraintStart_toEndOf="@id/buyingCurrencySwitch"
+                app:layout_constraintBottom_toBottomOf="@id/buyingCurrencySwitch"
                 app:layout_constraintTop_toTopOf="@id/buyingCurrencySwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsEditText

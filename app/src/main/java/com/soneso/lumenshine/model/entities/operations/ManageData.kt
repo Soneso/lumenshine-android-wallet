@@ -12,4 +12,8 @@ class ManageData(
         transactionMemo: String,
         val name: String,
         val value: String
-) : Operation(id, Type.MANAGE_DATA, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, bySelectedWallet)
+) : Operation(id, Type.MANAGE_DATA, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, bySelectedWallet) {
+
+    override fun getSortAmount(): Nothing? = null
+    override fun getSortCurrency(): Nothing? = null
+}

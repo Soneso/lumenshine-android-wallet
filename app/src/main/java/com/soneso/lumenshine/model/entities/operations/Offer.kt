@@ -23,4 +23,7 @@ class Offer(
     fun getCurrency(): String = "$sellingAssetType-$buyingAssetCode"
 
     fun getSellingText(): String = "$amount $sellingAssetType"
+
+    override fun getSortAmount() = amount.toDouble()
+    override fun getSortCurrency() = getCurrency()
 }

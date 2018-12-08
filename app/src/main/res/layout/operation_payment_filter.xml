@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGray">
@@ -38,24 +39,23 @@
                 android:layout_marginStart="@dimen/size_36"
                 android:text="@string/filter_received"
                 android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="@id/receivedSwitch"
                 app:layout_constraintStart_toEndOf="@id/receivedSwitch"
                 app:layout_constraintTop_toTopOf="@id/receivedSwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsEditText
                 android:id="@+id/receivedFromText"
                 style="@style/AppTheme.LsFilterEditText"
-                android:layout_width="0dp"
+                android:layout_width="170dp"
                 android:layout_height="@dimen/size_36"
-                android:layout_margin="@dimen/size_11"
                 android:background="@drawable/bg_input_filter"
                 android:enabled="false"
                 android:hint="@string/received_from"
                 android:inputType="number"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintEnd_toStartOf="@id/guideline"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/receivedSwitch" />
+                tools:layout_editor_absoluteX="11dp"
+                tools:layout_editor_absoluteY="49dp" />
 
             <com.soneso.lumenshine.presentation.widgets.LsEditText
                 android:id="@+id/receivedToText"
@@ -76,7 +76,8 @@
                 android:id="@+id/sentSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/size_11"
+                android:layout_marginTop="@dimen/size_36"
+                android:layout_marginStart="@dimen/size_11"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/receivedFromText" />
 
@@ -87,6 +88,7 @@
                 android:layout_marginStart="@dimen/size_36"
                 android:text="@string/filter_sent"
                 android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="@id/sentSwitch"
                 app:layout_constraintStart_toEndOf="@id/sentSwitch"
                 app:layout_constraintTop_toTopOf="@id/sentSwitch" />
 
@@ -124,7 +126,8 @@
                 android:id="@+id/currencySwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/size_11"
+                android:layout_marginTop="@dimen/size_36"
+                android:layout_marginStart="@dimen/size_11"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/amountFromText" />
 
@@ -135,6 +138,7 @@
                 android:layout_marginStart="@dimen/size_36"
                 android:text="@string/filter_currency"
                 android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="@id/currencySwitch"
                 app:layout_constraintStart_toEndOf="@id/currencySwitch"
                 app:layout_constraintTop_toTopOf="@id/currencySwitch" />
 

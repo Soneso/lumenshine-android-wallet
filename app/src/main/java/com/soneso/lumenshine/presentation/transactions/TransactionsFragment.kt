@@ -51,8 +51,15 @@ class TransactionsFragment : LsFragment() {
             activity!!.supportFragmentManager
                     .beginTransaction()
                     .replace(R.id.fragment_container, TransactionsFilterFragment.newInstance(), TransactionsFilterFragment.TAG)
-//                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                     .addToBackStack(TransactionsFilterFragment.TAG)
+                    .commit()
+        }
+
+        transactionSortButton.setOnClickListener {
+            activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, TransactionsSortFragment.newInstance(), TransactionsSortFragment.TAG)
+                    .addToBackStack(TransactionsSortFragment.TAG)
                     .commit()
         }
     }

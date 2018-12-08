@@ -16,4 +16,6 @@ class ChangeTrust(
 ) : Operation(id, Type.CHANGE_TRUST, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, bySelectedWallet) {
 
     fun isAddTrust(): Boolean = limit != "0"
+    override fun getSortAmount(): Nothing? = null
+    override fun getSortCurrency(): Nothing? = null
 }

@@ -65,7 +65,7 @@
         <item name="android:elevation">@dimen/size_1</item>
     </style>
 
-    <style name="MaterialDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+    <style name="AppTheme.LsDatePicker" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/blue</item>
     </style>
 

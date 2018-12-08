@@ -15,4 +15,8 @@ class Payment(
         val amount: String,
         val currency: String,
         var isReceived: Boolean
-) : Operation(id, Type.PAYMENT, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, fromSelectedWallet)
+) : Operation(id, Type.PAYMENT, fee, order, date, transactionSource, transactionHash, transactionMemoType, transactionMemo, fromSelectedWallet) {
+
+    override fun getSortAmount() = amount.toDouble()
+    override fun getSortCurrency() = currency
+}

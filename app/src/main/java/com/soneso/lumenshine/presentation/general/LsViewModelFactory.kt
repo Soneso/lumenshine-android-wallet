@@ -38,6 +38,7 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T
             modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(TransactionsFilterViewModel::class.java) -> TransactionsFilterViewModel(appComponent.transactionsUseCase) as T
+            modelClass.isAssignableFrom(TransactionsSortViewModel::class.java) -> TransactionsSortViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(PaymentsFilterViewModel::class.java) -> PaymentsFilterViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(OffersFilterViewModel::class.java) -> OffersFilterViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(OtherFilterViewModel::class.java) -> OtherFilterViewModel(appComponent.transactionsUseCase) as T
