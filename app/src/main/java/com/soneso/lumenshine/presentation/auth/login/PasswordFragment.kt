@@ -54,8 +54,8 @@ class PasswordFragment : AuthFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (shouldAutoPaste) {
-            val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+        val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+        if (shouldAutoPaste && textFromClipboard.toIntOrNull() != null) {
             tfaCodeView.trimmedText = textFromClipboard
             tfaCodeView.setSelection(textFromClipboard.length)
         }

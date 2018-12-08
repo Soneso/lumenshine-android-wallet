@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -52,13 +50,7 @@ class ChangePasswordFragment : FragmentInMain() {
 
     private fun setupListeners() {
         newPassInput.onDrawableEndClickListener = { activity?.let { PasswordRequirementsDialog.showInstance(it.supportFragmentManager) } }
-        newPassConfirmationInput.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                attemptPassChange()
-                return@OnEditorActionListener true
-            }
-            false
-        })
+        newPassConfirmationInput.setOnEditorActionListener { attemptPassChange() }
         submitButton.setOnClickListener { attemptPassChange() }
         doneButton.setOnClickListener { NavHostFragment.findNavController(this).navigateUp() }
     }

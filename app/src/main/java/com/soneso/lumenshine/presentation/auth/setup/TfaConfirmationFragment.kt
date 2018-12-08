@@ -47,12 +47,10 @@ class TfaConfirmationFragment : SetupFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (shouldAutoPaste) {
-            val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
-            if (textFromClipboard != tfaSecret) {
-                tfaInputView.trimmedText = textFromClipboard
-                tfaInputView.setSelection(textFromClipboard.length)
-            }
+        val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+        if (shouldAutoPaste && textFromClipboard.toIntOrNull() != null) {
+            tfaInputView.trimmedText = textFromClipboard
+            tfaInputView.setSelection(textFromClipboard.length)
         }
     }
 

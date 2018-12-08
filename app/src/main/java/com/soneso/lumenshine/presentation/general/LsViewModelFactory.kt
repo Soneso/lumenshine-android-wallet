@@ -13,6 +13,7 @@ import com.soneso.lumenshine.presentation.auth.registration.RegistrationViewMode
 import com.soneso.lumenshine.presentation.auth.setup.*
 import com.soneso.lumenshine.presentation.home.HomeViewModel
 import com.soneso.lumenshine.presentation.settings.ChangePassViewModel
+import com.soneso.lumenshine.presentation.settings.ChangeTfaViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
 
@@ -36,6 +37,7 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(FingerprintSetupViewModel::class.java) -> FingerprintSetupViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(ChangePassViewModel::class.java) -> ChangePassViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(ChangeTfaViewModel::class.java) -> ChangeTfaViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(appComponent.walletsUseCase) as T

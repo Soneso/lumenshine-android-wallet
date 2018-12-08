@@ -120,7 +120,7 @@ interface UserApi {
     @FormUrlEncoded
     @POST("/portal/user/dashboard/new_2fa_secret")
     fun changeTfaSecret(
-            @Field("public_key_188") publicKey188: String
+            @Field("sep10_transaction") signedSep10Challenge: String
     ): Single<Response<ChangeTfaSecretResponse>>
 
     @FormUrlEncoded

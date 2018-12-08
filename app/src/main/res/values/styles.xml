@@ -63,6 +63,10 @@
         <item name="android:background">@drawable/bg_green_gray_states_button</item>
     </style>
 
+    <style name="GreyButton">
+        <item name="android:background">@drawable/bg_grey_button</item>
+    </style>
+
     <style name="RedButton" parent="AppTheme.LsButton">
         <item name="android:background">@drawable/bg_red_button</item>
     </style>

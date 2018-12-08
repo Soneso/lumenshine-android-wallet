@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -44,14 +42,14 @@ class FingerprintSetupFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                viewModel.loginAndSetFingerPrint(passwordView.trimmedText)
-                return@OnEditorActionListener true
-            }
-            false
-        })
-        activateButton.setOnClickListener { viewModel.loginAndSetFingerPrint(passwordView.trimmedText) }
+        passwordView.setOnEditorActionListener { attemptActivation() }
+        activateButton.setOnClickListener { attemptActivation() }
+    }
+
+    private fun attemptActivation() {
+        if (passwordView.isValidPassword()) {
+            viewModel.loginAndSetFingerPrint(passwordView.trimmedText)
+        }
     }
 
     private fun subscribeForLiveData() {
