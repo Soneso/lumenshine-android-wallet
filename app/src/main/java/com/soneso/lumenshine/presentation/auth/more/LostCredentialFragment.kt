@@ -79,14 +79,14 @@ class LostCredentialFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showLoadingView()
+                showLoadingView(true)
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showErrorSnackbar(resource.failure())
             }
             else -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showSnackbar(getString(R.string.email_sent))
                 when (credential) {
                     Credential.PASSWORD -> authActivity.navigate(R.id.to_email_lost_credential_screen,

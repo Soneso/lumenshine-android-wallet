@@ -86,14 +86,14 @@ class PasswordFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showLoadingView()
+                showLoadingView(true)
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 handleError(resource.failure())
             }
             else -> {
-                hideLoadingView()
+                showLoadingView(false)
                 authActivity.goToMain()
             }
         }

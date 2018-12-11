@@ -88,11 +88,9 @@ class MailConfirmationFragment : SetupFragment() {
     private fun renderRegistrationRefresh(resource: Resource<RegistrationStatus, LsException>) {
 
         when (resource.state) {
-            Resource.LOADING -> {
-                showLoadingView()
-            }
+            Resource.LOADING -> showLoadingView(true)
             Resource.SUCCESS -> {
-                hideLoadingView()
+                showLoadingView(false)
                 val status = resource.success()
                 if (!status.mailConfirmed) {
                     errorView.setText(R.string.error_verify_email)
@@ -101,7 +99,7 @@ class MailConfirmationFragment : SetupFragment() {
                 }
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showErrorSnackbar(resource.failure())
             }
         }
@@ -110,15 +108,13 @@ class MailConfirmationFragment : SetupFragment() {
     private fun renderMailResend(resource: Resource<Unit, LsException>) {
 
         when (resource.state) {
-            Resource.LOADING -> {
-                showLoadingView()
-            }
+            Resource.LOADING -> showLoadingView(true)
             Resource.SUCCESS -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showSnackbar(R.string.confirmation_mail_resent)
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 handleError(resource.failure())
             }
         }

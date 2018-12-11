@@ -82,14 +82,13 @@ class TfaConfirmationFragment : SetupFragment() {
     private fun renderTfaConfirmation(resource: Resource<RegistrationStatus, LsException>) {
         when (resource.state) {
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 handleError(resource.failure())
             }
-            Resource.LOADING -> {
-                showLoadingView()
-            }
+            Resource.LOADING -> showLoadingView(true)
+
             Resource.SUCCESS -> {
-                hideLoadingView()
+                showLoadingView(false)
                 renderRegistrationStatus(resource.success())
             }
         }

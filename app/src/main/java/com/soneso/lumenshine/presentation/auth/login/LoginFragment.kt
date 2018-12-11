@@ -71,14 +71,14 @@ class LoginFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showLoadingView()
+                showLoadingView(true)
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 handleError(resource.failure())
             }
             else -> {
-                hideLoadingView()
+                showLoadingView(false)
                 val status = resource.success()
                 if (status.isSetupCompleted()) {
                     authActivity.goToMain()

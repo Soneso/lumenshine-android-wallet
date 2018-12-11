@@ -12,8 +12,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
-import com.soneso.lumenshine.presentation.FragmentInMain
 import com.soneso.lumenshine.presentation.auth.registration.PasswordRequirementsDialog
+import com.soneso.lumenshine.presentation.general.LsFragment
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_change_password.*
@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_change_password.*
  * A simple [Fragment] subclass.
  *
  */
-class ChangePasswordFragment : FragmentInMain() {
+class ChangePasswordFragment : LsFragment() {
 
     private lateinit var viewModel: ChangePassViewModel
 

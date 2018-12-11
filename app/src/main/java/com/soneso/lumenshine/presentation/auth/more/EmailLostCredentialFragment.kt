@@ -73,14 +73,14 @@ class EmailLostCredentialFragment : AuthFragment() {
     private fun renderCredentialReset(resource: Resource<Unit, LsException>) {
         when (resource.state) {
             Resource.LOADING -> {
-                showLoadingView()
+                showLoadingView(true)
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showErrorSnackbar(resource.failure())
             }
             else -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showSnackbar(getString(R.string.email_sent))
             }
         }
