@@ -6,23 +6,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/homeItem"
-            android:icon="@drawable/ic_action_home"
+            android:icon="@drawable/icon_home"
             android:title="@string/menu_item_home" />
         <item
             android:id="@+id/nav_wallets"
-            android:icon="@drawable/ic_action_account_balance_wallet"
+            android:icon="@drawable/icon_wallet"
             android:title="@string/menu_item_wallets" />
         <item
             android:id="@+id/nav_transactions"
-            android:icon="@drawable/ic_action_list"
+            android:icon="@drawable/icon_transaction"
             android:title="@string/menu_item_transactions" />
         <item
             android:id="@+id/nav_contacts"
-            android:icon="@drawable/ic_action_list"
+            android:icon="@drawable/icon_user"
             android:title="@string/menu_item_contacts" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_action_settings"
+            android:icon="@drawable/icon_settings"
             android:title="@string/menu_item_settings" />
     </group>
 
@@ -31,11 +31,11 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_help"
-            android:icon="@drawable/ic_action_help"
+            android:icon="@drawable/icon_help"
             android:title="@string/menu_item_help" />
         <item
             android:id="@+id/nav_sign_out"
-            android:icon="@drawable/ic_action_settings"
+            android:icon="@drawable/icon_logout"
             android:title="@string/menu_item_sign_out" />
     </group>
 </menu>
