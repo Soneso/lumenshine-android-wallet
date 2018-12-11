@@ -39,4 +39,12 @@
         android:id="@+id/change_pass_screen"
         android:name="com.soneso.lumenshine.presentation.settings.ChangePasswordFragment" />
 
+    <action
+        android:id="@+id/to_change_tfa_screen"
+        app:destination="@id/change_tfa_screen" />
+
+    <fragment
+        android:id="@+id/change_tfa_screen"
+        android:name="com.soneso.lumenshine.presentation.settings.ChangeTfaFragment" />
+
 </navigation>

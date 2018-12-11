@@ -140,30 +140,23 @@ class UserUseCases
                                     }
                         }
                     }
-//
-//    fun changeTfaPassword(pass: CharSequence): Flowable<Resource<String, ServerException>> {
-//
-//        return userRepo.getUserData()
-//                .toFlowable()
-//                .flatMap {
-//                    val helper = UserSecurityHelper(pass.toCharArray())
-//                    val publicKey188 = helper.decipherUserSecurityOld(it)
-//                    if (publicKey188 != null) {
-//                        userRepo.changeTfaSecret(publicKey188)
-//                    } else {
-//                        Flowable.just(Failure<String, ServerException>(ServerException(ErrorCodes.UNKNOWN)))
-//                    }
-//                }
-//    }
 
-    fun confirmTfaSecretChange(tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaCode.toString())
+    fun changeTfaPassword(pass: CharSequence): Single<String> =
+            userRepo.loadUserAuthData()
+                    .flatMap { us ->
+                        val helper = UserSecurityHelper(pass.toCharArray())
+                        val keyPair = helper.decipherUserSecurity(us)
+                        if (keyPair == null) {
+                            throw ServerException(ErrorCodes.LOGIN_WRONG_PASSWORD)
+                        } else {
+                            userRepo.loadAndSignSep10Challenge(keyPair)
+                        }
+                    }
+                    .flatMap { userRepo.changeTfaSecret(it) }
 
-    fun logout(): Completable {
-        return userRepo.logout()
-                .doOnComplete {
-                    mnemonic = ""
-                }
-    }
+    fun confirmTfaSecretChange(tfaSecret: String, tfaCode: CharSequence) = userRepo.confirmTfaSecretChange(tfaSecret, tfaCode.toString())
+
+    fun logout(): Completable = userRepo.logout().doOnComplete { mnemonic = "" }
 
     companion object {
 

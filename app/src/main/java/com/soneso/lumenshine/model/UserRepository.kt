@@ -6,18 +6,13 @@ import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.model.entities.UserCredentialsEntity
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
-import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.LsApi
 import com.soneso.lumenshine.networking.api.UserApi
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.LsException
-import com.soneso.lumenshine.util.Resource
-import com.soneso.lumenshine.util.asHttpResourceLoader
-import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Single
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.ManageDataOperation
@@ -33,7 +28,6 @@ import javax.inject.Singleton
  */
 @Singleton
 class UserRepository @Inject constructor(
-        private val networkStateObserver: NetworkStateObserver,
         private val db: LsDatabase,
         r: Retrofit
 ) {
@@ -315,25 +309,30 @@ class UserRepository @Inject constructor(
                     }
                     .flatMap { signSep10Challenge(it, keyPair) }
 
-    fun changeTfaSecret(publicKey188: String): Flowable<Resource<String, ServerException>> {
+    fun changeTfaSecret(signedSep10Challenge: String): Single<String> {
 
-        return userApi.changeTfaSecret(publicKey188)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    LsPrefs.tfaSecret = it.tfaSecret
-                    it.tfaSecret
-                }, { it })
+        return userApi.changeTfaSecret(signedSep10Challenge)
+                .onErrorResumeNext { Single.error(LsException(it)) }
+                .map {
+                    if (it.isSuccessful) {
+                        it.body()!!.tfaSecret
+                    } else {
+                        throw ServerException(it.errorBody())
+                    }
+                }
     }
 
-    fun confirmTfaSecretChange(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
-
-        return userApi.confirmTfaSecretChange(tfaCode)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    //                    userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
-                    true
-                }, { it })
-    }
+    fun confirmTfaSecretChange(tfaSecret: String, tfaCode: String): Completable =
+            userApi.confirmTfaSecretChange(tfaCode)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (it.isSuccessful) {
+                            LsPrefs.tfaSecret = tfaSecret
+                        } else {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
     fun logout(): Completable {
         return Completable.create {

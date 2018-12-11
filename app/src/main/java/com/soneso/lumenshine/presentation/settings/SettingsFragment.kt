@@ -1,7 +1,6 @@
 package com.soneso.lumenshine.presentation.settings
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,12 +27,8 @@ class SettingsFragment : LsFragment() {
 
     private fun setupListeners() {
 
-        settings_change_password_setting.setOnClickListener {
-            NavHostFragment.findNavController(this).navigate(R.id.to_change_pass_screen)
-        }
-        settings_change_tfa_setting.setOnClickListener {
-            startActivity(Intent(context, ChangeTfaActivity::class.java))
-        }
+        settings_change_password_setting.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_change_pass_screen) }
+        settings_change_tfa_setting.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_change_tfa_screen) }
     }
 
     companion object {

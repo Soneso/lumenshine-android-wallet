@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
-import android.widget.TextView
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.presentation.util.setOnTextChangeListener
 import kotlinx.android.synthetic.main.ls_input_view.view.*
@@ -100,8 +99,15 @@ open class FormInputView @JvmOverloads constructor(
         return true
     }
 
-    fun setOnEditorActionListener(listener: TextView.OnEditorActionListener) {
-        editTextView.setOnEditorActionListener(listener)
+    fun setOnEditorActionListener(listener: (() -> Unit)) {
+        editTextView.setOnEditorActionListener { _, id, _ ->
+            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                listener.invoke()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     fun setSelection(index: Int) {

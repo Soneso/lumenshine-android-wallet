@@ -127,7 +127,7 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
 
     companion object {
 
-        private const val LOCK_THRESHOLD = 10 * 1000L
+        private const val LOCK_THRESHOLD = 20 * 1000L
 
         fun startInstance(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))
