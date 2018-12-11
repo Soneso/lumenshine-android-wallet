@@ -3,8 +3,7 @@
     style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_300"
-    android:layout_marginEnd="@dimen/size_5"
-    android:layout_marginStart="@dimen/size_5">
+    android:layout_margin="@dimen/size_10">
 
     <RelativeLayout
         android:layout_width="match_parent"

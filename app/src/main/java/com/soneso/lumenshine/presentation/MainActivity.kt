@@ -25,13 +25,10 @@ class MainActivity : SideMenuActivity() {
 
         setSupportActionBar(toolbar)
         setupNavigation()
-
-        collapsingToolbarLayout.isTitleEnabled = false
-        changeTitle(R.string.app_name)
         selectMenuItem(R.id.homeItem)
     }
 
-    override fun drawerMenu(): Int = R.menu.activity_main_drawer
+    override fun drawerMenu(): Int = R.menu.drawer_main
 
     override fun onNavItemSelected(item: MenuItem) {
         when (item.itemId) {
@@ -89,10 +86,6 @@ class MainActivity : SideMenuActivity() {
     override fun onStop() {
         onStopTs = System.currentTimeMillis()
         super.onStop()
-    }
-
-    private fun changeTitle(titleId: Int) {
-        toolbar.title = getString(titleId)
     }
 
     companion object {

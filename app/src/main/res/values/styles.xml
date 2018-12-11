@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/orange</item>
         <item name="editTextStyle">@style/AppTheme.LsEditText</item>
         <item name="buttonStyle">@style/AppTheme.LsButton</item>
+        <item name="actionBarSize">@dimen/size_45</item>
         <item name="android:textViewStyle">@style/AppTheme.LsTextView</item>
     </style>
 
