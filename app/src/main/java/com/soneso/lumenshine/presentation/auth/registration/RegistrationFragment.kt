@@ -153,16 +153,13 @@ class RegistrationFragment : AuthFragment() {
     private fun renderRegistration(resource: Resource<Unit, LsException>) {
         when (resource.state) {
 
-            Resource.LOADING -> {
-
-            }
+            Resource.LOADING -> showLoadingView(true)
             Resource.FAILURE -> {
-
-                hideLoadingView()
+                showLoadingView(false)
                 handleError(resource.failure())
             }
             else -> {
-                hideLoadingView()
+                showLoadingView(false)
                 authActivity.goToSetup()
             }
         }
@@ -185,8 +182,6 @@ class RegistrationFragment : AuthFragment() {
         if (!isValidForm()) {
             return
         }
-
-        showLoadingView()
         viewModel.register(
                 foreName.trimmedText,
                 lastName.trimmedText,

@@ -46,4 +46,8 @@ open class LsFragment : Fragment() {
                 .setAction(R.string.ok, null)
                 .show()
     }
+
+    fun showLoadingView(show: Boolean) {
+        lsActivity.showLoading(show)
+    }
 }

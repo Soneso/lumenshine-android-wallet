@@ -69,13 +69,13 @@ class ConfirmMnemonicFragment : SetupFragment() {
 
     private fun renderConfirmation(resource: Resource<Unit, LsException>) {
         when (resource.state) {
-            Resource.LOADING -> showLoadingView()
+            Resource.LOADING -> showLoadingView(true)
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 showErrorSnackbar(resource.failure())
             }
             Resource.SUCCESS -> {
-                hideLoadingView()
+                showLoadingView(false)
                 authActivity.goToMain()
             }
         }

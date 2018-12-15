@@ -1,46 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horizontal_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/size_228" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/backgroundView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/header_background"
+        app:layout_constraintBottom_toBottomOf="@id/horizontal_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/drawerIconView"
+        android:layout_width="@dimen/size_36"
+        android:layout_height="@dimen/size_36"
+        android:layout_marginStart="@dimen/size_15"
+        android:layout_marginTop="@dimen/size_3"
+        android:gravity="center"
+        android:padding="@dimen/size_10"
+        android:rotation="180"
+        android:src="@drawable/icon_hamburger_menu"
+        android:tint="@color/blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/appIconView"
+        android:layout_width="@dimen/size_85"
+        android:layout_height="@dimen/size_85"
+        android:layout_marginTop="@dimen/size_12"
+        android:src="@drawable/lumenshine_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/welcomeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_13"
+        android:fontFamily="@font/encodesans_semibold"
+        android:text="@string/welcome"
+        android:textAllCaps="true"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/text_size_19"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appIconView" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/usernameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/encodesans_bold"
+        android:text="@string/welcome"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_18"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcomeView" />
+
+    <!--Setup view-->
+    <LinearLayout
+        android:id="@+id/set_up_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:openDrawer="start">
-
-        <include
-            layout="@layout/layout_auth_activity"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/drawerView"
-            android:layout_width="@dimen/size_175"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/blue"
-            app:headerLayout="@layout/nav_header_main"
-            app:itemIconTint="@android:color/white"
-            app:itemTextColor="@android:color/white" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-
-    <FrameLayout
-        android:id="@+id/loadingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_75opacity"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone"
-        tools:ignore="UselessParent">
+        app:layout_constraintBottom_toTopOf="@+id/navHostFragment"
+        app:layout_constraintTop_toBottomOf="@+id/usernameView">
 
-        <ProgressBar
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-    </FrameLayout>
-</FrameLayout>
+            android:fontFamily="@font/encodesans_regular"
+            android:text="@string/setup_wallet"
+            android:textColor="@color/yellow"
+            android:textSize="@dimen/text_size_22" />
+
+    </LinearLayout>
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/poweredByView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_10"
+        android:src="@drawable/soneso"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/brandedBackgroundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:src="@drawable/soneso_background"
+        app:layout_constraintBottom_toTopOf="@id/poweredByView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <fragment
+        android:id="@+id/navHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontal_guideline"
+        app:navGraph="@navigation/auth_graph" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

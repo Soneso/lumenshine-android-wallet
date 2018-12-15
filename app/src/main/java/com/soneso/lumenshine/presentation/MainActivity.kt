@@ -4,21 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.GravityCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.appbar.AppBarLayout
 import com.soneso.lumenshine.R
-import com.soneso.lumenshine.presentation.general.LsActivity
+import com.soneso.lumenshine.presentation.general.SideMenuActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
 
 
-class MainActivity : LsActivity(), com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : SideMenuActivity() {
 
     private var onStopTs = 0L
     private lateinit var navController: NavController
@@ -29,25 +25,30 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
 
         setSupportActionBar(toolbar)
         setupNavigation()
+        selectMenuItem(R.id.homeItem)
+    }
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        collapsingToolbarLayout.isTitleEnabled = false
-        changeTitle(R.string.app_name)
+    override fun drawerMenu(): Int = R.menu.drawer_main
 
-        drawerView.setNavigationItemSelectedListener(this)
-
-        val homeItem = drawerView.menu.getItem(0)
-        homeItem.isChecked = true
-        onNavigationItemSelected(homeItem)
+    override fun onNavItemSelected(item: MenuItem) {
+        when (item.itemId) {
+            R.id.homeItem -> navController.navigate(R.id.to_home_screen)
+            R.id.nav_wallets -> navController.navigate(R.id.wallets_screen)
+            R.id.nav_transactions -> {
+            }
+            R.id.nav_contacts -> {
+            }
+            R.id.nav_settings -> navController.navigate(R.id.to_settings_screen)
+            R.id.nav_help -> {
+            }
+            R.id.nav_sign_out -> {
+            }
+        }
     }
 
     private fun setupNavigation() {
         navController = NavHostFragment.findNavController(navHostFragment)
-        navController.addOnNavigatedListener { _, _ ->
-            val destination = navController.currentDestination ?: return@addOnNavigatedListener
+        navController.addOnDestinationChangedListener { _, destination, args ->
             setupDestination(destination)
         }
     }
@@ -68,14 +69,6 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
         })
     }
 
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onStart() {
         super.onStart()
 
@@ -92,37 +85,6 @@ class MainActivity : LsActivity(), com.google.android.material.navigation.Naviga
     override fun onStop() {
         onStopTs = System.currentTimeMillis()
         super.onStop()
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.home_item -> navController.navigate(R.id.to_home_screen)
-            R.id.nav_wallets -> navController.navigate(R.id.wallets_screen)
-            R.id.nav_transactions -> {
-            }
-            R.id.nav_currencies -> {
-            }
-            R.id.nav_contacts -> {
-            }
-            R.id.nav_extras -> {
-            }
-            R.id.nav_settings -> navController.navigate(R.id.to_settings_screen)
-            R.id.nav_help -> {
-            }
-            R.id.nav_sign_out -> {
-            }
-        }
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    private fun changeTitle(titleId: Int) {
-        toolbar.title = getString(titleId)
-    }
-
-    fun showLoadingView(show: Boolean) {
-        loadingView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     companion object {

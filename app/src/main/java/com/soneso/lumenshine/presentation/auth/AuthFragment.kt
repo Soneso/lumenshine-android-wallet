@@ -13,12 +13,4 @@ open class AuthFragment : LsFragment() {
 
     protected val authActivity: BaseAuthActivity
         get() = activity as BaseAuthActivity
-
-    fun showLoadingView() {
-        authActivity.showLoading(true)
-    }
-
-    fun hideLoadingView() {
-        authActivity.showLoading(false)
-    }
 }

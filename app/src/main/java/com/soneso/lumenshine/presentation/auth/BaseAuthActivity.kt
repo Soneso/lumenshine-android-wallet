@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
@@ -15,12 +13,11 @@ import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.presentation.MainActivity
-import com.soneso.lumenshine.presentation.general.LsActivity
+import com.soneso.lumenshine.presentation.general.SideMenuActivity
 import kotlinx.android.synthetic.main.activity_base_auth.*
-import kotlinx.android.synthetic.main.layout_auth_activity.*
 
 
-abstract class BaseAuthActivity : LsActivity() {
+abstract class BaseAuthActivity : SideMenuActivity() {
 
     abstract val tabLayoutId: Int
     protected lateinit var navController: NavController
@@ -33,38 +30,11 @@ abstract class BaseAuthActivity : LsActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base_auth)
 
-        setupDrawerToggle()
         setupTabBar()
         setupNavigation()
 
         authViewModel = ViewModelProviders.of(this, viewModelFactory)[AuthViewModel::class.java]
         subscribeForLiveData()
-    }
-
-    private fun setupDrawerToggle() {
-        drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
-            override fun onDrawerStateChanged(newState: Int) {
-            }
-
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                appBarLayout.translationX = slideOffset * drawerView.width
-            }
-
-            override fun onDrawerClosed(drawerView: View) {
-                drawerIconView.isSelected = false
-            }
-
-            override fun onDrawerOpened(drawerView: View) {
-                drawerIconView.isSelected = true
-            }
-        })
-        drawerIconView.setOnClickListener {
-            if (it.isSelected) {
-                drawerLayout.closeDrawer(GravityCompat.START)
-            } else {
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-        }
     }
 
     private fun setupTabBar() {
@@ -85,8 +55,7 @@ abstract class BaseAuthActivity : LsActivity() {
 
     private fun setupNavigation() {
         navController = NavHostFragment.findNavController(navHostFragment)
-        navController.addOnNavigatedListener { _, _ ->
-            val destination = navController.currentDestination ?: return@addOnNavigatedListener
+        navController.addOnDestinationChangedListener { _, destination, args ->
             invalidateCurrentSelection(destination)
         }
     }
@@ -98,24 +67,12 @@ abstract class BaseAuthActivity : LsActivity() {
         navController.navigate(resId, args)
     }
 
-    protected fun selectMenuItem(menuItem: Int) {
-        drawerView.menu.findItem(menuItem)?.isChecked = true
-    }
-
     private fun subscribeForLiveData() {
 
         authViewModel.liveLogout.observe(this, Observer {
             finishAffinity()
             AuthNewUserActivity.startInstance(this)
         })
-    }
-
-    fun showLoading(loading: Boolean) {
-        if (loading) {
-            loadingView.visibility = View.VISIBLE
-        } else {
-            loadingView.visibility = View.GONE
-        }
     }
 
     fun goToMain() {
