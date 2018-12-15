@@ -20,6 +20,7 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
     val liveLogout: LiveData<Unit> = MutableLiveData()
 
     private val compositeDisposable = CompositeDisposable()
+    val liveFingerprintActive: LiveData<Boolean> = MutableLiveData()
 
     fun logout() {
         val d = userUseCases.logout()
@@ -29,6 +30,10 @@ class AuthViewModel(private val userUseCases: UserUseCases) : ViewModel() {
                     liveLogout.putValue(Unit)
                 }
         compositeDisposable.add(d)
+    }
+
+    fun setFingerprintActive(boolean: Boolean) {
+        liveFingerprintActive.putValue(boolean)
     }
 
     override fun onCleared() {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
@@ -70,7 +71,8 @@ class FingerprintSetupFragment : AuthFragment() {
             }
             else -> {
                 showLoadingView(false)
-                authActivity.goToMain()
+                authViewModel.setFingerprintActive(true)
+                NavHostFragment.findNavController(this).navigate(R.id.to_pass_screen)
             }
         }
     }

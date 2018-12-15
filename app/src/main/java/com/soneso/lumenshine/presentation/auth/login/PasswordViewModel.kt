@@ -51,4 +51,17 @@ class PasswordViewModel(private val useCases: UserUseCases) : ViewModel() {
         compositeDisposable.dispose()
         super.onCleared()
     }
+
+    fun login() {
+        liveLogin.putValue(Resource(Resource.LOADING))
+        val d = useCases.login()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveLogin.putValue(Success(it))
+                }, {
+                    liveLogin.putValue(Failure(it as LsException))
+                })
+        compositeDisposable.add(d)
+    }
 }

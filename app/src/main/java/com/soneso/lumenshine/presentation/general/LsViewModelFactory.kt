@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.soneso.lumenshine.di.AppComponent
 import com.soneso.lumenshine.presentation.SplashViewModel
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
-import com.soneso.lumenshine.presentation.auth.login.FingerprintViewModel
 import com.soneso.lumenshine.presentation.auth.login.LoginViewModel
 import com.soneso.lumenshine.presentation.auth.login.PasswordViewModel
 import com.soneso.lumenshine.presentation.auth.more.LostCredentialViewModel
@@ -33,7 +32,6 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(ConfirmMnemonicViewModel::class.java) -> ConfirmMnemonicViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(LostCredentialViewModel::class.java) -> LostCredentialViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(PasswordViewModel::class.java) -> PasswordViewModel(appComponent.userUseCases) as T
-            modelClass.isAssignableFrom(FingerprintViewModel::class.java) -> FingerprintViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(FingerprintSetupViewModel::class.java) -> FingerprintSetupViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(ChangePassViewModel::class.java) -> ChangePassViewModel(appComponent.userUseCases) as T

@@ -7,21 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.mtramin.rxfingerprint.RxFingerprint
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.ErrorCodes
 import com.soneso.lumenshine.model.entities.RegistrationStatus
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.presentation.auth.AuthFragment
-import com.soneso.lumenshine.presentation.auth.AuthLoggedUserActivity
 import com.soneso.lumenshine.util.GeneralUtils
 import com.soneso.lumenshine.util.LsException
 import com.soneso.lumenshine.util.Resource
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_password.*
 
 
 class PasswordFragment : AuthFragment() {
 
     private lateinit var viewModel: PasswordViewModel
+    private var disposable: Disposable? = null
 
     // TODO: cristi.paval, 11/29/18 - another solution?
     private var shouldAutoPaste: Boolean = false
@@ -38,27 +40,31 @@ class PasswordFragment : AuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupFingerprintButton()
         setupListeners()
         subscribeForLiveData()
     }
 
-    private fun setupFingerprintButton() {
-        val hasFingerprint = (authActivity as? AuthLoggedUserActivity)?.canLoginWithTouch()
-        if (hasFingerprint == true) {
-            fingerprintButton.visibility = View.VISIBLE
-        } else {
-            fingerprintButton.visibility = View.GONE
-        }
-    }
-
     override fun onResume() {
         super.onResume()
+
         val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
         if (shouldAutoPaste && textFromClipboard.toIntOrNull() != null) {
             tfaCodeView.trimmedText = textFromClipboard
             tfaCodeView.setSelection(textFromClipboard.length)
         }
+        listenForTouch()
+    }
+
+    private fun listenForTouch() {
+        disposable?.dispose()
+        disposable = RxFingerprint.authenticate(context ?: return)
+                .subscribe {
+                    if (it.isSuccess) {
+                        viewModel.login()
+                    } else {
+                        handleError(LsException(it.message))
+                    }
+                }
     }
 
     override fun onPause() {
@@ -66,17 +72,20 @@ class PasswordFragment : AuthFragment() {
         if (tfaCodeView.visibility == View.VISIBLE) {
             shouldAutoPaste = true
         }
+        disposable?.dispose()
     }
 
     private fun setupListeners() {
 
-        fingerprintButton.setOnClickListener { authActivity.navigate(R.id.to_fingerprint_screen) }
         unlockButton.setOnClickListener { attemptLogin() }
         lostPassButton.setOnClickListener {}
     }
 
     private fun subscribeForLiveData() {
 
+        authViewModel.liveFingerprintActive.observe(this, Observer {
+            fingerprintButton.visibility = if (it) View.VISIBLE else View.GONE
+        })
         viewModel.liveLogin.observe(this, Observer {
             renderLoginStatus(it ?: return@Observer)
         })
@@ -109,14 +118,16 @@ class PasswordFragment : AuthFragment() {
             return
         }
         when (e.code) {
-            ErrorCodes.LOGIN_WRONG_PASSWORD -> passwordView.error = e.displayMessage
+            ErrorCodes.LOGIN_WRONG_PASSWORD -> {
+                passwordView.error = e.displayMessage
+                fingerprintButton.visibility = View.GONE
+            }
             ErrorCodes.LOGIN_INVALID_2FA -> {
                 if (tfaCodeView.visibility == View.VISIBLE) {
                     tfaCodeView.error = e.displayMessage
                 } else {
                     tfaCodeView.visibility = View.VISIBLE
                     fingerprintButton.visibility = View.GONE
-                    (authActivity as AuthLoggedUserActivity).hideFingerprintTab()
                 }
             }
         }
@@ -126,10 +137,11 @@ class PasswordFragment : AuthFragment() {
         if (!passwordView.isValidPassword()) {
             return
         }
-        if (tfaCodeView.visibility == View.VISIBLE) {
-            viewModel.login(passwordView.trimmedText, tfaCodeView.trimmedText)
-        } else {
-            viewModel.login(passwordView.trimmedText)
+        when {
+            // onisio, 15/12/2018 - if the tfa secret was changed and has to be updated
+            tfaCodeView.visibility == View.VISIBLE -> viewModel.login(passwordView.trimmedText, tfaCodeView.trimmedText)
+
+            else -> viewModel.login(passwordView.trimmedText)
         }
     }
 

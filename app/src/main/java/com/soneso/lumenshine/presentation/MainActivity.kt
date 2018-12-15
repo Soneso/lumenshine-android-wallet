@@ -48,8 +48,7 @@ class MainActivity : SideMenuActivity() {
 
     private fun setupNavigation() {
         navController = NavHostFragment.findNavController(navHostFragment)
-        navController.addOnNavigatedListener { _, _ ->
-            val destination = navController.currentDestination ?: return@addOnNavigatedListener
+        navController.addOnDestinationChangedListener { _, destination, args ->
             setupDestination(destination)
         }
     }
