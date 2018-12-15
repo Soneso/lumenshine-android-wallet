@@ -29,9 +29,20 @@
             <Spinner
                 android:id="@+id/walletSpinner"
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/size_32"
+                android:layout_margin="@dimen/size_11"
+                android:background="@drawable/bg_input_box"
+                app:layout_constraintTop_toBottomOf="@id/walletNameTag" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsImageView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/size_11"
-                app:layout_constraintTop_toBottomOf="@id/walletNameTag" />
+                android:src="@drawable/ic_options_right"
+                android:tint="@color/lightGray"
+                app:layout_constraintEnd_toEndOf="@id/walletSpinner"
+                app:layout_constraintTop_toTopOf="@+id/walletSpinner"
+                app:layout_constraintBottom_toBottomOf="@+id/walletSpinner"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
@@ -148,7 +159,7 @@
             <com.soneso.lumenshine.presentation.widgets.LsEditText
                 android:id="@+id/memoText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/size_32"
                 android:layout_margin="@dimen/size_11"
                 android:background="@drawable/bg_input_box"
                 android:inputType="text"

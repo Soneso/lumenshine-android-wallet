@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightGray">
@@ -53,8 +52,6 @@
                 android:enabled="false"
                 android:hint="@string/received_from"
                 android:inputType="number"
-                app:layout_constrainedHeight="true"
-                app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/receivedSwitch" />
@@ -68,8 +65,6 @@
                 android:enabled="false"
                 android:hint="@string/received_to"
                 android:inputType="number"
-                app:layout_constrainedHeight="true"
-                app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/receivedSwitch" />
@@ -103,8 +98,6 @@
                 android:enabled="false"
                 android:hint="@string/amount_from"
                 android:inputType="number"
-                app:layout_constrainedHeight="true"
-                app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/sentSwitch" />
@@ -118,8 +111,6 @@
                 android:enabled="false"
                 android:hint="@string/amount_to"
                 android:inputType="number"
-                app:layout_constrainedHeight="true"
-                app:layout_constrainedWidth="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 app:layout_constraintTop_toBottomOf="@id/sentSwitch" />
@@ -144,19 +135,26 @@
                 app:layout_constraintStart_toEndOf="@id/currencySwitch"
                 app:layout_constraintTop_toTopOf="@id/currencySwitch" />
 
-            <com.soneso.lumenshine.presentation.widgets.LsEditText
-                android:id="@+id/currencyText"
-                style="@style/AppTheme.LsFilterEditText"
+            <Spinner
+                android:id="@+id/currencySpinner"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/size_36"
                 android:layout_margin="@dimen/size_11"
-                android:enabled="false"
-                android:hint="@string/all"
-                app:layout_constrainedHeight="true"
-                app:layout_constrainedWidth="true"
+                android:background="@drawable/bg_currency_spinner"
                 app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/currencySwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsImageView
+                android:id="@+id/currencyArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:src="@drawable/ic_options_right"
+                android:tint="@color/input_filter_hint"
+                app:layout_constraintBottom_toBottomOf="@+id/currencySpinner"
+                app:layout_constraintEnd_toEndOf="@id/currencySpinner"
+                app:layout_constraintTop_toTopOf="@+id/currencySpinner" />
 
             <com.soneso.lumenshine.presentation.widgets.LsButton
                 android:id="@+id/clearPaymentFilterButton"
@@ -169,7 +167,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/currencyText" />
+                app:layout_constraintTop_toBottomOf="@id/currencySpinner" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

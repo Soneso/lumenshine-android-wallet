@@ -64,21 +64,6 @@ class TransactionsFragment : LsFragment() {
         }
     }
 
-    private fun setupRecyclerView() {
-
-        transactionsAdapter = TransactionsAdapter(this@TransactionsFragment)
-        transactionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        transactionsRecyclerView.setHasFixedSize(true)
-        transactionsRecyclerView.adapter = transactionsAdapter
-
-        val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
-        transactionsRecyclerView.addItemDecoration(dividerItemDecoration)
-
-        transactionsAdapter.onOperationJsonSetListener = {
-            //#ZICA
-        }
-    }
-
     private fun subscribeForLiveData() {
         transactionsViewModel.liveWallet.observe(this, Observer {
             when (it.state) {
@@ -99,6 +84,22 @@ class TransactionsFragment : LsFragment() {
         transactionsViewModel.liveOperations.observe(this, Observer {
             renderOperations(it ?: return@Observer)
         })
+    }
+
+    private fun setupRecyclerView() {
+
+        transactionsAdapter = TransactionsAdapter(this@TransactionsFragment)
+        transactionsRecyclerView.layoutManager = LinearLayoutManager(context)
+        transactionsRecyclerView.setHasFixedSize(true)
+        transactionsRecyclerView.adapter = transactionsAdapter
+
+        val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
+        transactionsRecyclerView.addItemDecoration(dividerItemDecoration)
+
+        transactionsAdapter.onOperationJsonSetListener = {
+            //#ZICA
+            showSnackbar("TODO ")
+        }
     }
 
     private fun renderOperations(resource: Resource<List<Operation>, ServerException>) {

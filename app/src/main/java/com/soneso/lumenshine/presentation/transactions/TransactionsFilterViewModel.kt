@@ -46,9 +46,11 @@ class TransactionsFilterViewModel(private val transactionsUseCases: Transactions
         transactionsUseCases.updateTransactionsFilter(transactionsFilter)
     }
 
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
+    fun updateOperationFilter(memo: String, paymentsActive: Boolean, offersActive: Boolean, otherActive: Boolean) {
+        transactionsUseCases.operationFilter.memo = memo
+        transactionsUseCases.operationFilter.paymentsFilter.active = paymentsActive
+        transactionsUseCases.operationFilter.offersFilter.active = offersActive
+        transactionsUseCases.operationFilter.othersFilter.active = otherActive
     }
 
     fun updatePaymentOperationFilter(paymentsActive: Boolean) {
@@ -67,16 +69,14 @@ class TransactionsFilterViewModel(private val transactionsUseCases: Transactions
         if (!otherActive) transactionsUseCases.operationFilter.othersFilter.otherOperations = HashSet()
     }
 
-    fun updateOperationFilter(memo: String, paymentsActive: Boolean, offersActive: Boolean, otherActive: Boolean) {
-        transactionsUseCases.operationFilter.memo = memo
-        transactionsUseCases.operationFilter.paymentsFilter.active = paymentsActive
-        transactionsUseCases.operationFilter.offersFilter.active = offersActive
-        transactionsUseCases.operationFilter.othersFilter.active = otherActive
-    }
-
     fun resetOperationFilter() {
         transactionsUseCases.operationFilter.resetFilter()
     }
 
     fun getOperationFilter() = transactionsUseCases.operationFilter
+
+    override fun onCleared() {
+        compositeDisposable.dispose()
+        super.onCleared()
+    }
 }

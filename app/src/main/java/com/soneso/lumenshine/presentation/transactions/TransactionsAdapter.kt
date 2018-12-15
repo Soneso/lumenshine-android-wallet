@@ -58,10 +58,13 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.operation_item, parent, false)
                 SetOptionHolder(transactionsFragment, view)
             }
-            else -> {
-                //#ZICA - no operations case
+            Operation.Type.ALLOW_TRUST.value -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.operation_item, parent, false)
-                PaymentHolder(transactionsFragment, view)
+                OperationHolder(transactionsFragment, view)
+            }
+            else -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.operation_item, parent, false)
+                OperationHolder(transactionsFragment, view)
             }
         }
     }
@@ -97,6 +100,10 @@ class TransactionsAdapter(private val transactionsFragment: TransactionsFragment
             }
             Operation.Type.SET_OPTIONS.value -> {
                 (holder as SetOptionHolder).populate(operationsList[position] as SetOptions)
+            }
+            Operation.Type.ALLOW_TRUST.value -> {
+                // #Zica load Allow Trust operation details
+                (holder as OperationHolder).populateGeneralInfo(operationsList[position])
             }
         }
     }

@@ -30,8 +30,8 @@
                 android:layout_marginStart="@dimen/size_36"
                 android:text="@string/selling_currency"
                 android:textAllCaps="false"
-                app:layout_constraintStart_toEndOf="@id/sellingCurrencySwitch"
                 app:layout_constraintBottom_toBottomOf="@id/sellingCurrencySwitch"
+                app:layout_constraintStart_toEndOf="@id/sellingCurrencySwitch"
                 app:layout_constraintTop_toTopOf="@id/sellingCurrencySwitch" />
 
             <com.soneso.lumenshine.presentation.widgets.LsEditText
@@ -52,8 +52,8 @@
                 android:id="@+id/buyingCurrencySwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_36"
                 android:layout_marginStart="@dimen/size_11"
+                android:layout_marginTop="@dimen/size_36"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sellingCurrencyText" />
 
@@ -64,9 +64,30 @@
                 android:layout_marginStart="@dimen/size_36"
                 android:text="@string/buying_currency"
                 android:textAllCaps="false"
-                app:layout_constraintStart_toEndOf="@id/buyingCurrencySwitch"
                 app:layout_constraintBottom_toBottomOf="@id/buyingCurrencySwitch"
+                app:layout_constraintStart_toEndOf="@id/buyingCurrencySwitch"
                 app:layout_constraintTop_toTopOf="@id/buyingCurrencySwitch" />
+
+            <Spinner
+                android:id="@+id/currencySpinner"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/size_36"
+                android:layout_margin="@dimen/size_11"
+                android:background="@drawable/bg_currency_spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buyingCurrencySwitch" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsImageView
+                android:id="@+id/currencyArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_11"
+                android:src="@drawable/ic_options_right"
+                android:tint="@color/input_filter_hint"
+                app:layout_constraintBottom_toBottomOf="@+id/currencySpinner"
+                app:layout_constraintEnd_toEndOf="@id/currencySpinner"
+                app:layout_constraintTop_toTopOf="@+id/currencySpinner" />
 
             <com.soneso.lumenshine.presentation.widgets.LsEditText
                 android:id="@+id/buyingCurrencyText"
@@ -87,13 +108,13 @@
                 style="@style/WhiteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/size_45"
+                android:layout_marginTop="@dimen/size_85"
                 android:layout_marginBottom="@dimen/size_11"
                 android:text="@string/clear"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/buyingCurrencyText" />
+                app:layout_constraintTop_toBottomOf="@id/buyingCurrencySwitch" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

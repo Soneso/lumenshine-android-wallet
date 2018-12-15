@@ -1,7 +1,6 @@
 package com.soneso.lumenshine.domain.usecases
 
 import com.google.common.collect.ComparisonChain
-import com.google.common.collect.Ordering
 import com.soneso.lumenshine.domain.data.OperationsFilter
 import com.soneso.lumenshine.domain.data.OperationsSort
 import com.soneso.lumenshine.domain.data.TransactionsFilter
@@ -11,11 +10,13 @@ import com.soneso.lumenshine.model.WalletRepository
 import com.soneso.lumenshine.model.entities.operations.Offer
 import com.soneso.lumenshine.model.entities.operations.Operation
 import com.soneso.lumenshine.model.entities.operations.Payment
+import com.soneso.lumenshine.model.entities.wallet.WalletDetailEntity
 import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.util.Resource
 import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
@@ -26,10 +27,12 @@ import javax.inject.Singleton
 @Singleton
 class TransactionsUseCases @Inject constructor(
         private val transactionRepo: TransactionRepository,
-        walletRepo: WalletRepository
+        private val walletRepo: WalletRepository
 ) {
 
     private val transactionsFilter = BehaviorProcessor.create<TransactionsFilter>()
+    private var operationSort = BehaviorProcessor.create<OperationsSort>()
+
     var operationsSort = OperationsSort()
     // #Zica replace the object with 1 Processor / Operations Filter Fragment and unify them in 1
     val operationFilter = OperationsFilter()
@@ -44,6 +47,10 @@ class TransactionsUseCases @Inject constructor(
 
     fun getWallet(): Flowable<Resource<WalletEntity, ServerException>> =
             wallets.mapResource({ it -> it[0] }, { it })
+
+    fun getWalletDetails(wallet: WalletEntity): Single<WalletDetailEntity> =
+            walletRepo.loadWalletDetails(wallet.publicKey)
+
 
     fun getWallets(): Flowable<Resource<List<WalletEntity>, ServerException>> = wallets
 
@@ -80,7 +87,6 @@ class TransactionsUseCases @Inject constructor(
                     if (!offerOperationFiltered(operation as Offer)) filteredOperations.add(operation)
 
                 } else {
-                    // #Zica
                     filteredOperations.add(operation)
                 }
             }

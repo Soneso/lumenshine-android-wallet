@@ -28,22 +28,13 @@ class TransactionsSortFragment : LsFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         populateSortData(sortViewModel.getOperationSort())
-
-        dateSortSwitch.setOnCheckedChangeListener { _, isChecked -> dateSortButton.isActivated = isChecked }
-        typeSortSwitch.setOnCheckedChangeListener { _, isChecked -> typeSortButton.isActivated = isChecked }
-        amountSortSwitch.setOnCheckedChangeListener { _, isChecked -> amountSortButton.isActivated = isChecked }
-        currencySortSwitch.setOnCheckedChangeListener { _, isChecked -> currencySortButton.isActivated = isChecked }
-
-        dateSortButton.setOnClickListener { dateSortButton.isSelected = !dateSortButton.isSelected }
-        typeSortButton.setOnClickListener { typeSortButton.isSelected = !typeSortButton.isSelected }
-        amountSortButton.setOnClickListener { amountSortButton.isSelected = !amountSortButton.isSelected }
-        currencySortButton.setOnClickListener { currencySortButton.isSelected = !currencySortButton.isSelected }
+        initiateSwitches()
+        initiateButtons()
 
         clearSortButton.setOnClickListener { populateSortData(sortViewModel.getOperationSort()) }
     }
 
     override fun onDestroyView() {
-
         sortViewModel.updateOperationSort(
                 dateSortSwitch.isChecked,
                 if (dateSortButton.isSelected) SortType.ASC else SortType.DESC,
@@ -75,6 +66,20 @@ class TransactionsSortFragment : LsFragment() {
         currencySortSwitch.isChecked = operationsSort.sortByCurrency
         currencySortButton.isActivated = operationsSort.sortByCurrency
         currencySortButton.isSelected = SortType.ASC == operationsSort.currencySortType
+    }
+
+    private fun initiateSwitches() {
+        dateSortSwitch.setOnCheckedChangeListener { _, isChecked -> dateSortButton.isActivated = isChecked }
+        typeSortSwitch.setOnCheckedChangeListener { _, isChecked -> typeSortButton.isActivated = isChecked }
+        amountSortSwitch.setOnCheckedChangeListener { _, isChecked -> amountSortButton.isActivated = isChecked }
+        currencySortSwitch.setOnCheckedChangeListener { _, isChecked -> currencySortButton.isActivated = isChecked }
+    }
+
+    private fun initiateButtons() {
+        dateSortButton.setOnClickListener { dateSortButton.isSelected = !dateSortButton.isSelected }
+        typeSortButton.setOnClickListener { typeSortButton.isSelected = !typeSortButton.isSelected }
+        amountSortButton.setOnClickListener { amountSortButton.isSelected = !amountSortButton.isSelected }
+        currencySortButton.setOnClickListener { currencySortButton.isSelected = !currencySortButton.isSelected }
     }
 
     companion object {

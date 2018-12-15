@@ -43,6 +43,14 @@
         <item name="android:padding">@dimen/size_8</item>
     </style>
 
+    <style name="AppTheme.LsCurrencySpinnerStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/currency_spinner_text_color</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:padding">@dimen/size_8</item>
+    </style>
+
     <style name="AppTheme.LsCardView">
         <item name="cardBackgroundColor">@android:color/white</item>
         <item name="cardCornerRadius">@dimen/size_10</item>

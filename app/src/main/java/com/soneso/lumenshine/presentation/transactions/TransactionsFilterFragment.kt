@@ -12,6 +12,7 @@ import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.TransactionsFilter
 import com.soneso.lumenshine.model.entities.wallet.WalletEntity
 import com.soneso.lumenshine.presentation.general.LsFragment
+import com.soneso.lumenshine.presentation.util.getDate
 import com.soneso.lumenshine.util.Resource
 import kotlinx.android.synthetic.main.fragment_transactions_filter.*
 import java.text.SimpleDateFormat
@@ -48,57 +49,15 @@ class TransactionsFilterFragment : LsFragment() {
         }
 
         applyFilterButton.setOnClickListener {
-            val dateFrom = dateFormat.parse(dateFromText.text.toString())
-            var dateTo = dateFormat.parse(dateToText.text.toString())
-            val calendar = Calendar.getInstance()
-            calendar.time = dateTo
-            calendar.add(Calendar.HOUR_OF_DAY, 23)
-            calendar.add(Calendar.MINUTE, 59)
-            calendar.add(Calendar.SECOND, 59)
-            dateTo = calendar.time
-            filterViewModel.updateFilters(walletSpinner.selectedItem as WalletEntity, dateFrom, dateTo)
-
+            filterViewModel.updateFilters(walletSpinner.selectedItem as WalletEntity, dateFromDialog.datePicker.getDate(), dateToDialog.datePicker.getDate())
             filterViewModel.updateOperationFilter(memoText.text.toString(), paymentsSwitch.isChecked, offersSwitch.isChecked, othersSwitch.isChecked)
 
             activity!!.supportFragmentManager.popBackStack()
         }
 
-        paymentContainer.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, PaymentsFilterFragment.newInstance(), PaymentsFilterFragment.TAG)
-                    .addToBackStack(PaymentsFilterFragment.TAG)
-                    .commit()
-        }
-
-        offersContainer.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, OffersFilterFragment.newInstance(), OffersFilterFragment.TAG)
-                    .addToBackStack(OffersFilterFragment.TAG)
-                    .commit()
-        }
-
-        otherContainer.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, OtherFilterFragment.newInstance(), OtherFilterFragment.TAG)
-                    .addToBackStack(OtherFilterFragment.TAG)
-                    .commit()
-        }
-
-        paymentsSwitch.setOnCheckedChangeListener { _, isChecked ->
-            paymentsSwitch.isSelected = true
-            filterViewModel.updatePaymentOperationFilter(isChecked)
-        }
-
-        offersSwitch.setOnCheckedChangeListener { _, isChecked ->
-            filterViewModel.updateOfferOperationFilter(isChecked)
-        }
-
-        othersSwitch.setOnCheckedChangeListener { _, isChecked ->
-            filterViewModel.updateOtherOperationFilter(isChecked)
-        }
+        initiateOperationFilterData()
+        initiateFilterContainers()
+        initiateSwitches()
 
         clearAllFilterButton.setOnClickListener {
             filterViewModel.resetOperationFilter()
@@ -106,7 +65,6 @@ class TransactionsFilterFragment : LsFragment() {
             initiateTransactionFilterData(filterViewModel.initialTransactionFilterState)
         }
 
-        initiateOperationFilterData()
     }
 
     private fun subscribeForLiveData() {
@@ -154,6 +112,47 @@ class TransactionsFilterFragment : LsFragment() {
         }, 200)
     }
 
+    private fun initiateSwitches() {
+        paymentsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            paymentsSwitch.isSelected = true
+            filterViewModel.updatePaymentOperationFilter(isChecked)
+        }
+
+        offersSwitch.setOnCheckedChangeListener { _, isChecked ->
+            filterViewModel.updateOfferOperationFilter(isChecked)
+        }
+
+        othersSwitch.setOnCheckedChangeListener { _, isChecked ->
+            filterViewModel.updateOtherOperationFilter(isChecked)
+        }
+    }
+
+    private fun initiateFilterContainers() {
+        paymentContainer.setOnClickListener {
+            activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, PaymentsFilterFragment.newInstance(), PaymentsFilterFragment.TAG)
+                    .addToBackStack(PaymentsFilterFragment.TAG)
+                    .commit()
+        }
+
+        offersContainer.setOnClickListener {
+            activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, OffersFilterFragment.newInstance(), OffersFilterFragment.TAG)
+                    .addToBackStack(OffersFilterFragment.TAG)
+                    .commit()
+        }
+
+        otherContainer.setOnClickListener {
+            activity!!.supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, OtherFilterFragment.newInstance(), OtherFilterFragment.TAG)
+                    .addToBackStack(OtherFilterFragment.TAG)
+                    .commit()
+        }
+    }
+
     private fun updateDates(dateFrom: Date, dateTo: Date) {
         dateFromText.text = dateFormat.format(dateFrom)
         dateToText.text = dateFormat.format(dateTo)
@@ -164,17 +163,24 @@ class TransactionsFilterFragment : LsFragment() {
         dateFromDialog = DatePickerDialog(context!!, R.style.AppTheme_LsDatePicker, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             val selectedDate: String = dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year
             dateFromText.text = selectedDate
+
+            dateToDialog.datePicker.minDate = dateFromDialog.datePicker.getDate().time + TransactionsFilter.DAY_IN_MS
+            dateToDialog.datePicker.maxDate = dateFromDialog.datePicker.getDate().time + (14 * TransactionsFilter.DAY_IN_MS)
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-        dateFromDialog.datePicker.minDate = Date(dateTo.time - 14 * TransactionsFilter.DAY_IN_MS).time
-        dateFromDialog.datePicker.maxDate = Date(dateTo.time - TransactionsFilter.DAY_IN_MS).time
+        dateFromDialog.datePicker.minDate = dateTo.time - 14 * TransactionsFilter.DAY_IN_MS
+        dateFromDialog.datePicker.maxDate = dateTo.time - TransactionsFilter.DAY_IN_MS
 
         calendar.time = dateTo
         dateToDialog = DatePickerDialog(context!!, R.style.AppTheme_LsDatePicker, DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
             val selectedDate: String = dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year
             dateToText.text = selectedDate
+
+
+            dateFromDialog.datePicker.minDate = dateToDialog.datePicker.getDate().time - (14 * TransactionsFilter.DAY_IN_MS)
+            dateFromDialog.datePicker.maxDate = dateToDialog.datePicker.getDate().time - TransactionsFilter.DAY_IN_MS
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
-        dateFromDialog.datePicker.minDate = Date(dateTo.time - 14 * TransactionsFilter.DAY_IN_MS).time
-        dateFromDialog.datePicker.maxDate = Date(dateTo.time - TransactionsFilter.DAY_IN_MS).time
+        dateToDialog.datePicker.minDate = dateFrom.time + TransactionsFilter.DAY_IN_MS
+        dateToDialog.datePicker.maxDate = dateFrom.time + 14 * TransactionsFilter.DAY_IN_MS
     }
 
     companion object {
