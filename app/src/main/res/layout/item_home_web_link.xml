@@ -4,8 +4,7 @@
     style="@style/AppTheme.LsCardView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/size_400"
-    android:layout_marginEnd="@dimen/size_5"
-    android:layout_marginStart="@dimen/size_5">
+    android:layout_margin="@dimen/size_10">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -58,8 +57,8 @@
             android:id="@+id/blog_button"
             android:layout_width="@dimen/size_125"
             android:layout_height="@dimen/size_45"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
             android:text="@string/home_web_card_button"
             android:textColor="@color/cyan_800"

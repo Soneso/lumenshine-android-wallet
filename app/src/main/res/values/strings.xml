@@ -161,6 +161,8 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="wallet_button_fund_wallet">Fund Wallet</string>
     <string name="wallet">Wallet</string>
 
+    <string name="no_fingerprint_available">You have to set a fingerprint in your phone settings if you want to use this feature!</string>
+
     <string name="error">Error</string>
 
     <string name="ok">OK</string>
@@ -331,7 +333,7 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="face_recognition">Face Recognition</string>
 
-    <string name="hint_face_fingerprint">If you activate, the app will request your %@ instead of password when opened. Entering the password will not be required each time you open the app. To activate %@ please first insert your password below.</string>
+    <string name="hint_face_fingerprint">If you activate, the app will request your fingerprint instead of password when opened. Entering the password will not be required each time you open the app. To activate fingerprint please first insert your password below.</string>
 
     <string name="enabled">Enabled</string>
 
@@ -527,11 +529,11 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="change_password_hint">To change your password please provide current and new password.</string>
 
-    <string name="current_password">Current password</string>
+    <string name="current_password">CURRENT PASSWORD</string>
 
-    <string name="new_password">New password</string>
+    <string name="new_password">NEW PASSWORD</string>
 
-    <string name="repeat_new_password">Repeat new password</string>
+    <string name="repeat_new_password">REPEAT NEW PASSWORD</string>
 
     <string name="password_changed">Password successfully changed</string>
 
@@ -757,4 +759,6 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
     <string name="buying_currency">Buying currency</string>
 
     <string name="sort_button_description">Click to change sort type</string>
+    <string name="login_with_fingerprint">Log in with fingerprint</string>
+
 </resources>

@@ -19,6 +19,20 @@ class PasswordViewModel(private val useCases: UserUseCases) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
     val liveLogin: LiveData<Resource<RegistrationStatus, LsException>> = MutableLiveData()
 
+    fun login(password: CharSequence, tfaCode: CharSequence) {
+
+        liveLogin.putValue(Resource(Resource.LOADING))
+        val d = useCases.login(password, tfaCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveLogin.putValue(Success(it))
+                }, {
+                    liveLogin.putValue(Failure(it as LsException))
+                })
+        compositeDisposable.add(d)
+    }
+
     fun login(password: CharSequence) {
 
         liveLogin.putValue(Resource(Resource.LOADING))
@@ -36,5 +50,18 @@ class PasswordViewModel(private val useCases: UserUseCases) : ViewModel() {
     override fun onCleared() {
         compositeDisposable.dispose()
         super.onCleared()
+    }
+
+    fun login() {
+        liveLogin.putValue(Resource(Resource.LOADING))
+        val d = useCases.login()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    liveLogin.putValue(Success(it))
+                }, {
+                    liveLogin.putValue(Failure(it as LsException))
+                })
+        compositeDisposable.add(d)
     }
 }

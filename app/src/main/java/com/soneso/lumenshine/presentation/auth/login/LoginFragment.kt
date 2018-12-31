@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -53,16 +51,8 @@ class LoginFragment : AuthFragment() {
 
     private fun setupListeners() {
 
-        passwordView.setOnEditorActionListener(TextView.OnEditorActionListener { _, id, _ ->
-            if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                attemptLogin()
-                return@OnEditorActionListener true
-            }
-            false
-        })
-        loginButton.setOnClickListener {
-            attemptLogin()
-        }
+        passwordView.setOnEditorActionListener { attemptLogin() }
+        loginButton.setOnClickListener { attemptLogin() }
     }
 
     private fun attemptLogin() {
@@ -81,14 +71,14 @@ class LoginFragment : AuthFragment() {
 
         when (resource.state) {
             Resource.LOADING -> {
-                showLoadingView()
+                showLoadingView(true)
             }
             Resource.FAILURE -> {
-                hideLoadingView()
+                showLoadingView(false)
                 handleError(resource.failure())
             }
             else -> {
-                hideLoadingView()
+                showLoadingView(false)
                 val status = resource.success()
                 if (status.isSetupCompleted()) {
                     authActivity.goToMain()
@@ -101,8 +91,8 @@ class LoginFragment : AuthFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (shouldAutoPaste) {
-            val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+        val textFromClipboard: String = GeneralUtils.pasteFromClipboard(context!!)
+        if (shouldAutoPaste && textFromClipboard.toIntOrNull() != null) {
             tfaCodeView.trimmedText = textFromClipboard
             tfaCodeView.setSelection(textFromClipboard.length)
         }

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewFlipper"
+    style="@style/WhiteFragmentView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:inAnimation="@anim/slide_in_right"
+    android:outAnimation="@anim/slide_out_left"
+    tools:context=".presentation.settings.ChangeTfaFragment">
+
+    <LinearLayout
+        android:id="@+id/passStepLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/size_15">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/encodesans_semibold"
+            android:gravity="center"
+            android:text="@string/change_2fa_hint"
+            android:textColor="@color/lightBlack"
+            android:textSize="@dimen/text_size_15" />
+
+        <com.soneso.lumenshine.presentation.widgets.PasswordInputView
+            android:id="@+id/passInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_40"
+            android:hint="@string/hint_password"
+            android:textAllCaps="true" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/passNextButton"
+            style="@style/GreenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_40"
+            android:layout_marginTop="@dimen/size_40"
+            android:minWidth="@dimen/size_100"
+            android:text="@string/next" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tfaSecretStepLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        tools:context=".presentation.auth.setup.TfaConfirmationFragment">
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_15"
+            android:fontFamily="@font/encodesans_semibold"
+            android:text="@string/new_tfa"
+            android:textColor="@color/green"
+            android:textSize="@dimen/text_size_17" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/size_15"
+            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginEnd="@dimen/size_15"
+            android:fontFamily="@font/encodesans_regular"
+            android:text="@string/lbl_2fa_hint"
+            android:textColor="@color/lightBlack" />
+
+        <include
+            layout="@layout/separator"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_05"
+            android:layout_marginTop="@dimen/size_20" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_5"
+            android:layout_marginBottom="@dimen/size_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                android:id="@+id/tfaSecretView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/encodesans_semibold"
+                android:gravity="center"
+                android:text="@string/lbl_tfa_secret"
+                android:textColor="@color/darkerGray"
+                android:textStyle="bold" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsImageView
+                android:id="@+id/copyButton"
+                android:layout_width="@dimen/size_50"
+                android:layout_height="@dimen/size_52"
+                android:layout_marginStart="@dimen/size_10"
+                android:padding="@dimen/size_10"
+                android:scaleType="fitXY"
+                android:src="@drawable/icon_copy"
+                android:tint="@color/cyan" />
+        </LinearLayout>
+
+        <include layout="@layout/separator" />
+
+        <com.soneso.lumenshine.presentation.widgets.FormInputView
+            android:id="@+id/tfaInputView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_30"
+            android:layout_marginTop="@dimen/size_5"
+            android:layout_marginEnd="@dimen/size_30"
+            android:layout_marginBottom="@dimen/size_5"
+            android:hint="@string/tfa_code"
+            android:inputType="number" />
+
+        <include layout="@layout/separator" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_30"
+            android:orientation="horizontal">
+
+            <com.soneso.lumenshine.presentation.widgets.LsButton
+                android:id="@+id/tfaCancelButton"
+                style="@style/GreyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_38"
+                android:layout_marginEnd="@dimen/size_15"
+                android:minWidth="@dimen/size_100"
+                android:paddingStart="0dp"
+                android:paddingEnd="0dp"
+                android:text="@string/cancel" />
+
+            <com.soneso.lumenshine.presentation.widgets.LsButton
+                android:id="@+id/tfaNextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/size_38"
+                android:layout_marginStart="@dimen/size_15"
+                android:minWidth="@dimen/size_100"
+                android:text="@string/next" />
+        </LinearLayout>
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/size_15"
+            android:layout_marginTop="@dimen/size_20"
+            android:layout_marginEnd="@dimen/size_15"
+            android:fontFamily="@font/encodesans_regular"
+            android:gravity="center"
+            android:text="@string/lbl_cancel_2fa_secret"
+            android:textColor="@color/lightBlack" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/successLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/size_15">
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/encodesans_semibold"
+            android:gravity="center"
+            android:paddingTop="@dimen/size_25"
+            android:text="@string/tfa_secret_changed"
+            android:textColor="@color/green"
+            android:textSize="@dimen/text_size_17" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/doneButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/size_38"
+            android:layout_marginTop="@dimen/size_30"
+            android:minWidth="@dimen/size_100"
+            android:text="@string/done" />
+    </LinearLayout>
+
+</ViewFlipper>

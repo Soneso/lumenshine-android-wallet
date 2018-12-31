@@ -57,8 +57,8 @@ class HomeFeedAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androi
                 }
                 view.layoutParams = ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                         .apply {
-                            marginStart = parent.resources.getDimensionPixelSize(R.dimen.size_5)
-                            marginEnd = parent.resources.getDimensionPixelSize(R.dimen.size_5)
+                            val size10 = parent.resources.getDimensionPixelSize(R.dimen.size_10)
+                            setMargins(size10, size10, size10, size10)
                         }
                 return WalletViewHolder(view)
             }

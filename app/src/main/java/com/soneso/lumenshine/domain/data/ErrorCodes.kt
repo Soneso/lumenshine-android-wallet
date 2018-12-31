@@ -8,5 +8,4 @@ object ErrorCodes {
     const val MISSING_TFA = 1009
     const val LOGIN_WRONG_PASSWORD = 99
     const val SIGNUP_EMAIL_ALREADY_EXIST = 1001
-
 }

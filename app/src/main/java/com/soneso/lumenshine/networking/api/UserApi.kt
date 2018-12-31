@@ -3,7 +3,6 @@ package com.soneso.lumenshine.networking.api
 import com.soneso.lumenshine.networking.dto.auth.*
 import io.reactivex.Single
 import retrofit2.Response
-import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
 
 
@@ -105,26 +104,23 @@ interface UserApi {
     ): Single<Response<GetTfaRequestResponse>>
 
     @GET("/portal/user/dashboard/user_auth_data")
-    fun getUserAuthData(): Single<Result<GetUserAuthDataResponse>>
+    fun getUserAuthData(): Single<Response<GetUserAuthDataResponse>>
 
     @FormUrlEncoded
     @POST("/portal/user/dashboard/change_password")
     fun changePassword(
             @Field("kdf_salt") passwordSalt: String,
-
             @Field("mnemonic_master_key") encryptedMnemonicMasterKey: String,
             @Field("mnemonic_master_iv") mnemonicMasterKeyIv: String,
-
             @Field("wordlist_master_key") encryptedWordListMasterKey: String,
             @Field("wordlist_master_iv") wordListMasterKeyEncryptionIv: String,
-
-            @Field("public_key_188") publicKey188: String
+            @Field("sep10_transaction") signedSep10Challenge: String
     ): Single<Response<Any>>
 
     @FormUrlEncoded
     @POST("/portal/user/dashboard/new_2fa_secret")
     fun changeTfaSecret(
-            @Field("public_key_188") publicKey188: String
+            @Field("sep10_transaction") signedSep10Challenge: String
     ): Single<Response<ChangeTfaSecretResponse>>
 
     @FormUrlEncoded
@@ -135,4 +131,7 @@ interface UserApi {
 
     @GET
     fun loadServerSigningKey(@Url url: String = LsApi.TOML_URL): Single<Response<String>>
+
+    @GET("/portal/user/dashboard/get_sep10_challange")
+    fun getSep10Challenge(): Single<Response<GetSep10ChallengeResponse>>
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/size_220"
+    android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -11,6 +11,7 @@
         android:id="@+id/imageView"
         android:layout_width="@dimen/size_75"
         android:layout_height="@dimen/size_75"
+        android:layout_marginTop="@dimen/size_50"
         android:scaleType="centerCrop"
         app:civ_border_width="0dp"
         app:srcCompat="@drawable/icon_user"
@@ -20,6 +21,8 @@
         android:id="@+id/drawerUsernameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10"
+        android:layout_marginBottom="@dimen/size_10"
         android:text="@string/not_logged_in"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_10" />

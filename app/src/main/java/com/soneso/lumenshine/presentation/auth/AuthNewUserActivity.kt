@@ -3,12 +3,12 @@ package com.soneso.lumenshine.presentation.auth
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
-import androidx.core.view.GravityCompat
 import androidx.navigation.NavDestination
-import com.google.android.material.navigation.NavigationView
 import com.soneso.lumenshine.R
-import kotlinx.android.synthetic.main.activity_base_auth.*
+import com.soneso.lumenshine.presentation.auth.more.LostCredentialFragment
+import com.soneso.lumenshine.presentation.auth.more.MoreDialog
 import kotlinx.android.synthetic.main.tabs_auth_new_user.*
 
 /**
@@ -23,7 +23,7 @@ class AuthNewUserActivity : BaseAuthActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupDrawer()
+        selectMenuItem(R.id.login_item)
         setupTabs()
     }
 
@@ -66,33 +66,28 @@ class AuthNewUserActivity : BaseAuthActivity() {
         moreTab.setOnClickListener(tabClickListener)
     }
 
-    private fun setupDrawer() {
-        drawerView.inflateMenu(R.menu.drawer_auth_new_user)
-        val navItemListener = NavigationView.OnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.login_item -> navigate(R.id.to_login)
-                R.id.signup_item -> navigate(R.id.to_register)
-                R.id.lostpass_item -> {
-                    navigate(R.id.to_lost_credential, LostCredentialFragment.argForPassword())
-                    selectMenuItem(R.id.lostpass_item)
-                }
-                R.id.losttfa_item -> {
-                    navigate(R.id.to_lost_credential, LostCredentialFragment.argForTfa())
-                    selectMenuItem(R.id.losttfa_item)
-                }
-                R.id.mnemonic_item -> {
+    override fun drawerMenu(): Int = R.menu.drawer_auth_new_user
 
-                }
-                R.id.nav_about -> {
-                }
-                R.id.nav_help -> {
-                }
+    override fun onNavItemSelected(item: MenuItem) {
+        when (item.itemId) {
+            R.id.login_item -> navigate(R.id.to_login)
+            R.id.signup_item -> navigate(R.id.to_register)
+            R.id.lostpass_item -> {
+                navigate(R.id.to_lost_credential, LostCredentialFragment.argForPassword())
+                selectMenuItem(R.id.lostpass_item)
             }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            return@OnNavigationItemSelectedListener true
+            R.id.losttfa_item -> {
+                navigate(R.id.to_lost_credential, LostCredentialFragment.argForTfa())
+                selectMenuItem(R.id.losttfa_item)
+            }
+            R.id.mnemonic_item -> {
+
+            }
+            R.id.nav_about -> {
+            }
+            R.id.nav_help -> {
+            }
         }
-        selectMenuItem(R.id.login_item)
-        drawerView.setNavigationItemSelectedListener(navItemListener)
     }
 
     companion object {

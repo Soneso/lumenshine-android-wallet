@@ -3,24 +3,19 @@ package com.soneso.lumenshine.model
 import com.moandjiezana.toml.Toml
 import com.soneso.lumenshine.domain.util.base64String
 import com.soneso.lumenshine.model.entities.RegistrationStatus
+import com.soneso.lumenshine.model.entities.UserCredentialsEntity
 import com.soneso.lumenshine.model.entities.UserSecurity
 import com.soneso.lumenshine.model.wrapper.toRegistrationStatus
-import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.api.LsApi
 import com.soneso.lumenshine.networking.api.UserApi
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import com.soneso.lumenshine.persistence.LsPrefs
 import com.soneso.lumenshine.persistence.room.LsDatabase
 import com.soneso.lumenshine.util.LsException
-import com.soneso.lumenshine.util.Resource
-import com.soneso.lumenshine.util.asHttpResourceLoader
-import com.soneso.lumenshine.util.mapResource
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Single
 import org.stellar.sdk.KeyPair
 import org.stellar.sdk.ManageDataOperation
-import org.stellar.sdk.Network
 import org.stellar.sdk.Transaction
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -33,7 +28,6 @@ import javax.inject.Singleton
  */
 @Singleton
 class UserRepository @Inject constructor(
-        private val networkStateObserver: NetworkStateObserver,
         private val db: LsDatabase,
         r: Retrofit
 ) {
@@ -126,7 +120,7 @@ class UserRepository @Inject constructor(
                 .doOnSuccess { LsPrefs.registrationCompleted = it.isSetupCompleted() }
     }
 
-    fun loginStep1(email: String, tfaCode: String? = null): Single<UserSecurity> {
+    fun loginStep1(email: String, tfaCode: String?): Single<UserSecurity> {
 
         return userApi.loginStep1(email, tfaCode)
                 .onErrorResumeNext { Single.error(LsException(it)) }
@@ -141,9 +135,7 @@ class UserRepository @Inject constructor(
                 .map { response ->
                     val dto = response.body()!!
                     UserSecurity(
-                            email,
                             dto.publicKeyIndex0,
-                            dto.sep10TransactionChallenge,
                             dto.passwordKdfSalt(),
                             dto.encryptedMnemonicMasterKey(),
                             dto.mnemonicMasterKeyEncryptionIv(),
@@ -152,12 +144,35 @@ class UserRepository @Inject constructor(
                             dto.encryptedWordListMasterKey(),
                             dto.wordListMasterKeyEncryptionIv(),
                             dto.encryptedWordList(),
-                            dto.wordListEncryptionIv()
+                            dto.wordListEncryptionIv(),
+                            dto.sep10TransactionChallenge
                     )
                 }
     }
 
     fun loginStep2(sep10Challenge: String, userKeyPair: KeyPair): Single<RegistrationStatus> =
+            signSep10Challenge(sep10Challenge, userKeyPair)
+                    .flatMap { signedSep10Challenge ->
+                        // cristi.paval, 11/23/18 - send to server
+                        userApi.loginStep2(signedSep10Challenge).map {
+                            if (it.isSuccessful) {
+                                LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: ""
+                                it.body()!!.toRegistrationStatus()
+                            } else {
+                                throw ServerException(it.errorBody())
+                            }
+                        }.flatMap { status ->
+                            if (status.isSetupCompleted()) {
+                                // cristi.paval, 11/28/18 - update tfa secret in local storage
+                                LsPrefs.registrationCompleted = true
+                                refreshTfaSecret(signedSep10Challenge).doOnSuccess { LsPrefs.tfaSecret = it }.flatMap { Single.just(status) }
+                            } else {
+                                Single.just(status)
+                            }
+                        }
+                    }
+
+    private fun signSep10Challenge(sep10Challenge: String, userKeyPair: KeyPair): Single<String> =
             Single.create<Transaction> { emitter ->
                 // cristi.paval, 11/22/18 - validate sep10 challenge
                 val transaction = Transaction.fromEnvelopeXdr(sep10Challenge)
@@ -172,7 +187,6 @@ class UserRepository @Inject constructor(
                 emitter.onSuccess(transaction)
             }.flatMap { transaction ->
                 // cristi.paval, 11/22/18 - verify server signature
-                Network.useTestNetwork()
                 val firstSignature = transaction.signatures.first().signature
                 val transactionHash = transaction.hash()
                 val serverKeyPair = KeyPair.fromAccountId(LsApi.INITIAL_SERVER_KEY)
@@ -200,25 +214,6 @@ class UserRepository @Inject constructor(
                     .doOnSuccess { transaction -> transaction.sign(userKeyPair) }
                     // cristi.paval, 11/23/18 - encode transaction
                     .map { transaction -> transaction.toEnvelopeXdrBase64() }
-                    .flatMap { signedSep10Challenge ->
-                        // cristi.paval, 11/23/18 - send to server
-                        userApi.loginStep2(signedSep10Challenge).map {
-                            if (it.isSuccessful) {
-                                LsPrefs.jwtToken = it.headers()[LsApi.HEADER_NAME_AUTHORIZATION] ?: ""
-                                it.body()!!.toRegistrationStatus()
-                            } else {
-                                throw ServerException(it.errorBody())
-                            }
-                        }.flatMap { status ->
-                            if (status.isSetupCompleted()) {
-                                // cristi.paval, 11/28/18 - update tfa secret in local storage
-                                LsPrefs.registrationCompleted = true
-                                refreshTfaSecret(signedSep10Challenge).doOnSuccess { LsPrefs.tfaSecret = it }.flatMap { Single.just(status) }
-                            } else {
-                                Single.just(status)
-                            }
-                        }
-                    }
 
     private fun refreshTfaSecret(signedSep10Challenge: String): Single<String> {
 
@@ -237,62 +232,112 @@ class UserRepository @Inject constructor(
 
     fun loadTfaSecret(): Single<String> = Single.just(LsPrefs.tfaSecret)
 
-    fun requestEmailForPasswordReset(email: String): Flowable<Resource<Boolean, LsException>> {
+    fun loadUserCredentials(): Single<UserCredentialsEntity> =
+            Single.just(UserCredentialsEntity(LsPrefs.username, LsPrefs.tfaSecret, LsPrefs.userPassword, LsPrefs.registrationCompleted))
 
-        return userApi.requestResetPasswordEmail(email)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
+    fun requestEmailForPasswordReset(email: String): Completable =
+            userApi.requestResetPasswordEmail(email)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
-    fun requestEmailForTfaReset(email: String): Flowable<Resource<Boolean, LsException>> {
-
-        return userApi.requestResetTfaEmail(email)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
-    }
+    fun requestEmailForTfaReset(email: String): Completable =
+            userApi.requestResetTfaEmail(email)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
     fun loadUsername(): Single<String> = Single.just(LsPrefs.username)
 
-    fun changeUserPassword(userSecurity: UserSecurity): Flowable<Resource<Boolean, ServerException>> {
+    fun loadUserAuthData(): Single<UserSecurity> =
+            userApi.getUserAuthData()
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .map {
+                        if (it.isSuccessful) {
+                            val dto = it.body()!!
+                            UserSecurity(
+                                    dto.publicKeyIndex0,
+                                    dto.passwordKdfSalt(),
+                                    dto.encryptedMnemonicMasterKey(),
+                                    dto.mnemonicMasterKeyEncryptionIv(),
+                                    dto.encryptedMnemonic(),
+                                    dto.mnemonicEncryptionIv(),
+                                    dto.encryptedWordListMasterKey(),
+                                    dto.wordListMasterKeyEncryptionIv(),
+                                    dto.encryptedWordList(),
+                                    dto.wordListEncryptionIv()
+                            )
+                        } else {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
 
-        return userApi.changePassword(
-                userSecurity.passwordKdfSalt.base64String(),
-                userSecurity.encryptedMnemonicMasterKey.base64String(),
-                userSecurity.mnemonicMasterKeyEncryptionIv.base64String(),
-                userSecurity.encryptedWordListMasterKey.base64String(),
-                userSecurity.wordListMasterKeyEncryptionIv.base64String(),
-                "" // TODO - change to sep10
-                //userSecurity.publicKeyIndex188
-        )
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({ true }, { it })
+    fun changeUserPassword(userSecurity: UserSecurity): Completable =
+            userApi.changePassword(
+                    userSecurity.passwordKdfSalt.base64String(),
+                    userSecurity.encryptedMnemonicMasterKey.base64String(),
+                    userSecurity.mnemonicMasterKeyEncryptionIv.base64String(),
+                    userSecurity.encryptedWordListMasterKey.base64String(),
+                    userSecurity.wordListMasterKeyEncryptionIv.base64String(),
+                    userSecurity.sep10Challenge
+            )
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (!it.isSuccessful) {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
+
+    fun loadAndSignSep10Challenge(keyPair: KeyPair): Single<String> =
+            userApi.getSep10Challenge()
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .map {
+                        if (it.isSuccessful) {
+                            it.body()!!.sep10TransactionChallenge
+                        } else {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .flatMap { signSep10Challenge(it, keyPair) }
+
+    fun changeTfaSecret(signedSep10Challenge: String): Single<String> {
+
+        return userApi.changeTfaSecret(signedSep10Challenge)
+                .onErrorResumeNext { Single.error(LsException(it)) }
+                .map {
+                    if (it.isSuccessful) {
+                        it.body()!!.tfaSecret
+                    } else {
+                        throw ServerException(it.errorBody())
+                    }
+                }
     }
 
-    fun changeTfaSecret(publicKey188: String): Flowable<Resource<String, ServerException>> {
-
-        return userApi.changeTfaSecret(publicKey188)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    LsPrefs.tfaSecret = it.tfaSecret
-                    it.tfaSecret
-                }, { it })
-    }
-
-    fun confirmTfaSecretChange(tfaCode: String): Flowable<Resource<Boolean, ServerException>> {
-
-        return userApi.confirmTfaSecretChange(tfaCode)
-                .asHttpResourceLoader(networkStateObserver)
-                .mapResource({
-                    //                    userDao.saveRegistrationStatus(it.toRegistrationStatus(LsPrefs.username))
-                    true
-                }, { it })
-    }
-
-    fun isUserLoggedIn(): Single<Boolean> = Single.just(LsPrefs.registrationCompleted && LsPrefs.tfaSecret.isNotEmpty())
+    fun confirmTfaSecretChange(tfaSecret: String, tfaCode: String): Completable =
+            userApi.confirmTfaSecretChange(tfaCode)
+                    .onErrorResumeNext { Single.error(LsException(it)) }
+                    .doOnSuccess {
+                        if (it.isSuccessful) {
+                            LsPrefs.tfaSecret = tfaSecret
+                        } else {
+                            throw ServerException(it.errorBody())
+                        }
+                    }
+                    .ignoreElement()
 
     fun logout(): Completable {
         return Completable.create {
             try {
+                LsPrefs.clearAllKeys()
                 db.clearAllTables()
                 it.onComplete()
             } catch (e: Exception) {
@@ -300,6 +345,12 @@ class UserRepository @Inject constructor(
             }
         }
     }
+
+    fun savePassword(password: String): Completable =
+            Completable.create {
+                LsPrefs.userPassword = password
+                it.onComplete()
+            }
 
     companion object {
 

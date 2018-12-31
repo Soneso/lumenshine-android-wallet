@@ -3,18 +3,16 @@ package com.soneso.lumenshine.presentation.general
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.soneso.lumenshine.di.AppComponent
-import com.soneso.lumenshine.presentation.MainViewModel
 import com.soneso.lumenshine.presentation.SplashViewModel
 import com.soneso.lumenshine.presentation.auth.AuthViewModel
-import com.soneso.lumenshine.presentation.auth.LostCredentialViewModel
 import com.soneso.lumenshine.presentation.auth.login.LoginViewModel
 import com.soneso.lumenshine.presentation.auth.login.PasswordViewModel
+import com.soneso.lumenshine.presentation.auth.more.LostCredentialViewModel
 import com.soneso.lumenshine.presentation.auth.registration.RegistrationViewModel
-import com.soneso.lumenshine.presentation.auth.setup.ConfirmMnemonicViewModel
-import com.soneso.lumenshine.presentation.auth.setup.MailConfirmationViewModel
-import com.soneso.lumenshine.presentation.auth.setup.NoteMnemonicViewModel
-import com.soneso.lumenshine.presentation.auth.setup.TFAConfirmationViewModel
+import com.soneso.lumenshine.presentation.auth.setup.*
 import com.soneso.lumenshine.presentation.home.HomeViewModel
+import com.soneso.lumenshine.presentation.settings.ChangePassViewModel
+import com.soneso.lumenshine.presentation.settings.ChangeTfaViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
 import com.soneso.lumenshine.presentation.transactions.*
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
@@ -33,8 +31,12 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(MailConfirmationViewModel::class.java) -> MailConfirmationViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(NoteMnemonicViewModel::class.java) -> NoteMnemonicViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(ConfirmMnemonicViewModel::class.java) -> ConfirmMnemonicViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(LostCredentialViewModel::class.java) -> LostCredentialViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(PasswordViewModel::class.java) -> PasswordViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(FingerprintSetupViewModel::class.java) -> FingerprintSetupViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> SettingsViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(ChangePassViewModel::class.java) -> ChangePassViewModel(appComponent.userUseCases) as T
+            modelClass.isAssignableFrom(ChangeTfaViewModel::class.java) -> ChangeTfaViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T
             modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(TransactionsFilterViewModel::class.java) -> TransactionsFilterViewModel(appComponent.transactionsUseCase) as T
@@ -43,8 +45,6 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(OffersFilterViewModel::class.java) -> OffersFilterViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(OtherFilterViewModel::class.java) -> OtherFilterViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(appComponent.userUseCases) as T
-            modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel() as T
-            modelClass.isAssignableFrom(LostCredentialViewModel::class.java) -> LostCredentialViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(appComponent.walletsUseCase) as T
             else -> throw IllegalArgumentException("View Model not found here not found")
         }
