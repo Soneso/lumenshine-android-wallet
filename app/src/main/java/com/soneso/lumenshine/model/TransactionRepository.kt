@@ -33,7 +33,7 @@ class TransactionRepository @Inject constructor(
                 dateFormat.format(end))
                 .asHttpResourceLoader(networkStateObserver)
                 .mapResource({ dto ->
-                    dto.map { it.toOperation(walletPK) }
+                    dto?.map { it.toOperation(walletPK) } ?: emptyList()
                 }, { it })
 
 

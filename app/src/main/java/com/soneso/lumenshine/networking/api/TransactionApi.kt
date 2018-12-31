@@ -13,5 +13,5 @@ interface TransactionApi {
             @Query("stellar_account_pk") accountPK: String,
             @Query("start_timestamp") startTimestamp: String,
             @Query("end_timestamp") endTimestamp: String
-    ): Single<Response<List<OperationDto>>>
+    ): Single<Response<List<OperationDto>?>>
 }
