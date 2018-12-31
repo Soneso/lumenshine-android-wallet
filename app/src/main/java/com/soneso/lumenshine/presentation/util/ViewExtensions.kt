@@ -5,10 +5,12 @@ import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.DatePicker
 import android.widget.TextView
 import androidx.annotation.StyleRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import java.util.*
 
 /**
  * Extensions.
@@ -54,4 +56,24 @@ fun TextView.setStyleCompat(@StyleRes resId: Int) {
         @Suppress("DEPRECATION")
         setTextAppearance(context, resId)
     }
+}
+
+fun DatePicker.getDate(): Date {
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.set(year, month, dayOfMonth)
+    return calendar.time
+}
+
+fun Calendar.startOfDay(): Date {
+    add(Calendar.HOUR, -get(Calendar.HOUR))
+    add(Calendar.MINUTE, -get(Calendar.MINUTE))
+    add(Calendar.SECOND, -get(Calendar.SECOND))
+    return time
+}
+
+fun Calendar.endOfDay(): Date {
+    add(Calendar.HOUR, 23 - get(Calendar.HOUR))
+    add(Calendar.MINUTE, 59 - get(Calendar.MINUTE))
+    add(Calendar.SECOND, 59 - get(Calendar.SECOND))
+    return time
 }

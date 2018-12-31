@@ -16,7 +16,9 @@ import org.stellar.sdk.Server
 import org.stellar.sdk.requests.ErrorResponse
 import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class WalletRepository @Inject constructor(
         private val networkStateObserver: NetworkStateObserver,
         r: Retrofit,

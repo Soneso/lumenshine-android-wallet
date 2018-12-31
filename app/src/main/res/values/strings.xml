@@ -195,6 +195,10 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="login">Login</string>
 
+    <string name="filter">FILTER</string>
+
+    <string name="sort">SORT</string>
+
     <string name="register">Register</string>
 
     <string name="login_continue">Log in to your account</string>
@@ -664,6 +668,97 @@ The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for t
 
     <string name="error_invalid_lastname">Invalid lastname</string>
 
+    <string name="transactions_wallet">Wallet:</string>
+    <string name="transactions_date_from">Date from:</string>
+    <string name="transactions_date_to">Date to:</string>
+    <string name="transactions_history">Transactions History</string>
+    <string name="transactions_date">Date</string>
+    <string name="transactions_type">Type</string>
+    <string name="transactions_amount">Amount</string>
+    <string name="transactions_currency">Currency</string>
+    <string name="transactions_fee">Fee</string>
+    <string name="transactions_details">Details</string>
+    <string name="transactions_operation_id">Operation ID</string>
+    <string name="transactions_memo">Memo</string>
+
+    <string name="payment_received">payment received</string>
+    <string name="payment_sent">payment sent</string>
+    <string name="payment_sender">Sender</string>
+    <string name="payment_receiver">Recipient:</string>
+
+    <string name="change_trust">change trust</string>
+    <string name="change_trust_add">add</string>
+    <string name="change_trust_remove">remove</string>
+    <string name="change_trust_type">Type</string>
+    <string name="change_trust_asset">Asset</string>
+    <string name="change_trust_issuer">Issuer</string>
+    <string name="change_trust_limit">Trust limit</string>
+
+    <string name="offer_create">offer created</string>
+    <string name="offer_removed">offer removed</string>
+    <string name="passive_offer_create">passive offer created</string>
+    <string name="passive_offer_removed">passive offer removed</string>
+    <string name="offer_id">Offer ID</string>
+    <string name="offer_buying_asset">Buying</string>
+    <string name="offer_selling_asset">Selling</string>
+    <string name="offer_asset_price">Price for 1 unit</string>
+
+    <string name="manage_data">manage data</string>
+    <string name="manage_data_name">Entry name</string>
+    <string name="manage_data_value">Entry value</string>
+
+    <string name="bump_sequence">bump sequence</string>
+    <string name="bump_sequence_to">Bumped to</string>
+
+    <string name="account_merge">merge account</string>
+    <string name="account_merge_account">Merged account</string>
+
+    <string name="set_option">set options</string>
+    <string name="inflation_destination">Inflation destination</string>
+    <string name="set_flags">Set flags</string>
+    <string name="clear_flags">Clear flags</string>
+    <string name="master_weight">Master weight</string>
+    <string name="low_threshold">Low threshold</string>
+    <string name="medium_threshold">Medium threshold</string>
+    <string name="high_threshold">High threshold</string>
+    <string name="signer_added">Signer added</string>
+    <string name="signer_removed">Signer removed</string>
+    <string name="signer_type">Signer type</string>
+    <string name="signer_weight">Signer weight</string>
+    <string name="home_domain">Home domain</string>
+
+    <string name="source_account">Source account</string>
+
+    <string name="wallet_name">Wallet name</string>
+    <string name="clear">CLEAR</string>
+    <string name="clear_all">CLEAR ALL</string>
+    <string name="apply">APPLY</string>
+    <string name="payments">Payments</string>
+    <string name="offers">Offers</string>
+    <string name="other">Other</string>
+
+    <string name="public_key_copied"> public key copied to clipboard</string>
+
+    <string name="json_content">JSON Content</string>
+
+    <string name="filter_set_options">Set Options</string>
+    <string name="filter_inflation">Inflation</string>
+    <string name="filter_manage_data">Manage Data</string>
+    <string name="filter_trust">Trust</string>
+    <string name="filter_account_merge">Account Merge</string>
+    <string name="filter_bump_sequence">Bump sequence</string>
+    <string name="filter_received">received</string>
+    <string name="filter_sent">sent</string>
+    <string name="filter_currency">currency</string>
+    <string name="received_from">Received from</string>
+    <string name="received_to">Received to</string>
+    <string name="amount_from">Amount from</string>
+    <string name="amount_to">Amount to</string>
+    <string name="all">All</string>
+    <string name="selling_currency">Selling currency</string>
+    <string name="buying_currency">Buying currency</string>
+
+    <string name="sort_button_description">Click to change sort type</string>
     <string name="login_with_fingerprint">Log in with fingerprint</string>
 
 </resources>

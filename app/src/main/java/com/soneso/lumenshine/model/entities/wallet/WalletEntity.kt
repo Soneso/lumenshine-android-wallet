@@ -12,6 +12,9 @@ data class WalletEntity(
         @ColumnInfo(name = DbNames.COLUMN_ID)
         val id: Long,
 
+        @ColumnInfo(name = DbNames.COLUMEN_PUBLIC_KEY)
+        val publicKey: String,
+
         @ColumnInfo(name = DbNames.COLUMN_NAME)
         val name: String,
 
@@ -19,8 +22,7 @@ data class WalletEntity(
         val federationAddress: String,
 
         @ColumnInfo(name = DbNames.COLUMN_IN_HOME_SCREEN)
-        val shownInHomeScreen: Boolean,
-
-        @ColumnInfo(name = DbNames.COLUMN_PUBLIC_KEY)
-        val publicKey: String
-)
+        val shownInHomeScreen: Boolean
+) {
+    override fun toString(): String = name
+}

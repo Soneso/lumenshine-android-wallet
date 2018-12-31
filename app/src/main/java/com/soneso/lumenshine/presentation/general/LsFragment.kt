@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.soneso.lumenshine.R
+import com.soneso.lumenshine.presentation.util.showInfoDialog
 import com.soneso.lumenshine.util.LsException
 
 /**
@@ -49,5 +50,9 @@ open class LsFragment : Fragment() {
 
     fun showLoadingView(show: Boolean) {
         lsActivity.showLoading(show)
+    }
+
+    fun showInfoDialog(titleResId: Int, contentResId: Int, iconResId: Int = 0) {
+        lsActivity.showInfoDialog(titleResId, contentResId, iconResId)
     }
 }

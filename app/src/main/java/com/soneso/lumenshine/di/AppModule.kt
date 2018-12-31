@@ -3,6 +3,8 @@ package com.soneso.lumenshine.di
 import android.content.Context
 import android.text.SpannableStringBuilder
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.commonsware.cwac.saferoom.SafeHelperFactory
 import com.soneso.lumenshine.networking.NetworkUtil
 import com.soneso.lumenshine.networking.api.LsApi
@@ -48,7 +50,14 @@ class AppModule(private val context: Context) {
 
         val factory = SafeHelperFactory.fromUser(SpannableStringBuilder(LsPrefs.appPass))
 
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE wallets ADD COLUMN public_key TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         return Room.databaseBuilder(context, LsDatabase::class.java, DbNames.DB_NAME)
+                .addMigrations(MIGRATION_1_2)
                 .openHelperFactory(factory)
                 .allowMainThreadQueries()
                 .build()

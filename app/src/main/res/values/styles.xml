@@ -5,7 +5,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/orange</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="editTextStyle">@style/AppTheme.LsEditText</item>
         <item name="buttonStyle">@style/AppTheme.LsButton</item>
         <item name="actionBarSize">@dimen/size_45</item>
@@ -27,11 +27,29 @@
         <item name="android:background">@drawable/lsedittext_background</item>
         <item name="android:textColorHint">@color/lightBlack</item>
         <item name="android:textColor">@color/lightBlack</item>
-        <item name="android:drawableTint">@color/gray</item>
+        <!--<item name="android:drawableTint">@color/gray</item>-->
         <item name="android:fontFamily">@font/encodesans_semibold</item>
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:paddingTop">@dimen/size_8</item>
         <item name="android:paddingBottom">@dimen/size_8</item>
+    </style>
+
+    <style name="AppTheme.LsFilterEditText" parent="@android:style/Widget.EditText">
+        <item name="android:background">@drawable/bg_input_filter</item>
+        <item name="android:textColorHint">@color/input_filter_hint</item>
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:padding">@dimen/size_8</item>
+    </style>
+
+    <style name="AppTheme.LsCurrencySpinnerStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/currency_spinner_text_color</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:padding">@dimen/size_8</item>
     </style>
 
     <style name="AppTheme.LsCardView">
@@ -54,6 +72,10 @@
         <item name="android:fontFamily">@font/encodesans_semibold</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:elevation">@dimen/size_1</item>
+    </style>
+
+    <style name="AppTheme.LsDatePicker" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/blue</item>
     </style>
 
     <style name="GreenButton">
@@ -89,6 +111,20 @@
         <item name="android:textAllCaps">true</item>
     </style>
 
+    <style name="LsCardTitleBlue">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="LsCardTitleLightBlack">
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_17</item>
+        <item name="android:fontFamily">@font/encodesans_semibold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="LsCardSecondTitle">
         <item name="android:textColor">@color/green</item>
         <item name="android:textSize">@dimen/text_size_15</item>
@@ -98,6 +134,38 @@
 
     <style name="LsCardTitleDetail">
         <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsCardTitleDetailBold">
+        <item name="android:textColor">@color/lightBlack</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsCardMainTitle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsLightBlueText">
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsDarkGreenText">
+        <item name="android:textColor">@color/darkGreen</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+        <item name="android:fontFamily">@font/encodesans_regular</item>
+    </style>
+
+    <style name="LsDarkRedText">
+        <item name="android:textColor">@color/darkRed</item>
         <item name="android:textSize">@dimen/text_size_13</item>
         <item name="android:fontFamily">@font/encodesans_regular</item>
     </style>
@@ -135,6 +203,15 @@
         <item name="android:textColor">@color/blue_selectable</item>
     </style>
 
+    <style name="LsDateWhite" parent="AppTheme.LsTextView">
+        <item name="android:paddingEnd">@dimen/size_8</item>
+        <item name="android:paddingStart">@dimen/size_8</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/encodesans_bold</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="LsTabView">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/blue_selectable</item>
@@ -142,7 +219,7 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">@dimen/text_size_10</item>
         <item name="android:fontFamily">@font/encodesans_regular</item>
-        <item name="android:drawableTint">@color/blue_selectable</item>
+        <!--<item name="android:drawableTint">@color/blue_selectable</item>-->
     </style>
 
     <style name="MoreTabView">
@@ -154,7 +231,7 @@
         <item name="android:paddingBottom">@dimen/size_5</item>
         <item name="android:paddingStart">@dimen/size_10</item>
         <item name="android:paddingEnd">@dimen/size_10</item>
-        <item name="android:drawableTint">@android:color/black</item>
+        <!--<item name="android:drawableTint">@android:color/black</item>-->
     </style>
 
     <style name="DarkBlueCheckBox">
@@ -184,6 +261,11 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_from_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_to_bottom</item>
+    </style>
+
+    <style name="FiltersAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
     </style>
 
     <style name="WhiteFragmentView">

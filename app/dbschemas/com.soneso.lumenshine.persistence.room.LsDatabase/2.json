@@ -1,0 +1,181 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "37eb716df729c5a8074cd444a162aa52",
+    "entities": [
+      {
+        "tableName": "user_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `public_key_index_0` TEXT NOT NULL, `public_key_index_188` TEXT NOT NULL, `ppassword_kdf_salt` BLOB NOT NULL, `encrypted_mnemonic_master_key` BLOB NOT NULL, `mnemonic_master_key_encryption_iv` BLOB NOT NULL, `encrypted_mnemonic` BLOB NOT NULL, `mnemonic_encryption_iv` BLOB NOT NULL, `encrypted_word_list_master_key` BLOB NOT NULL, `word_list_master_key_encryption_iv` BLOB NOT NULL, `encrypted_word_list` BLOB NOT NULL, `word_list_encryption_iv` BLOB NOT NULL, PRIMARY KEY(`username`))",
+        "fields": [
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicKeyIndex0",
+            "columnName": "public_key_index_0",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicKeyIndex188",
+            "columnName": "public_key_index_188",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "passwordKdfSalt",
+            "columnName": "ppassword_kdf_salt",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedMnemonicMasterKey",
+            "columnName": "encrypted_mnemonic_master_key",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mnemonicMasterKeyEncryptionIv",
+            "columnName": "mnemonic_master_key_encryption_iv",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedMnemonic",
+            "columnName": "encrypted_mnemonic",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mnemonicEncryptionIv",
+            "columnName": "mnemonic_encryption_iv",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedWordListMasterKey",
+            "columnName": "encrypted_word_list_master_key",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordListMasterKeyEncryptionIv",
+            "columnName": "word_list_master_key_encryption_iv",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "encryptedWordList",
+            "columnName": "encrypted_word_list",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wordListEncryptionIv",
+            "columnName": "word_list_encryption_iv",
+            "affinity": "BLOB",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "wallets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `public_key` TEXT NOT NULL, `name` TEXT NOT NULL, `federation_address` TEXT NOT NULL, `shown_in_home_screen` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "publicKey",
+            "columnName": "public_key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "federationAddress",
+            "columnName": "federation_address",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shownInHomeScreen",
+            "columnName": "shown_in_home_screen",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "registration_status",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`username` TEXT NOT NULL, `mail_confirmation` INTEGER NOT NULL, `tfa_confirmation` INTEGER NOT NULL, `mnemonic_confirmation` INTEGER NOT NULL, PRIMARY KEY(`username`))",
+        "fields": [
+          {
+            "fieldPath": "username",
+            "columnName": "username",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mailConfirmed",
+            "columnName": "mail_confirmation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tfaConfirmed",
+            "columnName": "tfa_confirmation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mnemonicConfirmed",
+            "columnName": "mnemonic_confirmation",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "username"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"37eb716df729c5a8074cd444a162aa52\")"
+    ]
+  }
+}

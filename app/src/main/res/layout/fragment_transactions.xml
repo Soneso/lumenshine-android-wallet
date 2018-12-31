@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightGray"
+    tools:context=".presentation.transactions.TransactionsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/transactionHeaderView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/size_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/walletTag"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/transactions_wallet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/transactionWalletText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_2"
+            app:layout_constraintStart_toEndOf="@id/walletTag"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Primary" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/dateFromTag"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/transactions_date_from"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/walletTag" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/transactionDateFromText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_2"
+            app:layout_constraintStart_toEndOf="@id/dateFromTag"
+            app:layout_constraintTop_toBottomOf="@id/walletTag"
+            tools:text="20.10.2018" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/dateToTag"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/transactions_date_to"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateFromTag" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsTextView
+            android:id="@+id/transactionDateToText"
+            style="@style/LsCardTitleDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_2"
+            app:layout_constraintStart_toEndOf="@id/dateToTag"
+            app:layout_constraintTop_toBottomOf="@id/transactionDateFromText"
+            tools:text="30.10.2018" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/transactionFilterButton"
+            style="@style/WhiteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/size_11"
+            android:text="@string/filter"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineHeader"
+            app:layout_constraintEnd_toStartOf="@id/transactionSortButton"
+            app:layout_constraintTop_toTopOf="@id/guidelineHeader" />
+
+        <com.soneso.lumenshine.presentation.widgets.LsButton
+            android:id="@+id/transactionSortButton"
+            style="@style/WhiteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="@string/sort"
+            app:layout_constraintBottom_toBottomOf="@id/guidelineHeader"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guidelineHeader" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_11"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/transactionHeaderView"
+        app:layout_constraintVertical_bias="0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/size_14">
+
+            <com.soneso.lumenshine.presentation.widgets.LsTextView
+                style="@style/LsCardTitleBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/transactions_history"
+                android:textAllCaps="false" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/transactionsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_14"
+                android:layout_marginBottom="@dimen/size_14" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/poweredByView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/size_10"
+        android:src="@drawable/soneso"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsImageView
+        android:id="@+id/brandedBackgroundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitEnd"
+        android:src="@drawable/soneso_background"
+        app:layout_constraintBottom_toTopOf="@id/poweredByView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

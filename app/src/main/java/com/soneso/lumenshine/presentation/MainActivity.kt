@@ -33,9 +33,8 @@ class MainActivity : SideMenuActivity() {
     override fun onNavItemSelected(item: MenuItem) {
         when (item.itemId) {
             R.id.homeItem -> navController.navigate(R.id.to_home_screen)
-            R.id.nav_wallets -> navController.navigate(R.id.wallets_screen)
-            R.id.nav_transactions -> {
-            }
+            R.id.nav_wallets -> navController.navigate(R.id.to_wallets_screen)
+            R.id.nav_transactions -> navController.navigate(R.id.to_transactions_screen)
             R.id.nav_contacts -> {
             }
             R.id.nav_settings -> navController.navigate(R.id.to_settings_screen)

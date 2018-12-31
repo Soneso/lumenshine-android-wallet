@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transactionPaymentItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/size_8"
+    android:layout_marginBottom="@dimen/size_8">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationDateTag"
+        style="@style/LsCardTitleDetailBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationDateText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/operationDateTag"
+        tools:text="12.09.2018 at 11:53:09AM" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationTypeTag"
+        style="@style/LsCardTitleDetailBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/operationDateTag" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationTypeText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/operationTypeTag"
+        tools:text="payment received" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationAmountTag"
+        style="@style/LsCardTitleDetailBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_amount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/operationTypeTag" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationAmountText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/operationAmountTag"
+        tools:text="200.00" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationCurrencyTag"
+        style="@style/LsCardTitleDetailBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_currency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/operationAmountTag" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationCurrencyText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/operationCurrencyTag"
+        tools:text="XLM" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationFeeTag"
+        style="@style/LsCardTitleDetailBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_fee"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/operationCurrencyTag" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationFeeText"
+        style="@style/LsCardTitleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/operationFeeTag"
+        tools:text="0.0" />
+
+    <com.soneso.lumenshine.presentation.widgets.LsTextView
+        android:id="@+id/operationDetailsTag"
+        style="@style/LsCardTitleDetailBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/transactions_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/operationFeeTag" />
+
+    <include
+        layout="@layout/operation_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/operationDetailsTag" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

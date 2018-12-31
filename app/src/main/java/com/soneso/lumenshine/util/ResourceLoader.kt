@@ -1,6 +1,5 @@
 package com.soneso.lumenshine.util
 
-import android.util.Log
 import com.soneso.lumenshine.networking.NetworkStateObserver
 import com.soneso.lumenshine.networking.dto.exceptions.ServerException
 import io.reactivex.BackpressureStrategy
@@ -8,10 +7,9 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Function
 import retrofit2.Response
+import timber.log.Timber
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicInteger
-
-private const val TAG = "ResourceLoader"
 
 fun <ResponseType> Single<Response<ResponseType>>.asHttpResourceLoader(networkStateObserver: NetworkStateObserver, retryCount: Int = 3): Flowable<Resource<ResponseType, ServerException>> {
 
@@ -20,16 +18,16 @@ fun <ResponseType> Single<Response<ResponseType>>.asHttpResourceLoader(networkSt
         networkThrowable
                 .takeWhile { counter.getAndIncrement() < retryCount }
                 .doOnNext { throwable ->
-                    Log.d(TAG, "Trying number: ${counter.get()}")
+                    Timber.d("Trying number: ${counter.get()}")
                     if (counter.get() == 1) {
-                        Log.e(TAG, "--- Encountered throwable", throwable)
+                        Timber.e(throwable)
                     }
                     if (!throwable.isWorthRetry()) {
                         throw throwable
                     }
                 }
                 .flatMap { networkStateObserver.observeApiAccess() }
-                .doOnNext { Log.d(TAG, "--- Api accessible: $it") }
+                .doOnNext { Timber.d("--- Api accessible: $it") }
                 .filter { it }
     }
 
@@ -38,11 +36,11 @@ fun <ResponseType> Single<Response<ResponseType>>.asHttpResourceLoader(networkSt
         emitter.onNext(Resource(Resource.LOADING))
         val disposable = this.retryWhen(retryMechanism)
                 .subscribe({
-                    if (it.isSuccessful) {
-                        Log.d(TAG, "_______Response is success!")
+                    if (it.isSuccessful && it.body() != null) {
+                        Timber.d("_______Response is success!")
                         emitter.onNext(Success(it.body()!!))
                     } else {
-                        Log.d(TAG, "_______Response is errorBody!")
+                        Timber.d("_______Response is errorBody!")
                         emitter.onNext(Failure(ServerException(it.errorBody())))
                     }
                 }, {
@@ -73,7 +71,7 @@ fun <SuccessType, FailureType> Flowable<Resource<SuccessType, FailureType>>.refr
         var state = Resource.LOADING
 
         val thisD = this.subscribe {
-            Log.d(TAG, "Emitting result from initial source...")
+            Timber.d("Emitting result from initial source...")
             val resource = if (it.state == Resource.SUCCESS) {
                 Resource(state, it.success())
             } else {
@@ -83,7 +81,7 @@ fun <SuccessType, FailureType> Flowable<Resource<SuccessType, FailureType>>.refr
         }
         val refresherD = refresher
                 .subscribe({
-                    Log.d(TAG, "Emitting result from refresher...")
+                    Timber.d("Emitting result from refresher...")
                     state = it.state
                     if (it.state == Resource.SUCCESS && cacheFunction != null) {
                         cacheFunction.invoke(it.success())
@@ -91,12 +89,12 @@ fun <SuccessType, FailureType> Flowable<Resource<SuccessType, FailureType>>.refr
                         emitter.onNext(it)
                     }
                 }, {
-                    Log.d(TAG, "Emitting error...")
+                    Timber.d("Emitting error...")
                     emitter.onError(it)
                 })
 
         emitter.setCancellable {
-            Log.d(TAG, "Disposing...")
+            Timber.d("Disposing...")
             thisD.dispose()
             refresherD.dispose()
         }

@@ -14,6 +14,7 @@ import com.soneso.lumenshine.presentation.home.HomeViewModel
 import com.soneso.lumenshine.presentation.settings.ChangePassViewModel
 import com.soneso.lumenshine.presentation.settings.ChangeTfaViewModel
 import com.soneso.lumenshine.presentation.settings.SettingsViewModel
+import com.soneso.lumenshine.presentation.transactions.*
 import com.soneso.lumenshine.presentation.wallets.WalletsViewModel
 
 class LsViewModelFactory(
@@ -37,6 +38,12 @@ class LsViewModelFactory(
             modelClass.isAssignableFrom(ChangePassViewModel::class.java) -> ChangePassViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(ChangeTfaViewModel::class.java) -> ChangeTfaViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(WalletsViewModel::class.java) -> WalletsViewModel(appComponent.walletsUseCase) as T
+            modelClass.isAssignableFrom(TransactionsViewModel::class.java) -> TransactionsViewModel(appComponent.transactionsUseCase) as T
+            modelClass.isAssignableFrom(TransactionsFilterViewModel::class.java) -> TransactionsFilterViewModel(appComponent.transactionsUseCase) as T
+            modelClass.isAssignableFrom(TransactionsSortViewModel::class.java) -> TransactionsSortViewModel(appComponent.transactionsUseCase) as T
+            modelClass.isAssignableFrom(PaymentsFilterViewModel::class.java) -> PaymentsFilterViewModel(appComponent.transactionsUseCase) as T
+            modelClass.isAssignableFrom(OffersFilterViewModel::class.java) -> OffersFilterViewModel(appComponent.transactionsUseCase) as T
+            modelClass.isAssignableFrom(OtherFilterViewModel::class.java) -> OtherFilterViewModel(appComponent.transactionsUseCase) as T
             modelClass.isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(appComponent.userUseCases) as T
             modelClass.isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(appComponent.walletsUseCase) as T
             else -> throw IllegalArgumentException("View Model not found here not found")

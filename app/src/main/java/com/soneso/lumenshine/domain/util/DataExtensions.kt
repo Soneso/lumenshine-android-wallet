@@ -50,3 +50,7 @@ fun logLongString(string: String) {
 fun ByteArray.base64String(): String {
     return Base64.toBase64String(this)
 }
+
+enum class SortType {
+    ASC, DESC
+}
