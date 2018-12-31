@@ -50,7 +50,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     // cristi.paval, 3/12/18 - Firebase dependency for cloud messaging
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     // cristi.paval, 3/9/18 - Dagger library for dependency injection
@@ -94,7 +94,7 @@ dependencies {
 
     //attila.janosi, 7/17/18
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha08'
+    implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha09'
 
     // library to see logs in console
     implementation 'com.jakewharton.timber:timber:4.7.1'
