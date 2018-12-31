@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import com.soneso.lumenshine.R
 import com.soneso.lumenshine.domain.data.TransactionsFilter
 import com.soneso.lumenshine.model.entities.wallet.WalletEntity
@@ -52,7 +53,7 @@ class TransactionsFilterFragment : LsFragment() {
             filterViewModel.updateFilters(walletSpinner.selectedItem as WalletEntity, dateFromDialog.datePicker.getDate(), dateToDialog.datePicker.getDate())
             filterViewModel.updateOperationFilter(memoText.text.toString(), paymentsSwitch.isChecked, offersSwitch.isChecked, othersSwitch.isChecked)
 
-            activity!!.supportFragmentManager.popBackStack()
+            NavHostFragment.findNavController(this).navigateUp()
         }
 
         initiateOperationFilterData()
@@ -128,29 +129,9 @@ class TransactionsFilterFragment : LsFragment() {
     }
 
     private fun initiateFilterContainers() {
-        paymentContainer.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, PaymentsFilterFragment.newInstance(), PaymentsFilterFragment.TAG)
-                    .addToBackStack(PaymentsFilterFragment.TAG)
-                    .commit()
-        }
-
-        offersContainer.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, OffersFilterFragment.newInstance(), OffersFilterFragment.TAG)
-                    .addToBackStack(OffersFilterFragment.TAG)
-                    .commit()
-        }
-
-        otherContainer.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, OtherFilterFragment.newInstance(), OtherFilterFragment.TAG)
-                    .addToBackStack(OtherFilterFragment.TAG)
-                    .commit()
-        }
+        paymentContainer.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_payments_filter_screen) }
+        offersContainer.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_offers_filter_screen) }
+        otherContainer.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_other_filter_screen) }
     }
 
     private fun updateDates(dateFrom: Date, dateTo: Date) {

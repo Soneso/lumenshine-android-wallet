@@ -23,28 +23,79 @@
 
 
     <action
+        android:id="@+id/to_transactions_screen"
+        app:destination="@id/transactions_screen" />
+
+    <fragment
+        android:id="@+id/transactions_screen"
+        android:name="com.soneso.lumenshine.presentation.transactions.TransactionsFragment">
+
+        <action
+            android:id="@+id/to_transactions_filter_screen"
+            app:destination="@id/transactions_filter_screen" />
+
+        <action
+            android:id="@+id/to_transactions_sort_screen"
+            app:destination="@id/transactions_sort_screen" />
+    </fragment>
+
+
+    <action
         android:id="@+id/to_settings_screen"
         app:destination="@id/settings_screen" />
 
     <fragment
         android:id="@+id/settings_screen"
-        android:name="com.soneso.lumenshine.presentation.settings.SettingsFragment" />
+        android:name="com.soneso.lumenshine.presentation.settings.SettingsFragment">
 
+        <action
+            android:id="@+id/to_change_pass_screen"
+            app:destination="@id/change_pass_screen" />
 
-    <action
-        android:id="@+id/to_change_pass_screen"
-        app:destination="@id/change_pass_screen" />
+        <action
+            android:id="@+id/to_change_tfa_screen"
+            app:destination="@id/change_tfa_screen" />
+    </fragment>
 
     <fragment
         android:id="@+id/change_pass_screen"
         android:name="com.soneso.lumenshine.presentation.settings.ChangePasswordFragment" />
 
-    <action
-        android:id="@+id/to_change_tfa_screen"
-        app:destination="@id/change_tfa_screen" />
-
     <fragment
         android:id="@+id/change_tfa_screen"
         android:name="com.soneso.lumenshine.presentation.settings.ChangeTfaFragment" />
+
+    <fragment
+        android:id="@+id/transactions_filter_screen"
+        android:name="com.soneso.lumenshine.presentation.transactions.TransactionsFilterFragment">
+
+        <action
+            android:id="@+id/to_payments_filter_screen"
+            app:destination="@id/payments_filter_screen" />
+
+        <action
+            android:id="@+id/to_offers_filter_screen"
+            app:destination="@id/offers_filter_screen" />
+
+        <action
+            android:id="@+id/to_other_filter_screen"
+            app:destination="@id/other_filter_screen" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transactions_sort_screen"
+        android:name="com.soneso.lumenshine.presentation.transactions.TransactionsSortFragment" />
+
+    <fragment
+        android:id="@+id/payments_filter_screen"
+        android:name="com.soneso.lumenshine.presentation.transactions.PaymentsFilterFragment" />
+
+    <fragment
+        android:id="@+id/offers_filter_screen"
+        android:name="com.soneso.lumenshine.presentation.transactions.OffersFilterFragment" />
+
+    <fragment
+        android:id="@+id/other_filter_screen"
+        android:name="com.soneso.lumenshine.presentation.transactions.OtherFilterFragment" />
 
 </navigation>

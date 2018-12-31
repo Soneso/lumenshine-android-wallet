@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
@@ -46,22 +47,12 @@ class TransactionsFragment : LsFragment() {
 
         setupRecyclerView()
         subscribeForLiveData()
+        setupListeners()
+    }
 
-        transactionFilterButton.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, TransactionsFilterFragment.newInstance(), TransactionsFilterFragment.TAG)
-                    .addToBackStack(TransactionsFilterFragment.TAG)
-                    .commit()
-        }
-
-        transactionSortButton.setOnClickListener {
-            activity!!.supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, TransactionsSortFragment.newInstance(), TransactionsSortFragment.TAG)
-                    .addToBackStack(TransactionsSortFragment.TAG)
-                    .commit()
-        }
+    private fun setupListeners() {
+        transactionFilterButton.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_transactions_filter_screen) }
+        transactionSortButton.setOnClickListener { NavHostFragment.findNavController(this).navigate(R.id.to_transactions_sort_screen) }
     }
 
     private fun subscribeForLiveData() {
